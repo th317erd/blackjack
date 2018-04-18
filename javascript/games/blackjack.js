@@ -1,9 +1,9 @@
-ktExport('game.js', ({ Game }) => {
-  class Game {
-
+ktExport('games/blackjack.js', ({ Game }) => {
+  class BlackJackGame extends Game {
+    // Here we will define blackjack specific game stuff
   }
 
   return {
-    Game
+    BlackJackGame
   };
 });

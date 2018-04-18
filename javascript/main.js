@@ -1,3 +1,4 @@
-ktExport ('main.js', ({ Game }) => {
-
+ktExport('main.js', ({ Game }) => {
+  console.log('CARD CLASS: ', Game);
+  return {};
 });
