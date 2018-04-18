@@ -1,0 +1,3 @@
+ktExport ('main.js', ({ Game }) => {
+
+});
