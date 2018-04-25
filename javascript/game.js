@@ -9,9 +9,29 @@ ktExport('game.js', () => {
        How will turns be handled?
     */
 
+    // var player_one = new Array()
+
+
+    /*
+    what a game needs.
+    1. needs players
+      1a. needs to have a definable count of players
+      1b. if there is <= 2 players break
+      1c. default extra players will be cpu
+      1d. needs to interact with players, holding informtion about instanciated self
+    2. need players cards.
+      1a. a players cards should belong to a player
+      1b. if a player has cards make cards viewable
+      1c. determin the total value of those cards
+    3. define a turn
+      1a. possibly define a turn which begins at x (does not matter)
+      1b. turns can count to infinity
+      1c. when turn loop runs more turn method to mext players
+    */
+
     /* @team define how this will provide an interface to a game and its rules */
   }
-
+  console.log("mason");
   return {
     Game
   };
