@@ -1,4 +1,5 @@
 (function(root) {
+  // When you call the ktExport function you pass a "name" and a "func" arguemnts
   function ktExport(name, func) {
     // Call our export "module" helper function
     // The result will be our exported object
