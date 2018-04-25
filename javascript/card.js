@@ -1,6 +1,6 @@
 ktExport('card.js', () => {
   
-  const CARDSUIT = {
+  const cardSuite = {
     spade:{
       pattern: 0,
       color: black
@@ -19,72 +19,83 @@ ktExport('card.js', () => {
     }
   }
 
-  const CARDVALUE = {
-    // value should be 0 - 12
+  const cardValue = {
+    // value should be 0 - 11
     // random value from that array = itself
+    one: {
+      value: 1,
+      name: one
+    },
     two: {
-      value: 2
+      value: 2,
+      name: two
     },
     three: {
-      value: 3
+      value: 3,
+      name: three
     },
     four: {
-      value: 4
+      value: 4,
+      name: four
     },
     five: {
-      value: 5
+      value: 5,
+      name: five
     },
     six: {
-      value: 6
+      value: 6,
+      name: six
     },
     seven: {
-      value: 7
+      value: 7,
+      name: seven
     },
     eight: {
-      value: 8
+      value: 8,
+      name: eight
     },
     nine: {
-      value: 9
+      value: 9,
+      name: nine
     },
     ten: {
-      value: 10
+      value: 10,
+      name: ten
     },
     jack: {
-      value: 10
+      value: 10,
+      name: jack
     },
     queen: {
-      value: 10
+      value: 10,
+      name: queen
     },
     king: {
-      value: 10
+      value: 10,
+      name: king
     },
     ace: {
       value: 11,
-      altValue: 1
+      name: ace
     }
   }
   
   class Card {
-    static SUIT = CARDSUIT;
+    // here we need something to instantiate a single card
+    /* @paul define class constructor, and decide how internal instance variables should be
+       structured and defined. Also, defined structure of methods that will act upon each instance
+    */
 
     // Define a generic card and its functionality here
-    constructor() {
-      // needs a value
-      cardValue = 0;
-      
-      // needs a suit
-      cardSuit = 0;
-          // suit needs a shape (spade, diamond, heart, club)
-
-          // suit needs a text color (black or red)
-
-      // needs an owner (player)
-
-      // needs an html structure?
+    constructor(value,suit) {
+      // card value
+      this.value = value;
+      // card suit
+      this.suit = suit;
     }
-
   }
-
+  // Defining and returning a simple object
+  // With a single key: Card
   return {
     Card
   };
