@@ -5,20 +5,6 @@ ktExport('card.js', () => {
     to be properly applied to cards of any size
   */
 
-  const SUITS = {
-    0: {
-      pattern: [
-        { x: 0.0, y: 0.0 }
-      ]
-    },
-    1: {
-      pattern: [
-        { x: 0.0, y: 0.0 },
-        { x: 1.0, y: 1.0 }
-      ]
-    }
-  };
-
   // Defining a class
   class Card {
     // here we need something to instantiate a single card
