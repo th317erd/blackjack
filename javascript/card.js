@@ -80,6 +80,7 @@ ktExport('card.js', () => {
     }
   }
   
+  // Defining a class
   class Card {
     // here we need something to instantiate a single card
     /* @paul define class constructor, and decide how internal instance variables should be
