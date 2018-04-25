@@ -1,31 +1,20 @@
 ktExport('card.js', () => {
-  //create class of Cards
-  class Card {
-    //assign getters and setters within the class for the number suit and entire deck
-    constructor(number, suit, deck) {
-      //define the number
-      this.number = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"];
-      //define the suit
-      this.suit = ["Hearts", "Dimonds", "Clubs", "Spades"];
-      //define the deck
-      this.deck = [52];
-      //create new object of a builtDeck which is empty
-      var builtDeck = new Object();
-    }
+  /*
+    @chuck define pattern structure for suit render patterns
+    Recomendation: ratios from 0.0 - 1.0 would enable patterns
+    to be properly applied to cards of any size
+  */
 
-    //define counter_one and counter_two for the exterior and interior loops
-    var counter_one, counter_two;
-    //itterate though all the cards
-    for (counter_one = 0; counter_one < Card.deck[0]; counter_one++ ) {
-      //itterate though all the suits
-      for (counter_two = 0; counter_two < Card.suit.length; counter_two++ ) {
-        // assign suit to a card.number
-        // push those new formed cards into the builtDeck in key value pairs
-      }
-    }
+  // Defining a class
+  class Class {
+    // here we need something to instantiate a single card
+    /* @paul define class constructor, and decide how internal instance variables should be
+       structured and defined. Also, defined structure of methods that will act upon each instance
+    */
   }
 
-  //log new key value pairs to the console
+  // Defining and returning a simple object
+  // With a single key: Card
   return {
     Card
   };
