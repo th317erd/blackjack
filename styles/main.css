@@ -4,9 +4,16 @@ html, body {
 }
 
 .card {
+  padding: 1rem;
+  width: 63.5rem;
+  height: 88.9rem;
+  background-color: beige;
+}
 
+.card-suit-container {
+  position: relative;
 }
 
 .suit {
-
+  position: absolute;
 }
