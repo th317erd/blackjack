@@ -18,7 +18,7 @@ ktExport('card.js', () => {
     function addSuitPoint(parentElement, point, size = 'large') {
       var suitPointElement = document.createElement('span');
 
-      suitPointElement.setAttribute('class', `suit-point font-suits1-${suit} suit-color-${suit} suit-point-${size}`);
+      suitPointElement.setAttribute('class', `suit-point font-suits1-${suit} suit-color-${suit} suit-point-${size} ${(point.flip) ? 'suit-flip' : ''}`);
       suitPointElement.setAttribute('style', `left: ${point.x * 100}%; top: ${point.y * 100}%;`);
 
       parentElement.appendChild(suitPointElement);
