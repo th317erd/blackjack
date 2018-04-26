@@ -21,10 +21,10 @@ html, body {
 
 .card-suit-container {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
+  top: 2rem;
+  left: 2.5rem;
+  right: 2.5rem;
+  bottom: 2rem;
 }
 
 .suit-color-diamond {
