@@ -3,7 +3,7 @@ ktExport('main.js', ({ Game, Card, renderCard }) => {
 
   // First argument is type, can be one of:
   // diamond, heart, club, or spade
-  renderCard('diamond', Card.SUITS[1]);
+  renderCard('diamond', Card.SUITS[2]);
 
   // Empty exports (don't export anything)
   // An empty object is needed

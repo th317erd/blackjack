@@ -12,22 +12,25 @@ ktExport('card.js', () => {
 
   // http://www.milefoot.com/math/discrete/counting/images/cards.png
   const SUITS = {
-    0: {
+    0: { // Ace
       digit: 'A',
       pattern: [
         { x: 0.5, y: 0.5, flip: false }
       ]
     },
-    1: {
+    1: { // Two
       digit: '2',
       pattern: [
         { x: 0.5, y: 0.0, flip: false },
         { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    2: {
+    2: { // Three
+      digit: '3',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.5, y: 0.0, flip: false },
+        { x: 0.5, y: 0.5, flip: false  },
+        { x: 0.5, y: 1.0, flip: true  }
       ]
     },
     3: {
