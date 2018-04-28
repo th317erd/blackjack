@@ -36,6 +36,8 @@ ktExport('game.js', () => {
       i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
     */
     update() {
+
+
     }
 
     checkPlayIsValid(action) {
