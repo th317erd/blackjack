@@ -20,7 +20,7 @@ ktExport('game.js', () => {
   const PLAYERS =  {
     player_one: {
       cards: [
-        { x: "ace", y: "2" },
+        { x: "hearts", y: "2" },
         { x: "spades", y: "3" }
       ],
       age: 33,
@@ -28,22 +28,49 @@ ktExport('game.js', () => {
     },
     player_two: {
       cards: [
-        { x: "ace", y: "2" },
-        { x: "spades", y: "3" }
+        { x: "clubs", y: "4" },
+        { x: "spades", y: "7" }
       ],
-      age: 33,
-      name: "something"
+      age: 30,
+      name: "Wyatt"
     }
   };
 
   // make sure player exist
-  if ("something" === "something") {
-    console.log("sorry bud");
-  } else {
-    console.log("sorry bud");
+  // create function to create game
+  function createGameAndCallPlayers() {
+    // call class to instanciate game with players
+    var newGame = new Game(PLAYERS.player_one, PLAYERS.player_two);
+    console.log(newGame);
+    // check if players exist
+    if (new Game(PLAYERS.player_one) != null && new Game(PLAYERS.player_two) != null) {
+      // the two required players exist
+      console.log("looks like there is two players");
+
+      // define the end of the game
+      var gameEnd = false;
+      console.log(gameEnd);
+      // var winner == null;
+      // define a turn inside the check if players exist
+      /*
+      turn is set to zero, if the variable gameEnd is set to false
+      continue running game and add 1 to var turn
+      if gameEnd returns true contine program
+      */
+      while (gameEnd == false) {
+        console.log(gameEnd);
+        var gameEnd = true;
+        console.log(gameEnd);
+      }
+
+    } else {
+      // the two required players dont exist
+      console.log("looks like we need more players");
+      return
+    }
   }
 
-
+createGameAndCallPlayers();
 
   /*
   what a game needs.
@@ -63,8 +90,8 @@ ktExport('game.js', () => {
   */
 
 
-  console.log("mason");
-  console.log( new Game(PLAYERS.player_one, PLAYERS.player_two) );
+  // console.log("mason");
+  // console.log( new Game(PLAYERS.player_one, PLAYERS.player_two) );
   return {
     Game
   };
