@@ -55,14 +55,17 @@ ktExport('game.js', () => {
       /*
       turn is set to zero, if the variable gameEnd is set to false
       continue running game and add 1 to var turn
-      if gameEnd returns true contine program
+      if gameEnd returns true continue program
       */
       while (gameEnd == false) {
-        console.log(gameEnd);
-        var gameEnd = true;
-        console.log(gameEnd);
-      }
+        // test and make sure loop is working
+        // console.log(gameEnd);
+        // var gameEnd = true;
+        // console.log(gameEnd);
 
+
+        
+      }
     } else {
       // the two required players dont exist
       console.log("looks like we need more players");
