@@ -25,10 +25,20 @@
 [class^="font-suits1-"]:after, [class*=" font-suits1-"]:after {
   font-family: suits1;
   font-style: normal;
-  margin-left: 20px;
 }
 
-.font-suits1-diamond:before { content: "\f100"; }
-.font-suits1-heart:before { content: "\f101"; }
-.font-suits1-club:before { content: "\f102"; }
-.font-suits1-spade:before { content: "\f103"; }
+.font-suits1-diamond:before {
+  content: "\f100";
+}
+
+.font-suits1-heart:before {
+  content: "\f101";
+}
+
+.font-suits1-club:before {
+  content: "\f102";
+}
+
+.font-suits1-spade:before {
+  content: "\f103";
+}
