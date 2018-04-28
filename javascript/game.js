@@ -9,68 +9,39 @@ ktExport('game.js', () => {
        How will turns be handled?
     */
 
-    constructor(player_one, player_two) {
-      this.player_one = player_one;
-      this.player_two = player_two;
+    constructor() {
+      this.players = [];
+      this.cards = [];
     }
 
     /* @team define how this will provide an interface to a game and its rules */
-  }
 
-  const PLAYERS =  {
-    player_one: {
-      cards: [
-        { x: "hearts", y: "2" },
-        { x: "spades", y: "3" }
-      ],
-      age: 33,
-      name: "Mason"
-    },
-    player_two: {
-      cards: [
-        { x: "clubs", y: "4" },
-        { x: "spades", y: "7" }
-      ],
-      age: 30,
-      name: "Wyatt"
+    /* @mason defined all methods for players
+      i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
+    */
+
+    addPlayer(player) {
+      /* @mason start here */
     }
-  };
 
-  // make sure player exist
-  // create function to create game
-  function createGameAndCallPlayers() {
-    // call class to instanciate game with players
-    var newGame = new Game(PLAYERS.player_one, PLAYERS.player_two);
-    console.log(newGame);
-    // check if players exist
-    if (new Game(PLAYERS.player_one) != null && new Game(PLAYERS.player_two) != null) {
-      // the two required players exist
-      console.log("looks like there is two players");
+    /* @paul Add methods for cards!
+       i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
+    */
+    getPlayerCards(player) {
+      // iterate cards and match on card.owner === player.id
+    }
 
-      // define the end of the game
-      var gameEnd = false;
-      console.log(gameEnd);
-      // var winner == null;
-      // define a turn inside the check if players exist
-      /*
-      turn is set to zero, if the variable gameEnd is set to false
-      continue running game and add 1 to var turn
-      if gameEnd returns true contine program
-      */
-      while (gameEnd == false) {
-        console.log(gameEnd);
-        var gameEnd = true;
-        console.log(gameEnd);
-      }
+    /* @whitley & @wyatt
+      Define methods for game mechanics
+      i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
+    */
+    update() {
+    }
 
-    } else {
-      // the two required players dont exist
-      console.log("looks like we need more players");
-      return
+    checkPlayIsValid(action) {
+      return true;
     }
   }
-
-createGameAndCallPlayers();
 
   /*
   what a game needs.
@@ -89,9 +60,6 @@ createGameAndCallPlayers();
     1c. when turn loop runs more turn method to mext players
   */
 
-
-  // console.log("mason");
-  // console.log( new Game(PLAYERS.player_one, PLAYERS.player_two) );
   return {
     Game
   };
