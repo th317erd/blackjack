@@ -27,8 +27,47 @@ ktExport('game.js', () => {
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
     */
+    generateDeck(deck) {
+      // variable "deck" equals an empty array
+      deck = [];
+      // variable "suits" equals the suits defined in the const SUITS
+      suits = cards.SUITS;
+      // varable "values" equals the values defined in the cosnt
+      values = cards.VALUES;
+
+      // if index is less than suites length, iterate (4 suites)
+      for(var i = 0; i < suits.length; i++){
+        // if index is less than vlues length (13 values)
+        for(var x = 0; x < values.length; x++){
+          // create a "card" and give it a value and a suit
+          var card = {Value: values[x], Suit: suits[i]};
+          // give the object "deck" the key "card" that stores a "value" and "suit" key
+          deck.push(card);
+        }
+      }
+      return deck;
+      console.log(deck);
+    }
+
+    assignCardToPlayer(){
+      // 
+      var player = game.players;
+
+    }
     getPlayerCards(player) {
       // iterate cards and match on card.owner === player.id
+      // get the deck from generateDeck
+      var deck = game.deck;
+      // get the players from addPlayer
+      var players = game.players;
+
+      //var hand = 2 cards from game.deck
+
+      // for each index in array "players" define it as a "player"
+      for (var i = 0; i < players.length; i++){
+        // for each player deal 2 cards each from game.deck 
+        player.push(hand)
+      }
     }
 
     /* @whitley & @wyatt
