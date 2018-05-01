@@ -14,15 +14,31 @@ ktExport('game.js', () => {
       this.cards = [];
     }
 
+    //change currentPlayer, , removePlayer,
+    //addPlayer, clearPlayers
+    removePlayer(player) {
+      for (var i=array.length-1; i>=0; i--) {
+        if (this.players[i] === player) {
+            this.players.splice(i, 1);
+        }
+      }
+    }
+
+    addPLayer(player) {
+      this.players.push(player);
+    }
+
+    clearPlayers() {
+      while (this.players.length) { this.players.pop(); }
+
+
     /* @team define how this will provide an interface to a game and its rules */
 
     /* @mason defined all methods for players
       i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
     */
 
-    addPlayer(player) {
-      /* @mason start here */
-    }
+    
 
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
@@ -80,7 +96,9 @@ ktExport('game.js', () => {
     checkPlayIsValid(action) {
       return true;
     }
+    /* @team define how this will provide an interface to a game and its rules */
   }
+
 
   /*
   what a game needs.
@@ -98,6 +116,7 @@ ktExport('game.js', () => {
     1b. turns can count to infinity
     1c. when turn loop runs more turn method to mext players
   */
+
 
   return {
     Game
