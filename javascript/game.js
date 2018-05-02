@@ -12,6 +12,7 @@ ktExport('game.js', () => {
     constructor() {
       this.players = [];
       this.cards = [];
+      this.currentPlayer = 0;
     }
 
     //change currentPlayer, , removePlayer,
@@ -32,19 +33,7 @@ ktExport('game.js', () => {
       this.players = [];
     }
 
-    addPlayer(anotherPlayer) {
-      this.players.push(anotherPlayer);
-    }
-    // total number of players
-    playerCounter() {
-      var numberOfPLayers = this.players.length;
-    }
-    // calls an idividual player turn
-    turnCounter(playerCounter) {
-      numberOfPLayers.forEach(players => {
-        playerTurn();
-      };
-    }
+    
 
     /* @team define how this will provide an interface to a game and its rules */
 
