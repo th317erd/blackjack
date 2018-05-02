@@ -9,68 +9,96 @@ ktExport('game.js', () => {
        How will turns be handled?
     */
 
-    constructor(player_one, player_two) {
-      this.player_one = player_one;
-      this.player_two = player_two;
+    constructor() {
+      this.players = [];
+      this.cards = [];
     }
 
+    //change currentPlayer, , removePlayer,
+    //addPlayer, clearPlayers
+    removePlayer(player) {
+      for (var i=array.length-1; i>=0; i--) {
+        if (this.players[i] === player) {
+            this.players.splice(i, 1);
+        }
+      }
+    }
+
+    addPLayer(player) {
+      this.players.push(player);
+    }
+
+    clearPlayers() {
+      while (this.players.length) { this.players.pop(); }
+
+
+    /* @team define how this will provide an interface to a game and its rules */
+
+    /* @mason defined all methods for players
+      i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
+    */
+
+    
+
+    /* @paul Add methods for cards!
+       i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
+    */
+    generateDeck(deck) {
+      // variable "deck" equals an empty array
+      deck = [];
+      // variable "suits" equals the suits defined in the const SUITS
+      suits = cards.SUITS;
+      // varable "values" equals the values defined in the cosnt
+      values = cards.VALUES;
+
+      // if index is less than suites length, iterate (4 suites)
+      for(var i = 0; i < suits.length; i++){
+        // if index is less than vlues length (13 values)
+        for(var x = 0; x < values.length; x++){
+          // create a "card" and give it a value and a suit
+          var card = {Value: values[x], Suit: suits[i]};
+          // give the object "deck" the key "card" that stores a "value" and "suit" key
+          deck.push(card);
+        }
+      }
+      return deck;
+      console.log(deck);
+    }
+
+    assignCardToPlayer(){
+      // 
+      var player = game.players;
+
+    }
+    getPlayerCards(player) {
+      // iterate cards and match on card.owner === player.id
+      // get the deck from generateDeck
+      var deck = game.deck;
+      // get the players from addPlayer
+      var players = game.players;
+
+      //var hand = 2 cards from game.deck
+
+      // for each index in array "players" define it as a "player"
+      for (var i = 0; i < players.length; i++){
+        // for each player deal 2 cards each from game.deck 
+        player.push(hand)
+      }
+    }
+
+    /* @whitley & @wyatt
+      Define methods for game mechanics
+      i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
+    */
+    update() {
+    }
+
+    checkPlayIsValid(action) {
+      return true;
+    }
     /* @team define how this will provide an interface to a game and its rules */
   }
 
-  const PLAYERS =  {
-    player_one: {
-      cards: [
-        { x: "hearts", y: "2" },
-        { x: "spades", y: "3" }
-      ],
-      age: 33,
-      name: "Mason"
-    },
-    player_two: {
-      cards: [
-        { x: "clubs", y: "4" },
-        { x: "spades", y: "7" }
-      ],
-      age: 30,
-      name: "Wyatt"
-    }
-  };
-
-  // make sure player exist
-  // create function to create game
-  function createGameAndCallPlayers() {
-    // call class to instanciate game with players
-    var newGame = new Game(PLAYERS.player_one, PLAYERS.player_two);
-    console.log(newGame);
-    // check if players exist
-    if (new Game(PLAYERS.player_one) != null && new Game(PLAYERS.player_two) != null) {
-      // the two required players exist
-      console.log("looks like there is two players");
-
-      // define the end of the game
-      var gameEnd = false;
-      console.log(gameEnd);
-      // var winner == null;
-      // define a turn inside the check if players exist
-      /*
-      turn is set to zero, if the variable gameEnd is set to false
-      continue running game and add 1 to var turn
-      if gameEnd returns true contine program
-      */
-      while (gameEnd == false) {
-        console.log(gameEnd);
-        var gameEnd = true;
-        console.log(gameEnd);
-      }
-
-    } else {
-      // the two required players dont exist
-      console.log("looks like we need more players");
-      return
-    }
-  }
-
-createGameAndCallPlayers();
 
   /*
   what a game needs.
@@ -90,8 +118,6 @@ createGameAndCallPlayers();
   */
 
 
-  // console.log("mason");
-  // console.log( new Game(PLAYERS.player_one, PLAYERS.player_two) );
   return {
     Game
   };
