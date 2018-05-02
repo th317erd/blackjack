@@ -169,7 +169,11 @@ ktExport('card.js', () => {
     constructor(value) {
       this.value = value;
       //this.suit;
-      this.owner = 0;
+      this.ownerID = 0;
+    }
+
+    setOwner(player) {
+      this.ownerID = player.id;
     }
   }
 
