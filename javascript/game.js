@@ -103,6 +103,14 @@ ktExport('game.js', () => {
     update() {
     }
 
+    render() {
+
+    }
+
+    /* @chuck calculate if there is a winner */
+    calculateGameState() {
+    }
+
     checkPlayIsValid(action) {
       return true;
     }
