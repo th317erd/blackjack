@@ -33,9 +33,6 @@ ktExport('game.js', () => {
       this.players = [];
     }
 
-<<<<<<< HEAD
-    
-=======
     // total number of players
     numberOfPlayers() {
       return this.players.length;
@@ -44,7 +41,6 @@ ktExport('game.js', () => {
     setPlayerTurn(player) {
       this.currentPlayer = player;
     }
->>>>>>> e847a0928a1cc9776879c37a71c05726e34a385d
 
     /* @team define how this will provide an interface to a game and its rules */
 
