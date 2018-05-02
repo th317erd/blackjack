@@ -1,4 +1,4 @@
-ktExport('game.js', () => {
+ktExport('game.js', ({ Card }) => {
   class Game {
     // Here we will define game rules
     // A game will also hold some number of cards and players
@@ -54,20 +54,25 @@ ktExport('game.js', () => {
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
     */
-    generateDeck(deck) {
+    generateDeck() {
       // variable "deck" equals an empty array
-      deck = [];
+      var deck = [];
       // variable "suits" equals the suits defined in the const SUITS
-      suits = cards.SUITS;
-      // varable "values" equals the values defined in the cosnt
-      values = cards.VALUES;
+      var suits = Card.CARDS;
+      // return all the keys of the suits object
+      var suitkeys = Object.keys(suits);
 
       // if index is less than suites length, iterate (4 suites)
-      for(var i = 0; i < suits.length; i++){
+      for(var i = 0; i < suitkeys.length; i++){
+        // each key in suits = 
+        var suitkey = suitkeys[i];
+        // access value in var suitkey
+        var suitvalue = suits[suitkey];
+        console.log(suitvalue);
         // if index is less than vlues length (13 values)
-        for(var x = 0; x < values.length; x++){
+        for(var x = 0; x < 4; x++){
           // create a "card" and give it a value and a suit
-          var card = {Value: values[x], Suit: suits[i]};
+          var card = new Card(x,suitkey);
           // give the object "deck" the key "card" that stores a "value" and "suit" key
           deck.push(card);
         }
