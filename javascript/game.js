@@ -61,26 +61,23 @@ ktExport('game.js', ({ Card }) => {
       var suits = Card.CARDS;
       // return all the keys of the suits object
       var suitkeys = Object.keys(suits);
-
       // if index is less than suites length, iterate (4 suites)
-      for(var i = 0; i < suitkeys.length; i++){
-       
-        // each key in suits = 
-        var suitkey = suitkeys[i];
-        // access value in var suitkey
-        var suitvalue = suits[suitkey];
-        console.log(suitvalue);
-
+      for(var x = 0; x < 4; x++){
         // if index is less than vlues length (13 values)
-        for(var x = 0; x < 4; x++){
+        for(var i = 0; i < suitkeys.length; i++){
+          // each key in suits = 
+          var suitkey = suitkeys[i];
+          // access value in var suitkey
+          var suitvalue = suits[suitkey];
           // create a "card" and give it a value and a suit
-          var card = new Card(x,suitkey);
+          var card = new Card(suitkey,Card.SUITS[x]);
+          card.ownerID = // math to generate random cards
+
           // give the object "deck" the key "card" that stores a "value" and "suit" key
           deck.push(card);
         }
       }
       return deck;
-      console.log(deck);
     }
 
     assignCardToPlayer() {
@@ -91,17 +88,21 @@ ktExport('game.js', ({ Card }) => {
     getPlayerCards(player) {
       // iterate cards and match on card.owner === player.id
       // get the deck from generateDeck
-      var deck = game.deck;
+      var deck = this.deck;
       // get the players from addPlayer
-      var players = game.players;
+      var players = this.players;
+      var hand = [];
 
       //var hand = 2 cards from game.deck
 
       // for each index in array "players" define it as a "player"
       for (var i = 0; i < players.length; i++){
+        var player = player[i];
         // for each player deal 2 cards each from game.deck
-        player.push(hand)
+        if (player.id === card.ownerID)
+          hand.push(hand);
       }
+      return hand;
     }
 
     /* @whitley & @wyatt
