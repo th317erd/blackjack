@@ -30,6 +30,21 @@ ktExport('game.js', () => {
 
     clearPlayers() {
       while (this.players.length) { this.players.pop(); }
+      this.players = [];
+    }
+
+    addPlayer(anotherPlayer) {
+      this.players.push(anotherPlayer);
+    }
+    // total number of players
+    playerCounter() {
+      var numberOfPLayers = this.players.length;
+    }
+    // calls an idividual player turn
+    turnCounter(playerCounter) {
+      numberOfPLayers.forEach(players => {
+        playerTurn();
+      };
     }
 
     /* @team define how this will provide an interface to a game and its rules */
