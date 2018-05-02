@@ -64,11 +64,13 @@ ktExport('game.js', ({ Card }) => {
 
       // if index is less than suites length, iterate (4 suites)
       for(var i = 0; i < suitkeys.length; i++){
+       
         // each key in suits = 
         var suitkey = suitkeys[i];
         // access value in var suitkey
         var suitvalue = suits[suitkey];
         console.log(suitvalue);
+
         // if index is less than vlues length (13 values)
         for(var x = 0; x < 4; x++){
           // create a "card" and give it a value and a suit
