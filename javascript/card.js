@@ -166,9 +166,9 @@ ktExport('card.js', () => {
     */
 
     // Define a generic card and its functionality here
-    constructor(value) {
+    constructor(value,suit) {
       this.value = value;
-      //this.suit;
+      this.suit = suit;
       this.ownerID = 0;
     }
 
