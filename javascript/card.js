@@ -75,6 +75,7 @@ ktExport('card.js', () => {
         { x: 1.0, y: 1.0, flip: true  },
         { x: 0.0, y: 0.5, flip: false  },
         { x: 1.0, y: 0.5, flip: false  },
+        { x: 0.50, y: 0.25, flip: false  }
 
       ]
     },
@@ -86,24 +87,38 @@ ktExport('card.js', () => {
         { x: 0.0, y: 1.0, flip: true  },
         { x: 1.0, y: 1.0, flip: true  },
         { x: 0.0, y: 0.5, flip: false  },
-        { x: 1.0, y: 0.5, flip: false  }
-
+        { x: 1.0, y: 0.5, flip: false  },
+        { x: 0.50, y: 0.25, flip: false },
+        { x: 0.50, y: 0.75, flip: true  }
       ]
     },
     8: { //Nine
       digit:'9',
       pattern: [
-        { x: 0.5, y: 0.0, flip: false },
-        { x: 0.5, y: 0.5, flip: false  },
-        { x: 0.5, y: 1.0, flip: true  }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.35, flip: false  },
+        { x: 1.0, y: 0.35, flip: false  },
+        { x: 0.5, y: 0.5, flip: false },
+        { x: 1.0, y: 0.65, flip: true },
+        { x: 0.0, y: 0.65, flip: true }
       ]
     },
     9: { //Ten
       digit:'10',
       pattern: [
-        { x: 0.5, y: 0.0, flip: false },
-        { x: 0.5, y: 0.5, flip: false  },
-        { x: 0.5, y: 1.0, flip: true  }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.35, flip: false  },
+        { x: 1.0, y: 0.35, flip: false  },
+        { x: 0.5, y: 0.25, flip: false },
+        { x: 1.0, y: 0.65, flip: true },
+        { x: 0.0, y: 0.65, flip: true },
+        { x: 0.5, y: 0.75, flip: true },
       ]
     },
     10: {//Eleven
