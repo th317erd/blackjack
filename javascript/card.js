@@ -12,7 +12,7 @@ ktExport('card.js', () => {
 
   // http://www.milefoot.com/math/discrete/counting/images/cards.png
   // X is horizonal   Y is vertical
-  const SUITS = {
+  const CARDS = {
     0: { // Ace
       digit: 'A',
       pattern: [
@@ -34,17 +34,17 @@ ktExport('card.js', () => {
         { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    3: { // Four 
+    3: { // Four
       digit: '4',
       pattern: [
         { x: 0.0, y: 0.0, flip: false },
         { x: 1.0, y: 0.0, flip: false  },
         { x: 0.0, y: 1.0, flip: true  },
         { x: 1.0, y: 1.0, flip: true  }
-                      
+
       ]
     },
-    4: { // Five 
+    4: { // Five
       digit: '5',
       pattern: [
         { x: 0.0, y: 0.0, flip: false },
@@ -55,7 +55,7 @@ ktExport('card.js', () => {
 
       ]
     },
-    5: { //Six 
+    5: { //Six
       digit:'6',
       pattern: [
         { x: 0.0, y: 0.0, flip: false },
@@ -155,6 +155,8 @@ ktExport('card.js', () => {
     }
   };
 
+  const SUITS = [ 'diamond', 'heart', 'spade', 'club' ];
+
   // Defining a class
   class Card {
     // here we need something to instantiate a single card
@@ -171,6 +173,7 @@ ktExport('card.js', () => {
     }
   }
 
+  Card.CARDS = CARDS;
   Card.SUITS = SUITS;
 
   // Defining and returning a simple object
