@@ -49,8 +49,6 @@ ktExport('game.js', ({ Card }) => {
       i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
     */
 
-
-
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
     */
@@ -79,11 +77,13 @@ ktExport('game.js', ({ Card }) => {
       }
       return deck;
     }
-
-    assignCardToPlayer() {
-      //
-      var player = game.players;
-
+    //TESTING var g=new KingTut.Game();g.generateDeck()
+    
+    getRandomCard(){
+      // generate a random card from deck
+    }
+    assignCardToPlayer(player,card) {
+      // match card to playerID
     }
     getPlayerCards(player) {
       // iterate cards and match on card.owner === player.id
