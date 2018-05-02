@@ -30,7 +30,7 @@ ktExport('game.js', () => {
 
     clearPlayers() {
       while (this.players.length) { this.players.pop(); }
-
+    }
 
     /* @team define how this will provide an interface to a game and its rules */
 
@@ -38,7 +38,7 @@ ktExport('game.js', () => {
       i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
     */
 
-    
+
 
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
@@ -65,8 +65,8 @@ ktExport('game.js', () => {
       console.log(deck);
     }
 
-    assignCardToPlayer(){
-      // 
+    assignCardToPlayer() {
+      //
       var player = game.players;
 
     }
@@ -81,7 +81,7 @@ ktExport('game.js', () => {
 
       // for each index in array "players" define it as a "player"
       for (var i = 0; i < players.length; i++){
-        // for each player deal 2 cards each from game.deck 
+        // for each player deal 2 cards each from game.deck
         player.push(hand)
       }
     }
