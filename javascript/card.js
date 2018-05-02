@@ -11,6 +11,7 @@ ktExport('card.js', () => {
   */
 
   // http://www.milefoot.com/math/discrete/counting/images/cards.png
+  // X is horizonal   Y is vertical
   const SUITS = {
     0: { // Ace
       digit: 'A',
@@ -33,59 +34,123 @@ ktExport('card.js', () => {
         { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    3: {
+    3: { // Four 
+      digit: '4',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  }
+                      
       ]
     },
-    4: {
+    4: { // Five 
+      digit: '5',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.5, y: 0.5, flip: false  }
+
       ]
     },
-    5: {
+    5: { //Six 
+      digit:'6',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.5, flip: false  },
+        { x: 1.0, y: 0.5, flip: false  }
       ]
     },
-    6: {
+    6: { //seven
+      digit:'7',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.5, flip: false  },
+        { x: 1.0, y: 0.5, flip: false  },
+        { x: 0.50, y: 0.25, flip: false  }
+
       ]
     },
-    7: {
+    7: { //eight
+      digit:'8',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.5, flip: false  },
+        { x: 1.0, y: 0.5, flip: false  },
+        { x: 0.50, y: 0.25, flip: false },
+        { x: 0.50, y: 0.75, flip: true  }
       ]
     },
-    8: {
+    8: { //Nine
+      digit:'9',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.35, flip: false  },
+        { x: 1.0, y: 0.35, flip: false  },
+        { x: 0.5, y: 0.5, flip: false },
+        { x: 1.0, y: 0.65, flip: true },
+        { x: 0.0, y: 0.65, flip: true }
       ]
     },
-    9: {
+    9: { //Ten
+      digit:'10',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.0, y: 0.0, flip: false },
+        { x: 1.0, y: 0.0, flip: false  },
+        { x: 0.0, y: 1.0, flip: true  },
+        { x: 1.0, y: 1.0, flip: true  },
+        { x: 0.0, y: 0.35, flip: false  },
+        { x: 1.0, y: 0.35, flip: false  },
+        { x: 0.5, y: 0.25, flip: false },
+        { x: 1.0, y: 0.65, flip: true },
+        { x: 0.0, y: 0.65, flip: true },
+        { x: 0.5, y: 0.75, flip: true },
       ]
     },
-    10: {
+    10: {//Eleven
+      digit:'11',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.5, y: 0.0, flip: false },
+        { x: 0.5, y: 0.5, flip: false  },
+        { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    11: {
+    11: {//Twelve
+      digit:'12',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.5, y: 0.0, flip: false },
+        { x: 0.5, y: 0.5, flip: false  },
+        { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    12: {
+    12: {//Thirteen
+      digit:'13',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.5, y: 0.0, flip: false },
+        { x: 0.5, y: 0.5, flip: false  },
+        { x: 0.5, y: 1.0, flip: true  }
       ]
     },
-    13: {
+    13: {//Fourteen
+      digit:'14',
       pattern: [
-        { x: 0.0, y: 0.0, flip: false }
+        { x: 0.5, y: 0.0, flip: false },
+        { x: 0.5, y: 0.5, flip: false  },
+        { x: 0.5, y: 1.0, flip: true  }
       ]
     }
   };
