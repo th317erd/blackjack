@@ -1,4 +1,4 @@
-ktExport('game.js', () => {
+ktExport('game.js', ({ Card }) => {
   class Game {
     // Here we will define game rules
     // A game will also hold some number of cards and players
@@ -48,52 +48,60 @@ ktExport('game.js', () => {
       i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
     */
 
-
-
     /* @paul Add methods for cards!
        i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
     */
-    generateDeck(deck) {
+    generateDeck() {
       // variable "deck" equals an empty array
-      deck = [];
+      var deck = [];
       // variable "suits" equals the suits defined in the const SUITS
-      suits = cards.SUITS;
-      // varable "values" equals the values defined in the cosnt
-      values = cards.VALUES;
-
+      var suits = Card.CARDS;
+      // return all the keys of the suits object
+      var suitkeys = Object.keys(suits);
       // if index is less than suites length, iterate (4 suites)
-      for(var i = 0; i < suits.length; i++){
+      for(var x = 0; x < 4; x++){
         // if index is less than vlues length (13 values)
-        for(var x = 0; x < values.length; x++){
+        for(var i = 0; i < suitkeys.length; i++){
+          // each key in suits = 
+          var suitkey = suitkeys[i];
+          // access value in var suitkey
+          var suitvalue = suits[suitkey];
           // create a "card" and give it a value and a suit
-          var card = {Value: values[x], Suit: suits[i]};
+          var card = new Card(suitkey,Card.SUITS[x]);
+          card.ownerID = // math to generate random cards
+
           // give the object "deck" the key "card" that stores a "value" and "suit" key
           deck.push(card);
         }
       }
       return deck;
-      console.log(deck);
     }
-
-    assignCardToPlayer() {
-      //
-      var player = game.players;
-
+    //TESTING var g=new KingTut.Game();g.generateDeck()
+    
+    getRandomCard(){
+      // generate a random card from deck
+    }
+    assignCardToPlayer(player,card) {
+      // match card to playerID
     }
     getPlayerCards(player) {
       // iterate cards and match on card.owner === player.id
       // get the deck from generateDeck
-      var deck = game.deck;
+      var deck = this.deck;
       // get the players from addPlayer
-      var players = game.players;
+      var players = this.players;
+      var hand = [];
 
       //var hand = 2 cards from game.deck
 
       // for each index in array "players" define it as a "player"
       for (var i = 0; i < players.length; i++){
+        var player = player[i];
         // for each player deal 2 cards each from game.deck
-        player.push(hand)
+        if (player.id === card.ownerID)
+          hand.push(hand);
       }
+      return hand;
     }
 
     /* @whitley & @wyatt
