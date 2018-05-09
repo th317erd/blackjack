@@ -8,7 +8,7 @@ function initializeWebsocketConnection(host, port) {
     console.log('Connected to websocket server!');
 
     window.sendChat = (user, message) => {
-      if (arguments.length < 2)
+      if (typeof message !== 'string')
         throw new Error('Improper usage. Specify your username as the first argument, message as the second');
 
       this.emit('chat_message', {
