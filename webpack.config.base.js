@@ -17,7 +17,8 @@ module.exports = {
       '.dust'
     ],
     alias: {
-      dustjs: 'dustjs-linkedin'
+      "dustjs": 'dustjs-linkedin',
+      "dust.core": "dustjs-linkedin"
     }
   },
   module: {

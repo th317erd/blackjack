@@ -1,4 +1,22 @@
-function renderCard(suit, cardDefinition) {
+const dust = require('dustjs'),
+      cardTemplate = require('./templates/card'),
+      { Card } = require('./card');
+
+function renderCard(value, suit) {
+  dust.render(cardTemplate, Object.assign({
+    'suit': suit,
+    'suit-font': 'font-suits1'
+  }, Card.CARDS[value]), function(err, output) {
+    console.log(output);
+
+    var cardElement = document.createElement('div');
+    cardElement.setAttribute('class', 'card');
+    cardElement.innerHTML = output;
+    document.body.appendChild(cardElement);
+  });
+}
+
+/*function renderCard(suit, cardDefinition) {
   // Create our base card element
   function createCard() {
     var cardElement = document.createElement('div'),
@@ -64,7 +82,7 @@ function renderCard(suit, cardDefinition) {
   // Add elements to the DOM
   cardElement.children[0].appendChild(suitContainerElement);
   document.body.appendChild(cardElement);
-}
+}*/
 
 module.exports = {
   renderCard
