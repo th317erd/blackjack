@@ -3,10 +3,19 @@ const { initializeWebsocketConnection } = require('./websockets'),
       // Include game classes
       { Game } = require('./game'),
       { Card } = require('./card'),
-      { renderCard } = require('./debug-utils');
+      { renderCard } = require('./debug-utils'),
+      dust = require('dustjs'),
+      testTemplate = require('./templates/card');
 
 (function() {
   initializeWebsocketConnection('localhost', 8085);
+
+  dust.render(testTemplate, Object.assign({
+    'suit': 'spade',
+    'suit-font': 'font-suits1'
+  }, Card.CARDS[9]), function(err, output) {
+    console.log('TEMPLATE OUTPUT: ', output);
+  });
 
   console.log('KingTut: ', Game);
 
