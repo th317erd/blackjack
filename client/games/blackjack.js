@@ -2,6 +2,7 @@ const { Game } = require('../game');
 
 class BlackJackGame extends Game {
   constructor() {
+    super();
     this.deck = this.generateDeck();
   }
 
@@ -34,6 +35,6 @@ class BlackJackGame extends Game {
   }
 }
 
-return {
+module.exports = {
   BlackJackGame
 };

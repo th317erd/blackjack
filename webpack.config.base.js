@@ -16,14 +16,16 @@ module.exports = {
       '.js',
       '.dust'
     ],
-    alias: { dustjs: 'dustjs-linkedin' }
+    alias: {
+      dustjs: 'dustjs-linkedin'
+    }
   },
   module: {
     rules: [
       {
         test: /\.dust$/,
         exclude: /node_modules/,
-        loader: path.resolve( __dirname, 'index' ),
+        loader: "dust-loader-complete",
         options: {
           root: 'client/templates',
           verbose: true
