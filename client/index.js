@@ -1,14 +1,15 @@
       // Include websocket connector
 const { initializeWebsocketConnection } = require('./websockets'),
       // Include game classes
-      { Game } = require('./game'),
+      { BlackJackGame } = require('./games/blackjack'),
       { Card } = require('./card'),
       { renderCard } = require('./debug-utils');
 
 (function() {
-  initializeWebsocketConnection('localhost', 8085);
+//   initializeWebsocketConnection('localhost', 8085);
 
-  console.log('KingTut: ', Game);
+  console.log('KingTut: ', BlackJackGame); 
+  global.game = new BlackJackGame();
 
   // First argument is type, can be one of:
   // diamond, heart, club, or spade
