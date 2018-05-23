@@ -1,5 +1,5 @@
 const { Game } = require('../game'),
-  { Player } = require('../player');
+      { Player } = require('../player');
 
 class BlackJackGame extends Game {
   constructor() {

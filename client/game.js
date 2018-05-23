@@ -61,7 +61,7 @@ class Game {
     var suitkeys = Object.keys(suits);
     // if index is less than suites length, iterate (4 suites)
     for(var x = 0; x < 4; x++){
-      // if index is less than vlues length (13 values)
+      // if index is less than values length (13 values)
       for(var i = 0; i < suitkeys.length; i++){
         // each key in suits =
         var suitkey = suitkeys[i];
@@ -79,48 +79,31 @@ class Game {
   }
   //TESTING var g=new KingTut.Game();g.generateDeck()
 
-  getRandomCard(){
+  getRandomCard() {
     // generate a random card from deck
     var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
     return this.deck[randomeNumberBetween];
   }
 
   assignCardToPlayer(player,card) {
-    // match card to playerID
-    // var player = this.players;
-    //
-    // for (let i = 0; i < player.length; i += 1) {
-    //   var currentPLayer = player[i]
-    //   if ( currentPLayer === player ) {
-    //       player = card
-    //   }
-    // }
-    // return currentRandomCard;
-    // return player;
-    // var currentPlayer = this.players[0];
-    // var playerId = currentPlayer.id;
-    //
-    // card.ownerID = playerId;
-
     card.ownerID = player.id;
-
   }
+
   getPlayerCards(player) {
     // iterate cards and match on card.owner === player.id
-    // get the deck from generateDeck
-    var deck = this.deck;
-    // get the players from addPlayer
-    var hand = [];
+    // insert matching cards into an array called "hand"
+    // return the hand array, including all matching cards
+    var deck = this.deck,
+        hand = [];
 
-    //var hand = 2 cards from game.deck
-
-    // for each index in array "players" define it as a "player"
+    // for each index in array "deck"
     for (var i = 0; i < deck.length; i++){
       var card = deck[i];
-      // for each player deal 2 cards each from game.deck
+      // Does this card belong to the specified player?
       if (player.id === card.ownerID)
         hand.push(card);
     }
+
     return hand;
   }
 
@@ -129,6 +112,7 @@ class Game {
     i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
   */
   update() {
+
   }
 
   render() {
