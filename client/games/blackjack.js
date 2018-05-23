@@ -1,4 +1,4 @@
-const { Game } = require('../game'), 
+const { Game } = require('../game'),
       { Player } = require('../player');
 
 class BlackJackGame extends Game {
