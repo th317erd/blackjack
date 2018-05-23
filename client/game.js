@@ -91,15 +91,11 @@ class Game {
   assignCardToPlayer(player,card) {
     card.ownerID = player.id;
   }
-  getPlayerCards(player) {
-    // iterate cards and match on card.owner === player.id
-    // get the deck from generateDeck
-    var deck = this.deck;
-    // get the players from addPlayer
-    var players = this.players;
-    var hand = [];
 
-    //var hand = 2 cards from game.deck
+  getPlayerCards(player) {
+
+    var deck = this.deck;
+    var hand = [];
 
     // for each index in array "players" define it as a "player"
     for (var i = 0; i < players.length; i++){
