@@ -31,7 +31,6 @@ class Game {
   }
 
   clearPlayers() {
-    while (this.players.length) { this.players.pop(); }
     this.players = [];
   }
 
@@ -82,10 +81,8 @@ class Game {
 
   getRandomCard() {
     // generate a random card from deck
-    var deck = this.deck;
-    var cardIndex = Math.floor(Math.random() * deck.length);
-    var randomCard = deck[cardIndex]; 
-    return randomCard;
+    var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
+    return this.deck[randomeNumberBetween];
   }
 
   assignCardToPlayer(player,card) {

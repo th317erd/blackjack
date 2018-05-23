@@ -12,7 +12,10 @@ class BlackJackGame extends Game {
   /* @team discuss how this will tie into, and define a game and its rules */
   checkPlayIsValid(action) {
     // rules for if a play is valid
+    // if ()
   }
+
+  //some players hand  == total numbers added
 
   /* @mason define action methods */
   actionHit() {
