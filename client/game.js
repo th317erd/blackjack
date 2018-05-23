@@ -26,7 +26,7 @@ class Game {
     }
   }
 
-  addPLayer(player) {
+  addPlayer(player) {
     this.players.push(player);
   }
 
@@ -69,7 +69,7 @@ class Game {
         var suitvalue = suits[suitkey];
         // create a "card" and give it a value and a suit
         var card = new Card(suitkey,Card.SUITS[x]);
-        card.ownerID = // math to generate random cards
+        //card.ownerID = // math to generate random cards
 
         // give the object "deck" the key "card" that stores a "value" and "suit" key
         deck.push(card);
@@ -81,26 +81,45 @@ class Game {
 
   getRandomCard(){
     // generate a random card from deck
+    var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
+    return this.deck[randomeNumberBetween];
   }
+
   assignCardToPlayer(player,card) {
     // match card to playerID
+    // var player = this.players;
+    //
+    // for (let i = 0; i < player.length; i += 1) {
+    //   var currentPLayer = player[i]
+    //   if ( currentPLayer === player ) {
+    //       player = card
+    //   }
+    // }
+    // return currentRandomCard;
+    // return player;
+    // var currentPlayer = this.players[0];
+    // var playerId = currentPlayer.id;
+    //
+    // card.ownerID = playerId;
+
+    card.ownerID = player.id;
+
   }
   getPlayerCards(player) {
     // iterate cards and match on card.owner === player.id
     // get the deck from generateDeck
     var deck = this.deck;
     // get the players from addPlayer
-    var players = this.players;
     var hand = [];
 
     //var hand = 2 cards from game.deck
 
     // for each index in array "players" define it as a "player"
-    for (var i = 0; i < players.length; i++){
-      var player = player[i];
+    for (var i = 0; i < deck.length; i++){
+      var card = deck[i];
       // for each player deal 2 cards each from game.deck
       if (player.id === card.ownerID)
-        hand.push(hand);
+        hand.push(card);
     }
     return hand;
   }
