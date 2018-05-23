@@ -85,8 +85,8 @@ class Game {
     return this.deck[randomeNumberBetween];
   }
 
-  assignCardToPlayer(player,card) {
-    card.ownerID = player.id;
+  assignCardToPlayer(player, card) {
+    card.setOwner(player);
   }
 
   getPlayerCards(player) {
