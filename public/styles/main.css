@@ -3,6 +3,12 @@ html, body {
   color: black;
   box-sizing: border-box;
   line-height: 1rem;
+  background: 
+  radial-gradient(circle farthest-side, rgb(80, 159, 70), rgba(18, 88, 0, 0.9)), 
+  url(https://www.toptal.com/designers/subtlepatterns/patterns/noise_lines.png);
+  /* position: relative;
+  height: 100vh;
+  width: 100vw; */
 }
 
 .card {
@@ -11,6 +17,40 @@ html, body {
   width: 10rem;
   height: 14rem;
   background-color: #dcdcca;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.2);
+}
+
+.card{
+  margin: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.card.dealer{
+  transform: rotate(0deg);
+  bottom:auto;
+}
+
+.card.player1{
+  transform: rotate(45deg);
+  right:auto;
+  top:auto;
+}
+
+.card.player2{
+  transform: rotate(0deg);
+  top:auto;
+}
+
+.card.player3{
+  transform: rotate(-45deg); 
+  left:auto;  
+  top:auto;
 }
 
 .card-container {
