@@ -26,7 +26,7 @@ class Game {
     }
   }
 
-  addPLayer(player) {
+  addPlayer(player) {
     this.players.push(player);
   }
 
@@ -62,7 +62,7 @@ class Game {
     var suitkeys = Object.keys(suits);
     // if index is less than suites length, iterate (4 suites)
     for(var x = 0; x < 4; x++){
-      // if index is less than vlues length (13 values)
+      // if index is less than values length (13 values)
       for(var i = 0; i < suitkeys.length; i++){
         // each key in suits =
         var suitkey = suitkeys[i];
@@ -82,9 +82,14 @@ class Game {
 
   getRandomCard(){
     // generate a random card from deck
+    var deck = this.deck;
+    var cardIndex = Math.floor(Math.random() * deck.length);
+    var randomCard = deck[cardIndex]; 
+    return randomCard;
   }
+
   assignCardToPlayer(player,card) {
-    // match card to playerID
+    card.ownerID = player.id;
   }
   getPlayerCards(player) {
     // iterate cards and match on card.owner === player.id
@@ -111,6 +116,7 @@ class Game {
     i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
   */
   update() {
+
   }
 
   render() {
