@@ -1,9 +1,11 @@
-const { Game } = require('../game');
+const { Game } = require('../game'),
+      { Player } = require('../player');
 
 class BlackJackGame extends Game {
   constructor() {
     super();
     this.deck = this.generateDeck();
+    this.addPlayer(new Player());
   }
 
   // Here we will define blackjack specific game stuff

@@ -26,7 +26,7 @@ class Game {
     }
   }
 
-  addPLayer(player) {
+  addPlayer(player) {
     this.players.push(player);
   }
 
@@ -70,7 +70,7 @@ class Game {
         var suitvalue = suits[suitkey];
         // create a "card" and give it a value and a suit
         var card = new Card(suitkey,Card.SUITS[x]);
-        card.ownerID = // math to generate random cards
+        //card.ownerID = // math to generate random cards
 
         // give the object "deck" the key "card" that stores a "value" and "suit" key
         deck.push(card);
@@ -80,29 +80,29 @@ class Game {
   }
   //TESTING var g=new KingTut.Game();g.generateDeck()
 
-  getRandomCard(){
+  getRandomCard() {
     // generate a random card from deck
   }
+
   assignCardToPlayer(player,card) {
-    // match card to playerID
+    card.ownerID = player.id;
   }
+
   getPlayerCards(player) {
     // iterate cards and match on card.owner === player.id
-    // get the deck from generateDeck
-    var deck = this.deck;
-    // get the players from addPlayer
-    var players = this.players;
-    var hand = [];
+    // insert matching cards into an array called "hand"
+    // return the hand array, including all matching cards
+    var deck = this.deck,
+        hand = [];
 
-    //var hand = 2 cards from game.deck
-
-    // for each index in array "players" define it as a "player"
-    for (var i = 0; i < players.length; i++){
-      var player = player[i];
-      // for each player deal 2 cards each from game.deck
+    // for each index in array "deck"
+    for (var i = 0; i < deck.length; i++){
+      var card = deck[i];
+      // Does this card belong to the specified player?
       if (player.id === card.ownerID)
-        hand.push(hand);
+        hand.push(card);
     }
+
     return hand;
   }
 
