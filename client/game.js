@@ -138,8 +138,8 @@ class Game {
   /* @team define how this will provide an interface to a game and its rules */
   dispatchAction(action) {
     if (this.checkPlayIsValid(action)) {
-      var playerAction = 'action' + capitalize(action.name);
-      this['actionHit']()
+      var actionName = 'action' + capitalize(action.name);
+      return this[actionName](action);
     }
   }
 }
