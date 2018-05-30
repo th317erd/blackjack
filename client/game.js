@@ -1,4 +1,7 @@
-const { Card } = require('./card');
+const { Card } = require('./card'),
+      { capitalize } = require('./utils');
+
+global.capitalize = capitalize;
 
 class Game {
   // Here we will define game rules
@@ -10,7 +13,10 @@ class Game {
       How will turns be handled?
   */
 
-  constructor() {
+  constructor(_opts) {
+    var opts = _opts || {};
+
+    this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
     this.currentPlayer = 0;
