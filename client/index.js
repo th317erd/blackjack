@@ -5,23 +5,15 @@ const dust = global.dust = require('dustjs'),
       // Include websocket connector
 const { initializeWebsocketConnection } = require('./websockets'),
       // Include game classes
+      { DOMRenderer } = require('./dom-renderer'),
       { BlackJackGame } = require('./games/blackjack'),
       { Card } = require('./card'),
       { renderCard } = require('./debug-utils');
 
 (function() {
-//   initializeWebsocketConnection('localhost', 8085);
+  // Start websocket connection to server
+  //initializeWebsocketConnection('localhost', 8085);
 
   console.log('KingTut: ', BlackJackGame);
-  global.game = new BlackJackGame();
-
-  // First argument is type, can be one of:
-  // diamond, heart, club, or spade
-  renderCard(0, 'spade');
-
-  // Empty exports (don't export anything)
-  // An empty object is needed
-  // Because "nothing" (undefined)
-  // would throw an exception
-  return {};
+  global.game = new BlackJackGame(new DOMRenderer('root'));
 })();
