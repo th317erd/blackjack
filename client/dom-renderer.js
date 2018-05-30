@@ -36,15 +36,23 @@ class DOMRenderer {
     return element;
   }
 
-  update(game) {
+  async renderPlayerHand() {
 
   }
 
-  onEventHitRequested() {
-    if (this.checkPlayIsValid({ name: 'hit', player: 1 })) {
-      var actionName = 'action' + capitalize(action.name);
-      this[actionName](this.getPlayer(playerID));
+  async update(game) {
+    if (!game)
+      return;
+
+    var players = game.players,
+        playerHands = [];
+
+    for (var i = 0, il = players.length; i < il; i++) {
+      var players = players[i];
+      playerHands.push(this.renderPlayerHand(player));
     }
+
+    await Promise.all(playerHands);
   }
 }
 
