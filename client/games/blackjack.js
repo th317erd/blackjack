@@ -5,7 +5,7 @@ class BlackJackGame extends Game {
   constructor(...args) {
     super(...args);
 
-    this.deck = this.generateDeck();
+    this.cards = this.generateDeck();
     this.addPlayer(new Player());
   }
 
@@ -30,11 +30,21 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
-  //Stand
+  getHandValue() {
 
-  //Split
+    //getPlayerHand( getCurrentPlayer() );
 
-  //Double Down
+    // get value of each card
+    // add values together
+    // return score
+
+  }
+
+  // Stand
+
+  // Split
+
+  // Double Down
   checkWhoTurnItIs() {
     var player = this.getCurrentPlayer()
     if (!player) {

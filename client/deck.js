@@ -1,11 +1,12 @@
 const { CardOwner } = require('./card-owner');
-class Player extends CardOwner {
+
+class Deck extends CardOwner {
   constructor() {
     super();
   }
-
+  
 }
 
 module.exports = {
-  Player
+  Deck
 };
