@@ -1,4 +1,7 @@
-const { Card } = require('./card');
+const { Card } = require('./card'),
+      { capitalize } = require('./utils');
+
+global.capitalize = capitalize;
 
 class Game {
   // Here we will define game rules
@@ -10,10 +13,13 @@ class Game {
       How will turns be handled?
   */
 
-  constructor() {
+  constructor(_opts) {
+    var opts = _opts || {};
+
+    this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
-    this.currentPlayer = 0;
+    this.currentPlayer = null;
   }
 
   //change currentPlayer, , removePlayer,
@@ -43,6 +49,10 @@ class Game {
     this.currentPlayer = player;
   }
 
+  getCurrentPlayer() {
+    return this.currentPlayer;
+  }
+
   /* @team define how this will provide an interface to a game and its rules */
 
   /* @mason defined all methods for players
@@ -70,7 +80,6 @@ class Game {
         // create a "card" and give it a value and a suit
         var card = new Card(suitkey,Card.SUITS[x]);
         //card.ownerID = // math to generate random cards
-
         // give the object "deck" the key "card" that stores a "value" and "suit" key
         deck.push(card);
       }
@@ -134,10 +143,16 @@ class Game {
 
   }
 
-  checkPlayIsValid(action) {
+  checkPlayIsValid() {
     return true;
   }
   /* @team define how this will provide an interface to a game and its rules */
+  dispatchAction(action) {
+    if (this.checkPlayIsValid(action)) {
+      var actionName = 'action' + capitalize(action.name);
+      return this[actionName](action);
+    }
+  }
 }
 
 
@@ -157,7 +172,6 @@ what a game needs.
   1b. turns can count to infinity
   1c. when turn loop runs more turn method to mext players
 */
-
 
 module.exports = {
   Game
