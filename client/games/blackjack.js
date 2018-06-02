@@ -30,6 +30,11 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
+  //Stand
+
+  //Split
+
+  //Double Down
   checkWhoTurnItIs() {
     var player = this.getCurrentPlayer()
     if (!player) {

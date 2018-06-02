@@ -84,21 +84,24 @@ class Game {
         deck.push(card);
       }
     }
-    return deck;
+    //return deck;
+    return deck.slice(0, 2);
   }
   //TESTING var g=new KingTut.Game();g.generateDeck()
 
-  getRandomCard() {
+  getRandomCardFromDeck() {
     // generate a random card from deck
-    var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
-    return this.deck[randomeNumberBetween];
+    var unassignedCards = this.getUnassignedCards();
+    return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
   }
+
+  // get a truly random card - assign all the values
 
   assignCardToPlayer(player, card) {
     card.setOwner(player);
   }
 
-  getPlayerCards(player) {
+  getCardsMatchingOwnerId(id) {
     // iterate cards and match on card.owner === player.id
     // insert matching cards into an array called "hand"
     // return the hand array, including all matching cards
@@ -109,11 +112,18 @@ class Game {
     for (var i = 0; i < deck.length; i++){
       var card = deck[i];
       // Does this card belong to the specified player?
-      if (player.id === card.ownerID)
+      if (id === card.ownerID)
         hand.push(card);
     }
-
     return hand;
+  }
+
+  getPlayerHand(player){
+    return this.getCardsMatchingOwnerId(player.id);
+  }
+
+  getUnassignedCards(){
+    return this.getCardsMatchingOwnerId(0);
   }
 
   /* @whitley & @wyatt
@@ -130,6 +140,7 @@ class Game {
 
   /* @chuck calculate if there is a winner */
   calculateGameState() {
+
   }
 
   checkPlayIsValid() {
