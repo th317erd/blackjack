@@ -25,6 +25,12 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
+  //Stand
+
+  //Split
+
+  //Double Down
+
   /* @chuck calculate if there is a winner
       iterate cards/players as needed
       sum up if there is a winner
