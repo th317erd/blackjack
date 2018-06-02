@@ -19,7 +19,8 @@ class Game {
     this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
-    this.currentPlayer = null;
+    this.hand = 0;
+    this.currentPlayer = 1;
   }
 
   //change currentPlayer, , removePlayer,
@@ -51,6 +52,9 @@ class Game {
 
   getCurrentPlayer() {
     return this.currentPlayer;
+  }
+
+  getCurrentPlayerById() {
   }
 
   /* @team define how this will provide an interface to a game and its rules */
@@ -148,9 +152,14 @@ class Game {
   }
   /* @team define how this will provide an interface to a game and its rules */
   dispatchAction(action) {
+    var actionName = 'action' + capitalize(action.name);
+    if (typeof this[actionName] !== 'function')
+      return;
+
     if (this.checkPlayIsValid(action)) {
-      var actionName = 'action' + capitalize(action.name);
       return this[actionName](action);
+    } else {
+      return false;
     }
   }
 }
