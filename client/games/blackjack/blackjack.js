@@ -12,19 +12,39 @@ class BlackJackGame extends Game {
 
   // Here we will define blackjack specific game stuff
   /* @team discuss how this will tie into, and define a game and its rules */
+  /* @mason define action methods */
   checkPlayIsValid(action) {
-    // rules for if a play is valid
-    // if ()
+    return true;
   }
 
-  //some players hand  == total numbers added
-
-  /* @mason define action methods */
   actionHit() {
-    var player = this.getCurrentPlayer(),
-        card = this.getRandomCard();
+    // set player to current player
+    // if player is not a player return
+    var player = this.getCurrentPlayer();
+    if (!player)
+      return;
 
+    // get a random card
+    var card = this.getRandomCard();
+
+    // assings a cared to a player
     this.assignCardToPlayer(player, card);
+  }
+
+  //Stand
+
+  //Split
+
+  //Double Down
+  checkWhoTurnItIs() {
+    var player = this.getCurrentPlayer()
+    if (!player) {
+      return
+    }
+  }
+
+  shuffleCards() {
+    var getCards = generateDeck();
   }
 
   /* @chuck calculate if there is a winner

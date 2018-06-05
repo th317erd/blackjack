@@ -19,7 +19,7 @@ class Game {
     this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
-    this.currentPlayer = 0;
+    this.currentPlayer = null;
   }
 
   //change currentPlayer, , removePlayer,
@@ -58,6 +58,10 @@ class Game {
     this.currentPlayer = player;
   }
 
+  getCurrentPlayer() {
+    return this.currentPlayer;
+  }
+
   /* @team define how this will provide an interface to a game and its rules */
 
   /* @mason defined all methods for players
@@ -85,26 +89,28 @@ class Game {
         // create a "card" and give it a value and a suit
         var card = new Card(suitkey,Card.SUITS[x]);
         //card.ownerID = // math to generate random cards
-
         // give the object "deck" the key "card" that stores a "value" and "suit" key
         deck.push(card);
       }
     }
-    return deck;
+    //return deck;
+    return deck.slice(0, 2);
   }
   //TESTING var g=new KingTut.Game();g.generateDeck()
 
-  getRandomCard() {
+  getRandomCardFromDeck() {
     // generate a random card from deck
-    var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
-    return this.deck[randomeNumberBetween];
+    var unassignedCards = this.getUnassignedCards();
+    return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
   }
+
+  // get a truly random card - assign all the values
 
   assignCardToPlayer(player, card) {
     card.setOwner(player);
   }
 
-  getPlayerCards(player) {
+  getCardsMatchingOwnerId(id) {
     // iterate cards and match on card.owner === player.id
     // insert matching cards into an array called "hand"
     // return the hand array, including all matching cards
@@ -115,11 +121,18 @@ class Game {
     for (var i = 0; i < deck.length; i++){
       var card = deck[i];
       // Does this card belong to the specified player?
-      if (player.id === card.ownerID)
+      if (id === card.ownerID)
         hand.push(card);
     }
-
     return hand;
+  }
+
+  getPlayerHand(player){
+    return this.getCardsMatchingOwnerId(player.id);
+  }
+
+  getUnassignedCards(){
+    return this.getCardsMatchingOwnerId(0);
   }
 
   /* @whitley & @wyatt
@@ -135,12 +148,19 @@ class Game {
 
   /* @chuck calculate if there is a winner */
   calculateGameState() {
+
   }
 
-  checkPlayIsValid(action) {
+  checkPlayIsValid() {
     return true;
   }
   /* @team define how this will provide an interface to a game and its rules */
+  dispatchAction(action) {
+    if (this.checkPlayIsValid(action)) {
+      var actionName = 'action' + capitalize(action.name);
+      return this[actionName](action);
+    }
+  }
 }
 
 
@@ -160,7 +180,6 @@ what a game needs.
   1b. turns can count to infinity
   1c. when turn loop runs more turn method to mext players
 */
-
 
 module.exports = {
   Game
