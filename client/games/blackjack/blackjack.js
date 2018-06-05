@@ -1,12 +1,13 @@
-const { Game } = require('../game'),
-      { Player } = require('../player');
+const { Game } = require('../../game'),
+      { Player } = require('../../player'),
+      boardTemplate = require('./templates/board');
 
 class BlackJackGame extends Game {
   constructor(...args) {
     super(...args);
 
     this.deck = this.generateDeck();
-    this.addPlayer(new Player());
+    this.addPlayer(new Player(this));
   }
 
   // Here we will define blackjack specific game stuff
@@ -33,10 +34,13 @@ class BlackJackGame extends Game {
   calculateGameState() {
   }
 
-  render() {
-    cards.forEach((card) => {
-      placeCard();
-      defineActions(card);
+  async render() {
+    var R = this.renderer;
+    if (!R)
+      return;
+
+    R.render(async () => {
+      return R.renderTemplate(boardTemplate, game);
     });
   }
 }

@@ -165,7 +165,7 @@ class Card {
   */
 
   // Define a generic card and its functionality here
-  constructor(value,suit) {
+  constructor(value, suit) {
     this.value = value;
     this.suit = suit;
     this.ownerID = 0;

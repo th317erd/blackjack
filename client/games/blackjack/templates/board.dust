@@ -1,0 +1,5 @@
+<div class="board">
+  {#players}
+    Player
+  {/players}
+</div>

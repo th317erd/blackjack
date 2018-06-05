@@ -25,18 +25,27 @@ class Game {
   //change currentPlayer, , removePlayer,
   //addPlayer, clearPlayers
   removePlayer(player) {
-    for (var i=array.length-1; i>=0; i--) {
-      if (this.players[i] === player) {
-          this.players.splice(i, 1);
-      }
+    var index = this.players.indexOf(player);
+    if (index >= 0) {
+      player.setGame(null);
+      this.players.splice(index, 1);
     }
   }
 
   addPlayer(player) {
+    player.setGame(this);
     this.players.push(player);
   }
 
+  getActivePlayers() {
+    return this.players.filter((player) => player.inGame());
+  }
+
   clearPlayers() {
+    var players = this.players;
+    for (var i = 0, il = players.length; i < il; i++)
+      players[i].setGame(null);
+
     this.players = [];
   }
 
@@ -121,8 +130,7 @@ class Game {
 
   }
 
-  render() {
-
+  async render() {
   }
 
   /* @chuck calculate if there is a winner */

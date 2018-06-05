@@ -1,9 +1,24 @@
+const { attrGetterSetter } = require('./utils');
+
 var playerCounter = 1;
 
 class Player {
-  constructor() {
-    this.id = playerCounter++;
+  constructor(game) {
+    if (!game)
+      throw new Error('Game must be defined in order to create a player');
+
+    this.game = game;
+    attrGetterSetter(this, 'hand', () => this.game.getPlayerCards(this), (value) => {});
   }
+
+  setGame(game) {
+    this.game = game;
+  }
+
+  inGame() {
+    return true;
+  }
+
   // Here we will define a player
 
   // needs a value to assign cards to

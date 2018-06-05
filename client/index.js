@@ -15,5 +15,7 @@ const { initializeWebsocketConnection } = require('./websockets'),
   //initializeWebsocketConnection('localhost', 8085);
 
   console.log('KingTut: ', BlackJackGame);
-  global.game = new BlackJackGame(new DOMRenderer('root'));
+  global.game = new BlackJackGame({
+    renderer: new DOMRenderer('root')
+  });
 })();
