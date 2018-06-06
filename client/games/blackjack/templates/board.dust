@@ -2,7 +2,6 @@
   {#players}
     <div class="player">
       {#hand}
-        {@math key={@math key=$idx method="divide" operand=$len/} method="multiply" operand="100"/}<br>
       {/hand}
     </div>
   {/players}

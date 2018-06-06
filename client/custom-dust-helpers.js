@@ -1,93 +1,119 @@
 //const dust = global.dust = require('dustjs');
 class Context {
+  constructor(values) {
+    Object.assign(this, values || {});
+  }
+
   resolve(name) {
     return this[name];
   }
 }
 
-(function(_expression) {
-  function getRE(re, offset) {
-    re.lastIndex = offset;
-    var m = re.exec(expression);
+const { regexpEscape } = require('./utils');
 
-    if (!m || m.index !== offset)
-      throw new Error('Parsing error');
+const valueE = "([e\\d.-]+|\\w+)",
+      valueRE = new RegExp(valueE, 'g');
 
-    var value = m[0];
-    state.offset = offset + value.length;
-    state.value = value;
+const operators = {
+  '*': (lh, rh) => (lh * rh),
+  '/': (lh, rh) => (lh / rh),
+  '%': (lh, rh) => (lh % rh),
+  '+': (lh, rh) => (lh + rh),
+  '-': (lh, rh) => (lh - rh)
+};
 
-    return value;
-  }
+function getRE(re, state) {
+  var offset = state.offset;
 
-  function getValue(offset) {
-    // if (expression.charAt(offset) === '(')
-    //   return decend(offset + 1);
-    var value = getRE(/([e\d.-]+|\w+)/g, offset);
+  re.lastIndex = offset;
+  var m = re.exec(state.data);
 
-    if (value.match(/[a-zA-Z]/))
-      value = context.resolve(value);
-    else
-      value = parseFloat(value);
+  if (!m || m.index !== offset)
+    throw new Error('Parsing error');
 
-    state.value = value;
-    return value;
-  }
+  var value = m[0];
+  state.offset = offset + value.length;
 
-  function getOp(offset) {
-    return getRE(/[%*\/+-]{1}/g, offset);
-  }
+  return value;
+}
 
-  function getExpression(offset) {
-    var lh = getValue(offset),
-        op = getOp(state.offset),
-        rh = getValue(state.offset);
+function getValue(state) {
+  var value = getRE(valueRE, state);
+  if (value.match(/[a-zA-Z]/))
+    value = state.context.resolve(value);
+  else
+    value = parseFloat(value);
 
-    state.value = {
-      lh,
-      op,
-      rh
-    };
-  }
+  return value;
+}
 
-  function operate(exp) {
-    var op = operators[exp.op];
-    if (!op)
-      throw new Error(`Unknown operator: ${op}`);
+function getOp(state) {
+  return getRE(/[%*\/+-]{1}/g, state);
+}
 
-    return op(exp.lh, exp.rh);
-  }
+function operate(lh, op, rh) {
+  var opFunc = operators[op];
+  if (!opFunc)
+    throw new Error(`Unknown operator: ${op}`);
 
-  function decend(offset) {
-    for (var i = 0; i < expLen;) {
-      getExpression(i);
+  return opFunc(lh, rh);
+}
 
-      var exp = state.value;
-      console.log(exp, operate(exp));
+function solve(state) {
+  var lh, op, rh;
 
-      i = state.offset;
+  for (var i = state.offset, il = state.data.length; i < il; i = state.offset) {
+    if (lh === undefined) {
+      lh = getValue(state);
+    } else if (op === undefined) {
+      op = getOp(state);
+    } else {
+      rh = getValue(state);
+      return operate(lh, op, rh);
     }
   }
 
-  const operators = {
-    '*': (lh, rh) => (lh * rh),
-    '/': (lh, rh) => (lh / rh),
-    '+': (lh, rh) => (lh + rh),
-    '-': (lh, rh) => (lh - rh),
-    '%': (lh, rh) => (lh % rh)
-  };
+  throw new Error('Parsing error');
+}
 
-  var expression = _expression.replace(/\s+/g, ''),
-      expLen = expression.length,
-      state = { offset: 0, value: null },
-      context = new Context();
+function reduce(_expression, context) {
+  var expression = _expression,
+      keys = Object.keys(operators);
 
-  context.x = 0.1;
-  context.y = 0.5;
+  keys.forEach((key) => {
+    var str = `${valueE}${regexpEscape(key)}${valueE}`;
+    expression = expression.replace(new RegExp(str, 'g'), function(m) {
+      var offset = arguments[arguments.length - 2],
+          data = arguments[arguments.length - 1];
 
-  return decend(0);
-})("10 * x");
+      return solve({ offset, data, context });
+    });
+  });
 
+  return expression;
+}
+
+function calc(_expression, context) {
+  var expression = _expression.replace(/\s+/g, '');
+
+  while(1) {
+    var found = false;
+    expression = expression.replace(/\(([^)]*)\)/g, function(m, group) {
+      found = true;
+      return reduce(group, context);
+    });
+
+    if (!found)
+      break;
+  }
+
+  return parseFloat(reduce(expression, context));
+}
+
+(function(expression) {
+  var context = new Context({ x: 0.1, y: 0.5 });
+  console.log('Final value: ', calc(expression, context));
+})("10 * y + 5");
 
 // global.dust.helpers.calc = function(chunk, context, bodies, params) {
 
