@@ -14,23 +14,24 @@ class BlackJackGame extends Game {
   /* @team discuss how this will tie into, and define a game and its rules */
   /* @mason define action methods */
   checkPlayIsValid(action) {
-    // define an array of availa
-    // if ()
-    // var currentPlayer = this.getCurrentPlayer();
-    // var currentPlayerById = this.getCurrentPlayerById();
-    console.log(action);
-    return true;
-    // var arrayOfActionNames = ['stand', 'hit', 'split', 'double'];
-    //
-    // for (var i = 0; i < arrayOfActionNames.length; i++) {
-    //   if (arrayOfActionNames[i] === action.name) {
-    //     console.log('Cool your play is valid!');
-    //     return true;
-    //   } else {
-    //     console.log('Sorry this play is invalid.');
-    //   }
-    // }
-    // return false;
+    //check to see if current player initiated the action
+    var currentPlayer = this.getCurrentPlayer();
+    // var currentPlayer = this.getPlayerByID(this.getCurrentPlayer());
+    console.log(currentPlayer);
+
+    var actionPlayer = this.getPlayerByID(action.playerID);
+    console.log(actionPlayer.id);
+
+    if (!actionPlayer || !currentPlayer)
+      return false
+
+    if (actionPlayer.id === currentPlayer) {
+      console.log("this returned true the current player and the player ids match up");
+      return true;
+    } else {
+      console.log("this is not the current player");
+      return false;
+    }
   }
 
   actionHit() {

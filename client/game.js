@@ -170,10 +170,15 @@ class Game {
     return true;
   }
   /* @team define how this will provide an interface to a game and its rules */
+  //  game.dispatchAction({name: 'split', playerID: 3});
   dispatchAction(action) {
     var actionName = 'action' + capitalize(action.name);
+    // var playerId = action.playerID;
     if (typeof this[actionName] !== 'function')
       return;
+
+    // if (typeof this[playerId] !== 'number')
+    //   return;
 
     if (this.checkPlayIsValid(action)) {
       return this[actionName](action);
