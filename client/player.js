@@ -1,4 +1,6 @@
-const { CardOwner } = require('./card-owner');
+const { CardOwner } = require('./card-owner'),
+      { attrGetterSetter } = require('./utils');
+
 class Player extends CardOwner {
   constructor(game) {
     super();
