@@ -17,7 +17,8 @@ class Game {
     this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
-    this.currentPlayer = null;
+    this.hand = 0;
+    this.currentPlayer = 1;
   }
 
   removePlayer(player) {
@@ -57,6 +58,18 @@ class Game {
     return this.currentPlayer;
   }
 
+  getCurrentPlayerById() {
+  }
+
+  /* @team define how this will provide an interface to a game and its rules */
+
+  /* @mason defined all methods for players
+    i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
+  */
+
+  /* @paul Add methods for cards!
+      i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
+  */
   generateDeck() {
     // variable "cards" equals an empty array
     var cards = [];
@@ -74,7 +87,7 @@ class Game {
       for(var i = 0; i < suitkeys.length; i++){
         // each key in suits =
         var suitkey = suitkeys[i];
-        
+
         // access value in var suitkey
         var suitvalue = suits[suitkey];
 
@@ -99,16 +112,16 @@ class Game {
     var randomSuit = suits[Math.floor(Math.random() * suits.length)];
 
     // use math to randomly generate a value - get random key from object
-    var values = Object.keys(Card.CARDS); 
+    var values = Object.keys(Card.CARDS);
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
     var randomCard = new Card(randomValue, randomSuit);
 
     // add that card to the current cards
-    this.cards.push(randomCard); 
+    this.cards.push(randomCard);
 
-    // assign that card to the current player 
+    // assign that card to the current player
     this.assignCardToOwner(player, randomCard);
   }
 
@@ -157,9 +170,14 @@ class Game {
   }
   /* @team define how this will provide an interface to a game and its rules */
   dispatchAction(action) {
+    var actionName = 'action' + capitalize(action.name);
+    if (typeof this[actionName] !== 'function')
+      return;
+
     if (this.checkPlayIsValid(action)) {
-      var actionName = 'action' + capitalize(action.name);
       return this[actionName](action);
+    } else {
+      return false;
     }
   }
 }
