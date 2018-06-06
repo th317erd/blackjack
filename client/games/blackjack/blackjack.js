@@ -44,9 +44,13 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
-  getHandValue() {
+  getHandValue(player) {
+    var playerID = this.getPlayerByID();
+    //get current player ID
+    //loop though cards to find matching ownerID
 
-    //getPlayerHand( getCurrentPlayer() );
+    //var playerHand = this.getPlayerHand( this.getCurrentPlayer() );
+    console.log(playerID);
 
     // get value of each card
     // add values together
@@ -107,6 +111,10 @@ class BlackJackGame extends Game {
       sum up if there is a winner
   */
   calculateGameState() {
+  }
+
+  shuffleCards() {
+    var getCards = generateDeck();
   }
 
   async render() {
