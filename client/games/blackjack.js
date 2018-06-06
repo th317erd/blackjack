@@ -30,9 +30,13 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
-  getHandValue() {
+  getHandValue(player) {
+    var playerID = this.getCurrentPlayer();
+    //get current player ID
+    //loop though cards to find matching ownerID
 
-    //getPlayerHand( getCurrentPlayer() );
+    //var playerHand = this.getPlayerHand( this.getCurrentPlayer() );
+    console.log(playerID);
 
     // get value of each card
     // add values together
