@@ -14,20 +14,35 @@ class BlackJackGame extends Game {
   /* @team discuss how this will tie into, and define a game and its rules */
   /* @mason define action methods */
   checkPlayIsValid(action) {
-    // define an array of availa
+    //get the current player
     var currentPlayer = this.getCurrentPlayer();
-    var currentPlayerById = this.getCurrentPlayerById();
-    // var arrayOfActionNames = ['stand', 'hit', 'split', 'double'];
-    //
-    // for (var i = 0; i < arrayOfActionNames.length; i++) {
-    //   if (arrayOfActionNames[i] === action.name) {
-    //     console.log('Cool your play is valid!');
-    //     return true;
-    //   } else {
-    //     console.log('Sorry this play is invalid.');
-    //   }
-    // }
-    // return false;
+    // get the player who git the action
+    var actionPlayer = this.getPlayerByID(action.playerID);
+    var playerAction = action.name;
+    // double check to make sure the players exist
+    if (!actionPlayer || !currentPlayer)
+      return false
+
+    // compair the player who initiated the action to the player who is the current player
+    if (actionPlayer.id === currentPlayer) {
+      // return true if the players are the same
+      if (playerAction === 'hit') {
+        // do something
+      } else if (playerAction === 'split')  {
+        // do something else
+      }
+      // check to see which action the user has clicked on, should be within the actionPlayer array of values
+      // under name there should be the list of actions accomplished by user
+      // all last value assigned
+      // if it is action hit make sure the user has not exceeded the 21 card limit or the max ammout of hits a user can do
+
+      console.log("this returned true the current player and the player ids match up");
+      return true;
+    } else {
+      // return false if the players are not the same
+      console.log("this is not the current player");
+      return false;
+    }
   }
 
   actionHit() {
@@ -44,9 +59,11 @@ class BlackJackGame extends Game {
     this.assignCardToPlayer(player, card);
   }
 
-  getHandValue() {
+  getHandValue(player) {
 
-    //getPlayerHand( getCurrentPlayer() );
+    var playerHand = this.getCardsMatchingOwnerId( this.getCurrentPlayer() );
+    var handValue = playerHand.forEach();
+    //console.log(playerHand);
 
     // get value of each card
     // add values together
@@ -107,6 +124,10 @@ class BlackJackGame extends Game {
       sum up if there is a winner
   */
   calculateGameState() {
+  }
+
+  shuffleCards() {
+    var getCards = generateDeck();
   }
 
   async render() {
