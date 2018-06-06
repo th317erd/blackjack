@@ -15,8 +15,11 @@ class BlackJackGame extends Game {
   /* @mason define action methods */
   checkPlayIsValid(action) {
     // define an array of availa
-    var currentPlayer = this.getCurrentPlayer();
-    var currentPlayerById = this.getCurrentPlayerById();
+    // if ()
+    // var currentPlayer = this.getCurrentPlayer();
+    // var currentPlayerById = this.getCurrentPlayerById();
+    console.log(action);
+    return true;
     // var arrayOfActionNames = ['stand', 'hit', 'split', 'double'];
     //
     // for (var i = 0; i < arrayOfActionNames.length; i++) {
