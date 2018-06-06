@@ -1,0 +1,9 @@
+<div class="board">
+  {#players}
+    <div class="player">
+      {#hand}
+        This is a card I am sure!
+      {/hand}
+    </div>
+  {/players}
+</div>
