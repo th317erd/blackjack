@@ -50,12 +50,8 @@ class DOMRenderer {
     });
   }
 
-  async renderCard(value, suit) {
-    var cardElement = await this.renderTemplate(cardTemplate, Object.assign({
-      'suit': suit,
-      'suit-font': 'font-suits1'
-    }, Card.CARDS[value]));
-
+  async renderCard(card) {
+    var cardElement = await this.renderTemplate(cardTemplate, card);
     element.setAttribute('class', 'card');
 
     return element;

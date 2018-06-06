@@ -3,12 +3,18 @@ html, body {
   color: black;
   box-sizing: border-box;
   line-height: 1rem;
-  background: 
-  radial-gradient(circle farthest-side, rgb(80, 159, 70), rgba(18, 88, 0, 0.9)), 
+  background:
+  radial-gradient(circle farthest-side, rgb(80, 159, 70), rgba(18, 88, 0, 0.9)),
   url(https://www.toptal.com/designers/subtlepatterns/patterns/noise_lines.png);
   /* position: relative;
   height: 100vh;
   width: 100vw; */
+}
+
+.player {
+  position: relative;
+  width: 20rem;
+  height: 14rem;
 }
 
 .card {
@@ -48,8 +54,8 @@ html, body {
 }
 
 .card.player3{
-  transform: rotate(-45deg); 
-  left:auto;  
+  transform: rotate(-45deg);
+  left:auto;
   top:auto;
 }
 

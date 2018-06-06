@@ -13,6 +13,7 @@
 // X is horizonal   Y is vertical
 
 const { attrGetterSetter } = require('./utils');
+const DEFAULT_SUIT_FONT = 'font-suits1';
 
 const CARDS = {
   0: { // Ace
@@ -169,12 +170,16 @@ class Card {
 
   // Define a generic card and its functionality here
   constructor(value, suit) {
-    this.value = value;
-    this.suit = suit;
-    this.ownerID = 0;
+    if (!CARDS.hasOwnProperty(value))
+      throw new Error(`Invalid card value: ${value}`);
 
+    attrGetterSetter(this, 'value', () => value);
+    attrGetterSetter(this, 'suit', () => suit);
     attrGetterSetter(this, 'digit', () => CARDS[value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
+    attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
+
+    this.ownerID = 0;
   }
 
   setOwner(player) {
