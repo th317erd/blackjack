@@ -58,7 +58,8 @@ class Game {
     return this.currentPlayer;
   }
 
-  getCurrentPlayerById() {
+  getPlayerByID(id) {
+    return this.players.find((player) => (player.id === id));
   }
 
   /* @team define how this will provide an interface to a game and its rules */

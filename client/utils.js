@@ -1,4 +1,6 @@
-function attrGetterSetter(target, name, get, set) {
+const noop = (() => {});
+
+function attrGetterSetter(target, name, get, set = noop) {
   Object.defineProperty(target, name, {
     enumerable: true,
     configurable: true,
