@@ -1,24 +1,24 @@
-var playerCounter = 1;
+const { CardOwner } = require('./card-owner'),
+      { attrGetterSetter } = require('./utils');
 
-class Player {
-  constructor() {
-    this.id = playerCounter++;
+class Player extends CardOwner {
+  constructor(game) {
+    super();
+
+    if (!game)
+      throw new Error('Game must be defined in order to create a player');
+
+    this.game = game;
+    attrGetterSetter(this, 'hand', () => this.game.getPlayerHand(this), (value) => {});
   }
-  // Here we will define a player
 
-  // needs a value to assign cards to
+  setGame(game) {
+    this.game = game;
+  }
 
-  // needs a bankroll
-
-  // needs the ability to
-
-  // Having a structure like this will help with game rules and permissions (i.e. turns)
-  /* @whitley, define the structure of this class and its data.
-      Recommendations: Need a constructor
-      A name is needed, age might be nice
-      Color might be cool
-      A player id might be a good thing to be able to match cards to players
-  */
+  inGame() {
+    return true;
+  }
 }
 
 module.exports = {

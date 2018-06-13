@@ -4,8 +4,6 @@ const { Card } = require('./card'),
 global.capitalize = capitalize;
 
 class Game {
-  // Here we will define game rules
-  // A game will also hold some number of cards and players
 
   /* @mason: Define the structure of data for game instances
       How will cards be stored and acted upon?
@@ -19,34 +17,49 @@ class Game {
     this.renderer = opts.renderer;
     this.players = [];
     this.cards = [];
-    this.currentPlayer = 0;
+    this.hand = 0;
+    this.currentPlayer = 1;
   }
 
-  //change currentPlayer, , removePlayer,
-  //addPlayer, clearPlayers
   removePlayer(player) {
-    for (var i=array.length-1; i>=0; i--) {
-      if (this.players[i] === player) {
-          this.players.splice(i, 1);
-      }
+    var index = this.players.indexOf(player);
+    if (index >= 0) {
+      player.setGame(null);
+      this.players.splice(index, 1);
     }
   }
 
   addPlayer(player) {
+    player.setGame(this);
     this.players.push(player);
   }
 
+  getActivePlayers() {
+    return this.players.filter((player) => player.inGame());
+  }
+
   clearPlayers() {
+    var players = this.players;
+    for (var i = 0, il = players.length; i < il; i++)
+      players[i].setGame(null);
+
     this.players = [];
   }
 
-  // total number of players
   numberOfPlayers() {
     return this.players.length;
   }
 
   setPlayerTurn(player) {
     this.currentPlayer = player;
+  }
+
+  getCurrentPlayer() {
+    return this.currentPlayer;
+  }
+
+  getPlayerByID(id) {
+    return this.players.find((player) => (player.id === id));
   }
 
   /* @team define how this will provide an interface to a game and its rules */
@@ -59,80 +72,121 @@ class Game {
       i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
   */
   generateDeck() {
-    // variable "deck" equals an empty array
-    var deck = [];
+    // variable "cards" equals an empty array
+    var cards = [];
+
     // variable "suits" equals the suits defined in the const SUITS
     var suits = Card.CARDS;
+
     // return all the keys of the suits object
     var suitkeys = Object.keys(suits);
+
     // if index is less than suites length, iterate (4 suites)
     for(var x = 0; x < 4; x++){
+
       // if index is less than values length (13 values)
       for(var i = 0; i < suitkeys.length; i++){
         // each key in suits =
         var suitkey = suitkeys[i];
+
         // access value in var suitkey
         var suitvalue = suits[suitkey];
+
         // create a "card" and give it a value and a suit
         var card = new Card(suitkey,Card.SUITS[x]);
-        //card.ownerID = // math to generate random cards
 
-        // give the object "deck" the key "card" that stores a "value" and "suit" key
-        deck.push(card);
+        // give the object "cards" the key "card" that stores a "value" and "suit" key
+        cards.push(card);
       }
     }
-    return deck;
-  }
-  //TESTING var g=new KingTut.Game();g.generateDeck()
-
-  getRandomCard() {
-    // generate a random card from deck
-    var randomeNumberBetween = Math.floor(Math.random() * this.deck.length);
-    return this.deck[randomeNumberBetween];
+    return cards.slice(0, 2);
   }
 
-  assignCardToPlayer(player, card) {
-    card.setOwner(player);
+  getRandomCardFromDeck() {
+    var unassignedCards = this.getUnassignedCards();
+    return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
   }
 
-  getPlayerCards(player) {
+  addRandomCardToHand(player){
+    // use math to randomly generate a suit - get random index
+    var suits = Card.SUITS;
+    var randomSuit = suits[Math.floor(Math.random() * suits.length)];
+
+    // use math to randomly generate a value - get random key from object
+    var values = Object.keys(Card.CARDS);
+    var randomValue = values[Math.floor(Math.random() * values.length)];
+
+    // combine results and turn into card
+    var randomCard = new Card(randomValue, randomSuit);
+
+    // add that card to the current cards
+    this.cards.push(randomCard);
+
+    // assign that card to the current player
+    this.assignCardToOwner(player, randomCard);
+  }
+
+  assignCardToOwner(owner, card) {
+    card.setOwner(owner);
+  }
+
+  getCardsMatchingOwnerId(id) {
     // iterate cards and match on card.owner === player.id
     // insert matching cards into an array called "hand"
     // return the hand array, including all matching cards
-    var deck = this.deck,
+    var cards = this.cards,
         hand = [];
 
-    // for each index in array "deck"
-    for (var i = 0; i < deck.length; i++){
-      var card = deck[i];
+    // for each index in array "cards"
+    for (var i = 0; i < cards.length; i++){
+      var card = cards[i];
       // Does this card belong to the specified player?
-      if (player.id === card.ownerID)
+      if (id === card.ownerID)
         hand.push(card);
     }
-
     return hand;
   }
 
-  /* @whitley & @wyatt
-    Define methods for game mechanics
-    i.e. checkPlayIsValid(player, ???), updateBeforePlay, updateAfterPlay, etc...
-  */
+  getPlayerHand(player){
+    return this.getCardsMatchingOwnerId(player.id);
+  }
+
+  getUnassignedCards(){
+    return this.getCardsMatchingOwnerId(0);
+  }
+
   update() {
 
   }
 
-  render() {
-
+  async render() {
   }
 
-  /* @chuck calculate if there is a winner */
   calculateGameState() {
+
   }
 
-  checkPlayIsValid(action) {
+  checkPlayIsValid() {
     return true;
   }
   /* @team define how this will provide an interface to a game and its rules */
+  //  game.dispatchAction({name: 'split', playerID: 3});
+  dispatchAction(action) {
+    var actionName = 'action' + capitalize(action.name);
+    // var playerId = action.playerID;
+    if (typeof this[actionName] !== 'function')
+      return;
+
+    // if (typeof this[playerId] !== 'number')
+    //   return;
+
+    if (this.checkPlayIsValid(action)) {
+      return this[actionName](action);
+    } else {
+      return false;
+    }
+  }
+
 }
 
 
@@ -152,7 +206,6 @@ what a game needs.
   1b. turns can count to infinity
   1c. when turn loop runs more turn method to mext players
 */
-
 
 module.exports = {
   Game

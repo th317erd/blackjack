@@ -11,6 +11,10 @@
 
 // http://www.milefoot.com/math/discrete/counting/images/cards.png
 // X is horizonal   Y is vertical
+
+const { attrGetterSetter } = require('./utils');
+const DEFAULT_SUIT_FONT = 'font-suits1';
+
 const CARDS = {
   0: { // Ace
     digit: 'A',
@@ -55,7 +59,7 @@ const CARDS = {
     ]
   },
   5: { //Six
-    digit:'6',
+    digit: '6',
     pattern: [
       { x: 0.0, y: 0.0, flip: false },
       { x: 1.0, y: 0.0, flip: false  },
@@ -66,7 +70,7 @@ const CARDS = {
     ]
   },
   6: { //seven
-    digit:'7',
+    digit: '7',
     pattern: [
       { x: 0.0, y: 0.0, flip: false },
       { x: 1.0, y: 0.0, flip: false  },
@@ -79,7 +83,7 @@ const CARDS = {
     ]
   },
   7: { //eight
-    digit:'8',
+    digit: '8',
     pattern: [
       { x: 0.0, y: 0.0, flip: false },
       { x: 1.0, y: 0.0, flip: false  },
@@ -92,7 +96,7 @@ const CARDS = {
     ]
   },
   8: { //Nine
-    digit:'9',
+    digit: '9',
     pattern: [
       { x: 0.0, y: 0.0, flip: false },
       { x: 1.0, y: 0.0, flip: false  },
@@ -106,7 +110,7 @@ const CARDS = {
     ]
   },
   9: { //Ten
-    digit:'10',
+    digit: '10',
     pattern: [
       { x: 0.0, y: 0.0, flip: false },
       { x: 1.0, y: 0.0, flip: false  },
@@ -121,7 +125,7 @@ const CARDS = {
     ]
   },
   10: {//Eleven
-    digit:'11',
+    digit: '11',
     pattern: [
       { x: 0.5, y: 0.0, flip: false },
       { x: 0.5, y: 0.5, flip: false  },
@@ -129,7 +133,7 @@ const CARDS = {
     ]
   },
   11: {//Twelve
-    digit:'12',
+    digit: '12',
     pattern: [
       { x: 0.5, y: 0.0, flip: false },
       { x: 0.5, y: 0.5, flip: false  },
@@ -137,7 +141,7 @@ const CARDS = {
     ]
   },
   12: {//Thirteen
-    digit:'13',
+    digit: '13',
     pattern: [
       { x: 0.5, y: 0.0, flip: false },
       { x: 0.5, y: 0.5, flip: false  },
@@ -145,7 +149,7 @@ const CARDS = {
     ]
   },
   13: {//Fourteen
-    digit:'14',
+    digit: '14',
     pattern: [
       { x: 0.5, y: 0.0, flip: false },
       { x: 0.5, y: 0.5, flip: false  },
@@ -165,9 +169,16 @@ class Card {
   */
 
   // Define a generic card and its functionality here
-  constructor(value,suit) {
-    this.value = value;
-    this.suit = suit;
+  constructor(value, suit) {
+    if (!CARDS.hasOwnProperty(value))
+      throw new Error(`Invalid card value: ${value}`);
+
+    attrGetterSetter(this, 'value', () => value);
+    attrGetterSetter(this, 'suit', () => suit);
+    attrGetterSetter(this, 'digit', () => CARDS[value].digit);
+    attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
+    attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
+
     this.ownerID = 0;
   }
 

@@ -1,6 +1,7 @@
 // We need to require dust first since it sets and uses a global
 const dust = global.dust = require('dustjs'),
-      dustHelpers = require('dustjs-helpers');
+      dustHelpers = require('dustjs-helpers'),
+      extraDustHelpers = require('./custom-dust-helpers');
 
       // Include websocket connector
 const { initializeWebsocketConnection } = require('./websockets'),
@@ -15,5 +16,14 @@ const { initializeWebsocketConnection } = require('./websockets'),
   //initializeWebsocketConnection('localhost', 8085);
 
   console.log('KingTut: ', BlackJackGame);
-  global.game = new BlackJackGame(new DOMRenderer('root'));
+  var game = global.game = new BlackJackGame({
+    renderer: new DOMRenderer('root')
+  });
+
+  var player = game.getPlayerByID(1);
+
+  for (var i = 0; i < 5; i++)
+    game.addRandomCardToHand(player);
+
+  game.render();
 })();
