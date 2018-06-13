@@ -15,48 +15,40 @@ class BlackJackGame extends Game {
   /* @mason define action methods */
   checkPlayIsValid(action) {
     //get the current player
-    var currentPlayer = this.getCurrentPlayer();
+    var currentPlayerId = this.getCurrentPlayerId();
     // get the player who git the action
     var actionPlayer = this.getPlayerByID(action.playerID);
     var playerAction = action.name;
     // double check to make sure the players exist
-    if (!actionPlayer || !currentPlayer)
+    if (!actionPlayer || !currentPlayerId)
       return false
 
     // compair the player who initiated the action to the player who is the current player
-    if (actionPlayer.id === currentPlayer) {
-      // return true if the players are the same
-      if (playerAction === 'hit') {
-        // do something
-      } else if (playerAction === 'split')  {
-        // do something else
-      }
-      // check to see which action the user has clicked on, should be within the actionPlayer array of values
-      // under name there should be the list of actions accomplished by user
-      // all last value assigned
-      // if it is action hit make sure the user has not exceeded the 21 card limit or the max ammout of hits a user can do
-
-      console.log("this returned true the current player and the player ids match up");
-      return true;
-    } else {
+    if (actionPlayer.id !== currentPlayerId) {
       // return false if the players are not the same
-      console.log("this is not the current player");
       return false;
+    }
+
+    if (playerAction === 'hit' || playerAction === 'split' || playerAction === 'handvalue') {
+      return true;
+      // // do something
+      // var runAction = actionHit();
+      // // runAction
+      // // console.log(this is true);
+      // console.log(runAction);
     }
   }
 
   actionHit() {
-    // set player to current player
-    // if player is not a player return
-    var player = this.getCurrentPlayer();
-    // if (!player)
-    //   return false;
+    // assing random card to current player
+    var currentPlayerId = this.getCurrentPlayerId();
+    var getPlayerById = this.getPlayerByID(currentPlayerId);
+    // console.log(getPlayerById);
+    var addRandomCard = this.addRandomCardToHand(getPlayerById);
+    return addRandomCard;
 
-    // get a random card
-    var card = this.getRandomCardFromDeck();
-
-    // assings a cared to a player
-    this.assignCardToPlayer(player, card);
+    // console.log(addRandomCard);
+    // console.log("this was fired");
   }
 
   getCardValue(card){
@@ -113,7 +105,18 @@ class BlackJackGame extends Game {
     }, 0 );
     
     return handTotal;
+  }
 
+  actionHandvalue() {
+    var currentPlayerId = this.getCurrentPlayerId();
+    var getPlayerById = this.getPlayerByID(currentPlayerId);
+
+    console.log(getPlayerById);
+    console.log(getPlayerById.hand);
+    //getPlayerHand( getCurrentPlayer() );
+    // get value of each card
+    // add values together
+    // return score
   }
 
   // Stand
@@ -137,6 +140,7 @@ class BlackJackGame extends Game {
     City Blackjack rules, you may only draw one additional card on each ace when splitting a pair of aces.
     Also note that this option will normally only be available immediately after you receive your first two cards.
     */
+    console.log("this is a action split");
   }
   //Double
   actionDouble () {

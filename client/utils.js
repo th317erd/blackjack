@@ -1,7 +1,7 @@
 const noop = (() => {});
 
 function regexpEscape(str) {
-  return str.replace(/([*\/+{}\[\]])/g, '\\$1');
+  return str.replace(/([\^*\/+{}\[\]])/g, '\\$1');
 }
 
 function attrGetterSetter(target, name, get, set = noop) {
