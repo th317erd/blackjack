@@ -1,15 +1,4 @@
 //const dust = global.dust = require('dustjs');
-class Context {
-  constructor(values) {
-    Object.assign(this, values || {});
-  }
-
-  resolve(name) {
-    console.log('Attempting to resolve: ', name);
-    return this[name];
-  }
-}
-
 const { regexpEscape } = require('./utils');
 
 const CustomMath = (function() {
@@ -69,10 +58,10 @@ function getRE(re, state) {
 
 function getValue(state) {
   var value = getRE(valueRE, state);
-  if (value.match(/[e\d.-]+/))
+  if (value.match(/^-?\d/))
     value = parseFloat(value);
   else
-    value = state.context.resolve(value);
+    value = state.context[value];
 
   return value;
 }
@@ -161,6 +150,35 @@ function render(what, chunk, context) {
   }
 }
 
+function filteredObj(obj) {
+  if (!obj)
+    return {};
+
+  var newObj = {},
+      keys = Object.keys(obj);
+
+  for (var i = 0, il = keys.length; i < il; i++) {
+    var key = keys[i],
+        value = obj[key];
+
+    if (typeof value === 'function')
+      continue;
+
+    newObj[key.replace(/[^a-zA-Z]+/g, '')] = value;
+  }
+
+  return newObj;
+}
+
+function mergeStack(stack) {
+  if (stack.tail) {
+    var last = mergeStack(stack.tail);
+    return Object.assign(last, filteredObj(stack.head));
+  }
+
+  return filteredObj(stack.head);
+}
+
 global.dust.helpers.calc = function(chunk, context, bodies, params) {
   var body = bodies.block;
   if (!body)
@@ -168,13 +186,13 @@ global.dust.helpers.calc = function(chunk, context, bodies, params) {
 
   var state = {},
       keys = Object.keys(params),
-      mathContext = new Context(CustomMath.getContextVariables());
+      mathContext = Object.assign(mergeStack(context.stack), CustomMath.getContextVariables());
 
   for (var i = 0, il = keys.length; i < il; i++) {
     var key = keys[i],
         expression = context.resolve(params[key]);
 
-    state[key] = calc('' + expression, context);
+    state[key] = calc('' + expression, mathContext);
   }
 
   return chunk.render(body, context.push(state));
