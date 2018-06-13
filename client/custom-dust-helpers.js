@@ -5,13 +5,42 @@ class Context {
   }
 
   resolve(name) {
+    console.log('Attempting to resolve: ', name);
     return this[name];
   }
 }
 
 const { regexpEscape } = require('./utils');
 
-const valueE = "([e\\d.-]+|\\w+)",
+const CustomMath = (function() {
+  var CustomMath = {
+        getContextVariables: () => contextVariables
+      },
+      contextVariables = {
+        DTR: Math.PI / 180,
+        RTD: 180 / Math.PI
+      },
+      keys = Object.getOwnPropertyNames(Math);
+
+  for (var i = 0, il = keys.length; i < il; i++) {
+    var key = keys[i],
+        value = Math[key];
+
+    if (!value)
+      continue;
+
+    if (typeof value !== 'function') {
+      contextVariables[key] = value;
+      continue;
+    }
+
+    CustomMath[key] = value;
+  }
+
+  return CustomMath;
+})();
+
+const valueE = "([\\d.-]+?e-\\d+|[\\d.-]+|\\b[a-zA-Z]+\\b)",
       valueRE = new RegExp(valueE, 'g');
 
 const operators = {
@@ -19,7 +48,8 @@ const operators = {
   '/': (lh, rh) => (lh / rh),
   '%': (lh, rh) => (lh % rh),
   '+': (lh, rh) => (lh + rh),
-  '-': (lh, rh) => (lh - rh)
+  '-': (lh, rh) => (lh - rh),
+  '^': (lh, rh) => Math.pow(lh, rh)
 };
 
 function getRE(re, state) {
@@ -39,16 +69,16 @@ function getRE(re, state) {
 
 function getValue(state) {
   var value = getRE(valueRE, state);
-  if (value.match(/[a-zA-Z]/))
-    value = state.context.resolve(value);
-  else
+  if (value.match(/[e\d.-]+/))
     value = parseFloat(value);
+  else
+    value = state.context.resolve(value);
 
   return value;
 }
 
 function getOp(state) {
-  return getRE(/[%*\/+-]{1}/g, state);
+  return getRE(/[\^%*\/+-]{1}/g, state);
 }
 
 function operate(lh, op, rh) {
@@ -90,7 +120,7 @@ function reduce(_expression, context) {
     });
   });
 
-  return expression;
+  return parseFloat(expression);
 }
 
 function calc(_expression, context) {
@@ -98,29 +128,54 @@ function calc(_expression, context) {
 
   while(1) {
     var found = false;
-    expression = expression.replace(/\(([^)]*)\)/g, function(m, group) {
+    expression = expression.replace(/([a-z]+)?\(([^()]*)\)/g, function(m, func, group) {
       found = true;
-      return reduce(group, context);
+      var value = reduce(group, context);
+      return (func) ? CustomMath[func](value) : value;
     });
 
     if (!found)
       break;
   }
 
-  return parseFloat(reduce(expression, context));
+  return reduce(expression, context);
 }
 
-(function(expression) {
-  var context = new Context({ x: 0.1, y: 0.5 });
-  console.log('Final value: ', calc(expression, context));
-})("10 * y + 5");
+// (function(expression) {
+//   var context = new Context(Object.assign({ x: 0.1, y: 0.5, PI: Math.PI,  }, CustomMath.getContextVariables()));
+//   console.log('Final value: ', calc(expression, context));
+// })("sin(DTR * 30)^2");
 
-// global.dust.helpers.calc = function(chunk, context, bodies, params) {
+function render(what, chunk, context) {
+  if (typeof what === "function") {
+    var output = '';
 
+    chunk.tap(function(data) {
+      output += data;
+      return '';
+    }).render(what, context).untap();
 
-//   var expression = context.resolve(params.expression),
-//       state = { offset: 0, value: null };
+    return output;
+  } else {
+    return what || '';
+  }
+}
 
-//    /* logic here */
-//    return chunk;
-// }
+global.dust.helpers.calc = function(chunk, context, bodies, params) {
+  var body = bodies.block;
+  if (!body)
+    return chunk;
+
+  var state = {},
+      keys = Object.keys(params),
+      mathContext = new Context(CustomMath.getContextVariables());
+
+  for (var i = 0, il = keys.length; i < il; i++) {
+    var key = keys[i],
+        expression = context.resolve(params[key]);
+
+    state[key] = calc('' + expression, context);
+  }
+
+  return chunk.render(body, context.push(state));
+}
