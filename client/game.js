@@ -18,7 +18,7 @@ class Game {
     this.players = [];
     this.cards = [];
     this.hand = 0;
-    this.currentPlayer = 1;
+    this.currentPlayerId = 1;
   }
 
   removePlayer(player) {
@@ -51,11 +51,11 @@ class Game {
   }
 
   setPlayerTurn(player) {
-    this.currentPlayer = player;
+    this.currentPlayerId = player;
   }
 
-  getCurrentPlayer() {
-    return this.currentPlayer;
+  getCurrentPlayerId() {
+    return this.currentPlayerId;
   }
 
   getPlayerByID(id) {
@@ -166,9 +166,6 @@ class Game {
 
   }
 
-  checkPlayIsValid() {
-    return true;
-  }
   /* @team define how this will provide an interface to a game and its rules */
   //  game.dispatchAction({name: 'split', playerID: 3});
   dispatchAction(action) {
