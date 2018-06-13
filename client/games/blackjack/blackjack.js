@@ -51,6 +51,62 @@ class BlackJackGame extends Game {
     // console.log("this was fired");
   }
 
+  getCardValue(card){
+    var values = {
+      '0' : 11, // aceTT
+      '1' : 2, 
+      '2' : 3,
+      '3' : 4,
+      '4' : 5,
+      '5' : 6,
+      '6' : 7,
+      '7' : 8,
+      '8' : 9,
+      '9' : 10,
+      '10' : 10, // jack
+      '11' : 10, // queen
+      '12' : 10 // king
+    };
+    values[card.value];
+    return card.value;
+  }
+
+  getHandValue(player) {
+
+    //var playerHand = this.getCardsMatchingOwnerId( this.getCurrentPlayer() );
+    //var handValue = playerHand.forEach(this.getCardValue());
+
+    var currentPlayerID = this.getCurrentPlayer();
+    console.log('currentplayer:' + currentPlayerID);
+    
+    // var currentPlayerID = this.currentPlayer.id ; 
+    // console.log('currentplayerID:' + currentPlayerID);
+    
+    var playerHand = this.getCardsMatchingOwnerId(currentPlayerID);
+    //var playerHand = this.getPlayerHand(currentPlayerID);
+    //console.log('currentplayerhand:' + playerHand);
+    return playerHand
+
+    //for each card in players hand, take the value and add it to the "score"
+    var sortedHand = playerHand.slice().sort((a, b) => {
+      var x = getCardValue(a),
+          y = getCardValue(b);
+      
+      return (x == y) ? 0 : (x < y) ? -1 : 1;
+    });
+
+    var handTotal = sortedHand.reduce((sum, card) => {
+      var value = getCardValue(card);
+      if(value > 10 && (sum + value) > 21)
+        value = 1;
+      
+        return sum + value;
+
+    }, 0 );
+    
+    return handTotal;
+  }
+
   actionHandvalue() {
     var currentPlayerId = this.getCurrentPlayerId();
     var getPlayerById = this.getPlayerByID(currentPlayerId);
