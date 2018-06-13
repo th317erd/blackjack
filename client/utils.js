@@ -1,5 +1,9 @@
 const noop = (() => {});
 
+function regexpEscape(str) {
+  return str.replace(/([\^*\/+{}\[\]])/g, '\\$1');
+}
+
 function attrGetterSetter(target, name, get, set = noop) {
   Object.defineProperty(target, name, {
     enumerable: true,
@@ -14,6 +18,7 @@ function capitalize(str) {
 }
 
 module.exports = {
+  regexpEscape,
   attrGetterSetter,
   capitalize
 };

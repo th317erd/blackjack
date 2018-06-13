@@ -1,6 +1,7 @@
 // We need to require dust first since it sets and uses a global
 const dust = global.dust = require('dustjs'),
-      dustHelpers = require('dustjs-helpers');
+      dustHelpers = require('dustjs-helpers'),
+      extraDustHelpers = require('./custom-dust-helpers');
 
       // Include websocket connector
 const { initializeWebsocketConnection } = require('./websockets'),

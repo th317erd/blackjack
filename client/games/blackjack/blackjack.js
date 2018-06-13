@@ -119,6 +119,10 @@ class BlackJackGame extends Game {
   calculateGameState() {
   }
 
+  shuffleCards() {
+    var getCards = generateDeck();
+  }
+
   async render() {
     var R = this.renderer;
     if (!R)

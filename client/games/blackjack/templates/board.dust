@@ -2,7 +2,9 @@
   {#players}
     <div class="player">
       {#hand}
-        This is a card I am sure!
+        {@calc x="{$idx}/{$len}"}
+          {>"card" x=x y="0"/}
+        {/calc}
       {/hand}
     </div>
   {/players}
