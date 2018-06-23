@@ -1,11 +1,7 @@
 <div class="board">
   {#players}
     <div class="player">
-      {#hand}
-        {@calc x="idx/len"}
-          {>"card" x=x y="0"/}
-        {/calc}
-      {/hand}
+      {>"hand" hand=hand/}
     </div>
   {/players}
 </div>

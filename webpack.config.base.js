@@ -1,4 +1,5 @@
-const path = require('path');
+const path = require('path'),
+      webpack = require('webpack');
 
 module.exports = {
   entry: './client/index.js',
@@ -33,5 +34,11 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'global': 'window',
+      'global.PLATFORM': '"browser"'
+    })
+  ]
 };

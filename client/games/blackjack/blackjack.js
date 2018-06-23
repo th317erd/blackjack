@@ -1,6 +1,6 @@
 const { Game } = require('../../game'),
       { Player } = require('../../player');
-      //boardTemplate = require('./templates/board');
+      boardTemplate = (global.PLATFORM === 'browser') ? require('./templates/board') : null;
 
 class BlackJackGame extends Game {
   constructor(...args) {
@@ -54,7 +54,7 @@ class BlackJackGame extends Game {
   getCardValue(card){
     var values = {
       '0' : 11, // aceTT
-      '1' : 2, 
+      '1' : 2,
       '2' : 3,
       '3' : 4,
       '4' : 5,
@@ -78,10 +78,10 @@ class BlackJackGame extends Game {
 
     var currentPlayerID = this.getCurrentPlayer();
     console.log('currentplayer:' + currentPlayerID);
-    
-    // var currentPlayerID = this.currentPlayer.id ; 
+
+    // var currentPlayerID = this.currentPlayer.id ;
     // console.log('currentplayerID:' + currentPlayerID);
-    
+
     var playerHand = this.getCardsMatchingOwnerId(currentPlayerID);
     //var playerHand = this.getPlayerHand(currentPlayerID);
     //console.log('currentplayerhand:' + playerHand);
@@ -91,7 +91,7 @@ class BlackJackGame extends Game {
     var sortedHand = playerHand.slice().sort((a, b) => {
       var x = getCardValue(a),
           y = getCardValue(b);
-      
+
       return (x == y) ? 0 : (x < y) ? -1 : 1;
     });
 
@@ -99,16 +99,16 @@ class BlackJackGame extends Game {
       var value = getCardValue(card);
       if(value > 10 && (sum + value) > 21)
         value = 1;
-      
+
         return sum + value;
 
     }, 0 );
-    
+
     return handTotal;
   }
 
   actionHandvalue() {
-    
+
     var currentPlayerId = this.getCurrentPlayerId();
     var getPlayerById = this.getPlayerByID(currentPlayerId);
 
