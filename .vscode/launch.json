@@ -7,14 +7,14 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Dust Helpers",
-      "program": "${workspaceFolder}/client/custom-dust-helpers.js"
+      "name": "Paul Testing",
+      "program": "${workspaceFolder}/client/paul-test.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/index.js"
+      "name": "Dust Helpers",
+      "program": "${workspaceFolder}/client/custom-dust-helpers.js"
     },
     {
       "type": "node",
