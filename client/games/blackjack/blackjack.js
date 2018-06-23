@@ -10,9 +10,6 @@ class BlackJackGame extends Game {
     this.addPlayer(new Player(this));
   }
 
-  // Here we will define blackjack specific game stuff
-  /* @team discuss how this will tie into, and define a game and its rules */
-  /* @mason define action methods */
   checkPlayIsValid(action) {
     //get the current player
     var currentPlayerId = this.getCurrentPlayerId();
@@ -27,9 +24,12 @@ class BlackJackGame extends Game {
     if (actionPlayer.id !== currentPlayerId) {
       // return false if the players are not the same
       return false;
-    }
 
-    if (playerAction === 'hit' || playerAction === 'split' || playerAction === 'handvalue') {
+    } else if (playerAction === 'hit'){
+
+    } else if (playerAction === 'split' ){
+      
+    } else if (playerAction === 'handvalue') {
       return true;
       // // do something
       // var runAction = actionHit();
@@ -46,14 +46,11 @@ class BlackJackGame extends Game {
     // console.log(getPlayerById);
     var addRandomCard = this.addRandomCardToHand(getPlayerById);
     return addRandomCard;
-
-    // console.log(addRandomCard);
-    // console.log("this was fired");
   }
 
   getCardValue(card){
     var values = {
-      '0' : 11, // aceTT
+      '0' : 11, // ace
       '1' : 2, 
       '2' : 3,
       '3' : 4,
@@ -67,36 +64,30 @@ class BlackJackGame extends Game {
       '11' : 10, // queen
       '12' : 10 // king
     };
-    values[card.value];
-    return card.value;
+    return values[card.value];
   }
 
   getHandValue(player) {
+    // make sure player is valid
+    if (!player)
+      return 0;
 
-    //var playerHand = this.getCardsMatchingOwnerId( this.getCurrentPlayer() );
-    //var handValue = playerHand.forEach(this.getCardValue());
+    var playerHand = player.hand;
 
-    var currentPlayerID = this.getCurrentPlayer();
-    console.log('currentplayer:' + currentPlayerID);
-    
-    // var currentPlayerID = this.currentPlayer.id ; 
-    // console.log('currentplayerID:' + currentPlayerID);
-    
-    var playerHand = this.getCardsMatchingOwnerId(currentPlayerID);
-    //var playerHand = this.getPlayerHand(currentPlayerID);
-    //console.log('currentplayerhand:' + playerHand);
-    return playerHand
+    // make sure hand is valid
+    if (!playerHand)
+      return 0;
 
     //for each card in players hand, take the value and add it to the "score"
     var sortedHand = playerHand.slice().sort((a, b) => {
-      var x = getCardValue(a),
-          y = getCardValue(b);
+      var x = this.getCardValue(a),
+          y = this.getCardValue(b);
       
       return (x == y) ? 0 : (x < y) ? -1 : 1;
     });
-
+    // get the sum of the players cards
     var handTotal = sortedHand.reduce((sum, card) => {
-      var value = getCardValue(card);
+      var value = this.getCardValue(card);
       if(value > 10 && (sum + value) > 21)
         value = 1;
       
@@ -105,19 +96,6 @@ class BlackJackGame extends Game {
     }, 0 );
     
     return handTotal;
-  }
-
-  actionHandvalue() {
-    
-    var currentPlayerId = this.getCurrentPlayerId();
-    var getPlayerById = this.getPlayerByID(currentPlayerId);
-
-    console.log(getPlayerById);
-    console.log(getPlayerById.hand);
-    //getPlayerHand( getCurrentPlayer() );
-    // get value of each card
-    // add values together
-    // return score
   }
 
   // Stand
