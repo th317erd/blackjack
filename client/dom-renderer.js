@@ -1,4 +1,4 @@
-const dust = require('dustjs'),
+const dust = require('dustjs-linkedin'),
       cardTemplate = require('./templates/card'),
       { Card } = require('./card');
 

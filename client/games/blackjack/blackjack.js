@@ -1,6 +1,6 @@
 const { Game } = require('../../game'),
-      { Player } = require('../../player'),
-      boardTemplate = require('./templates/board');
+      { Player } = require('../../player');
+      //boardTemplate = require('./templates/board');
 
 class BlackJackGame extends Game {
   constructor(...args) {
@@ -108,6 +108,7 @@ class BlackJackGame extends Game {
   }
 
   actionHandvalue() {
+    
     var currentPlayerId = this.getCurrentPlayerId();
     var getPlayerById = this.getPlayerByID(currentPlayerId);
 
