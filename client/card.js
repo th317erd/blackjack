@@ -177,7 +177,7 @@ class Card {
     attrGetterSetter(this, 'suit', () => suit);
     attrGetterSetter(this, 'digit', () => CARDS[value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
-    attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
+    attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
 
     this.ownerID = 0;
   }

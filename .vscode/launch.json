@@ -13,6 +13,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Wyatts Playground",
+      "program": "${workspaceFolder}/client/wyatt-test.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Dust Helpers",
       "program": "${workspaceFolder}/client/custom-dust-helpers.js"
     },
