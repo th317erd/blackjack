@@ -1,0 +1,7 @@
+<div class="player">
+  {#hand}
+    {@calc x="idx/len"}
+      {>"card" x=x y="0"/}
+    {/calc}
+  {/hand}
+</div>

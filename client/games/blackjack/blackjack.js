@@ -1,6 +1,6 @@
 const { Game } = require('../../game'),
       { Player } = require('../../player');
-      //boardTemplate = require('./templates/board');
+      boardTemplate = (global.PLATFORM === 'browser') ? require('./templates/board') : null;
 
 class BlackJackGame extends Game {
   constructor(...args) {
@@ -90,11 +90,11 @@ class BlackJackGame extends Game {
       var value = this.getCardValue(card);
       if(value > 10 && (sum + value) > 21)
         value = 1;
-      
+
         return sum + value;
 
     }, 0 );
-    
+
     return handTotal;
   }
 
