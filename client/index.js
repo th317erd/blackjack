@@ -1,5 +1,5 @@
 // We need to require dust first since it sets and uses a global
-const dust = global.dust = require('dustjs'),
+const dust = global.dust = require('dustjs-linkedin'),
       dustHelpers = require('dustjs-helpers'),
       extraDustHelpers = require('./custom-dust-helpers');
 

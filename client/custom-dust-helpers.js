@@ -1,4 +1,4 @@
-//const dust = global.dust = require('dustjs');
+//const dust = global.dust = require('dustjs-linkedin');
 const { regexpEscape } = require('./utils');
 
 const CustomMath = (function() {
