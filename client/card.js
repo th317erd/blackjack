@@ -172,13 +172,21 @@ class Card {
   constructor(value, suit) {
     if (!CARDS.hasOwnProperty(value))
       throw new Error(`Invalid card value: ${value}`);
+    
+      // create variable to hold value
+      var _viewableByPlayers = [];
 
     attrGetterSetter(this, 'value', () => value);
     attrGetterSetter(this, 'suit', () => suit);
     attrGetterSetter(this, 'digit', () => CARDS[value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
+<<<<<<< HEAD
+    attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
+    attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
+=======
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => false);
+>>>>>>> c54ddae98b8287e9bb22fdbf5b091288b6cfc6e2
 
     this.ownerID = 0;
   }
@@ -186,6 +194,39 @@ class Card {
   setOwner(player) {
     this.ownerID = player.id;
   }
+  isVisibleTo(player, set){
+    if(!player) 
+      return false;
+
+    var viewableByPlayers = this.viewableByPlayers;
+    var playerID = player.id;
+
+    // if false NOT VISIBLE
+    if(set === undefined){
+      // GET
+      // step through and check if the ID matches the array of visible to players
+      return (viewableByPlayers.indexOf(playerID) >= 0);
+      // same as above
+      // for ( var i = 0; i < viewableByPlayers.length; i++ ){
+      //   if (playerID === viewableByPlayers[i])
+      //     return true;
+      // }
+
+    } else {
+      // SET
+      if(set === true){
+        viewableByPlayers.push(playerID);
+      } else {
+        //remove player from array
+        var playerIndex = viewableByPlayers.indexOf(playerID);
+        if(playerIndex >= 0){
+          //remove this player from array
+          viewableByPlayers.splice(playerIndex, 1);
+        }
+      }
+    }
+  }
+
 }
 
 Card.CARDS = CARDS;
