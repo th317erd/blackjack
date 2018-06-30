@@ -12,23 +12,23 @@ class BlackJackGame extends Game {
 
   checkPlayIsValid(action) {
     //get the current player
-    var currentPlayerId = this.getCurrentPlayerId();
+    var currentPlayerID = this.getCurrentPlayerID();
     // get the player who git the action
     var actionPlayer = this.getPlayerByID(action.playerID);
     var playerAction = action.name;
     // double check to make sure the players exist
-    if (!actionPlayer || !currentPlayerId)
+    if (!actionPlayer || !currentPlayerID)
       return false
 
     // compair the player who initiated the action to the player who is the current player
-    if (actionPlayer.id !== currentPlayerId) {
+    if (actionPlayer.id !== currentPlayerID) {
       // return false if the players are not the same
       return false;
 
     } else if (playerAction === 'hit'){
 
     } else if (playerAction === 'split' ){
-      
+
     } else if (playerAction === 'handvalue') {
       return true;
       // // do something
@@ -41,8 +41,8 @@ class BlackJackGame extends Game {
 
   actionHit() {
     // assing random card to current player
-    var currentPlayerId = this.getCurrentPlayerId();
-    var getPlayerById = this.getPlayerByID(currentPlayerId);
+    var currentPlayerID = this.getCurrentPlayerID();
+    var getPlayerById = this.getPlayerByID(currentPlayerID);
     // console.log(getPlayerById);
     var addRandomCard = this.addRandomCardToHand(getPlayerById);
     return addRandomCard;
@@ -51,7 +51,7 @@ class BlackJackGame extends Game {
   getCardValue(card){
     var values = {
       '0' : 11, // ace
-      '1' : 2, 
+      '1' : 2,
       '2' : 3,
       '3' : 4,
       '4' : 5,
@@ -82,7 +82,7 @@ class BlackJackGame extends Game {
     var sortedHand = playerHand.slice().sort((a, b) => {
       var x = this.getCardValue(a),
           y = this.getCardValue(b);
-      
+
       return (x == y) ? 0 : (x < y) ? -1 : 1;
     });
     // get the sum of the players cards

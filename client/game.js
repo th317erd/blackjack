@@ -18,7 +18,8 @@ class Game {
     this.players = [];
     this.cards = [];
     this.hand = 0;
-    this.currentPlayerId = 1;
+    this.currentPlayerID = 1; // This is the player id for whichever player's turn it is
+    this.clientPlayerID = null; // This is the player id for this computer / client
     this.defaultCardWidth = 12;
     this.defaultCardHeight = 16;
   }
@@ -53,15 +54,27 @@ class Game {
   }
 
   setPlayerTurn(player) {
-    this.currentPlayerId = player;
-  }
-
-  getCurrentPlayerId() {
-    return this.currentPlayerId;
+    this.currentPlayerID = player;
   }
 
   getPlayerByID(id) {
     return this.players.find((player) => (player.id === id));
+  }
+
+  getCurrentPlayerID() {
+    return this.currentPlayerID;
+  }
+
+  getCurrentPlayer() {
+    return this.getPlayerByID(this.getCurrentPlayerID());
+  }
+
+  getClientPlayerID() {
+    return this.clientPlayerID;
+  }
+
+  getClientPlayer() {
+    return this.getPlayerByID(this.getClientPlayerID());
   }
 
   /* @team define how this will provide an interface to a game and its rules */
@@ -95,7 +108,7 @@ class Game {
         var suitvalue = suits[suitkey];
 
         // create a "card" and give it a value and a suit
-        var card = new Card(suitkey,Card.SUITS[x]);
+        var card = new Card(this, suitkey,Card.SUITS[x]);
 
         // give the object "cards" the key "card" that stores a "value" and "suit" key
         cards.push(card);
@@ -119,7 +132,7 @@ class Game {
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
-    var randomCard = new Card(randomValue, randomSuit);
+    var randomCard = new Card(this, randomValue, randomSuit);
 
     // add that card to the current cards
     this.cards.push(randomCard);

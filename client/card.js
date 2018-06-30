@@ -169,12 +169,12 @@ class Card {
   */
 
   // Define a generic card and its functionality here
-  constructor(value, suit) {
+  constructor(game, value, suit) {
     if (!CARDS.hasOwnProperty(value))
       throw new Error(`Invalid card value: ${value}`);
 
-      // create variable to hold value
-      var _viewableByPlayers = [];
+    // create variable to hold value
+    var _viewableByPlayers = [];
 
     attrGetterSetter(this, 'value', () => value);
     attrGetterSetter(this, 'suit', () => suit);
@@ -183,7 +183,7 @@ class Card {
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
-    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => false);
+    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.isVisibleTo(game.getClientPlayer()));
 
     this.ownerID = 0;
   }
@@ -191,6 +191,7 @@ class Card {
   setOwner(player) {
     this.ownerID = player.id;
   }
+
   isVisibleTo(player, set){
     if(!player)
       return false;
@@ -199,7 +200,7 @@ class Card {
     var playerID = player.id;
 
     // if false NOT VISIBLE
-    if(set === undefined){
+    if(set === undefined) {
       // GET
       // step through and check if the ID matches the array of visible to players
       return (viewableByPlayers.indexOf(playerID) >= 0);
