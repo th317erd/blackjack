@@ -1,7 +1,7 @@
 <div class="board">
   {#players}
     <div class="player">
-      {>"hand" hand=hand/}
+      {>"hand" hand=hand style="background-color:red;"/}
     </div>
   {/players}
 </div>

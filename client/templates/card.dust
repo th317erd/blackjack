@@ -1,17 +1,19 @@
-<div class="card" style="left: {@math key=x method="multiply" operand="100"/}%; top: {@math key=y method="multiply" operand="100"/}%;">
-  <div class="card-container">
-    <div class="suit-digit-container " style="top: 0; left: 0">
-      <span class="suit-point {suit-font}-{suit} suit-color-{suit} suit-point-small " style="left: 50%; top: 100%;"></span>
-      <span class="suit-digit suit-color-{suit}">{digit}</span>
-    </div>
-    <div class="suit-digit-container flip" style="bottom: 0; right: 0;">
-      <span class="suit-point {suit-font}-{suit} suit-color-{suit} suit-point-small " style="left: 50%; top: 100%;"></span>
-      <span class="suit-digit suit-color-{suit}">{digit}</span>
-    </div>
-    <div class="card-suit-container">
-      {#pattern}
-        <span class="suit-point {suit-font}-{suit} suit-color-{suit} suit-point-large {#flip}suit-flip{/flip}" style="left: {@math key=x method="multiply" operand="100"/}%; top: {@math key=y method="multiply" operand="100"/}%;"></span>
-      {/pattern}
-    </div>
+<div class="card" style="left:{@math key=x method="multiply" operand="100"/}%;top:{@math key=y method="multiply" operand="100"/}%;width:{defaultCardWidth}rem;height:{defaultCardHeight}rem;">
+  <div class="card-container{#isVisibleToCurrentPlayer}"{:else}card-background" style=""{/isVisibleToCurrentPlayer}>
+    {#isVisibleToCurrentPlayer}
+      <div class="suit-digit-container " style="top: 0; left: 0">
+        <span class="suit-point {suitFont}-{suit} suit-color-{suit} suit-point-small " style="left: 50%; top: 100%;"></span>
+        <span class="suit-digit suit-color-{suit}">{digit}</span>
+      </div>
+      <div class="suit-digit-container flip" style="bottom: 0; right: 0;">
+        <span class="suit-point {suitFont}-{suit} suit-color-{suit} suit-point-small " style="left: 50%; top: 100%;"></span>
+        <span class="suit-digit suit-color-{suit}">{digit}</span>
+      </div>
+      <div class="card-suit-container">
+        {#pattern}
+          <span class="suit-point {suitFont}-{suit} suit-color-{suit} suit-point-large {#flip}suit-flip{/flip}" style="left: {@math key=x method="multiply" operand="100"/}%; top: {@math key=y method="multiply" operand="100"/}%;"></span>
+        {/pattern}
+      </div>
+    {/isVisibleToCurrentPlayer}
   </div>
 </div>

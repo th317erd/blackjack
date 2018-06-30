@@ -19,6 +19,8 @@ class Game {
     this.cards = [];
     this.hand = 0;
     this.currentPlayerId = 1;
+    this.defaultCardWidth = 12;
+    this.defaultCardHeight = 16;
   }
 
   removePlayer(player) {
@@ -147,11 +149,11 @@ class Game {
     return hand;
   }
 
-  getPlayerHand(player){
+  getPlayerHand(player) {
     return this.getCardsMatchingOwnerId(player.id);
   }
 
-  getUnassignedCards(){
+  getUnassignedCards() {
     return this.getCardsMatchingOwnerId(0);
   }
 
