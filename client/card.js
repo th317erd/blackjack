@@ -172,7 +172,7 @@ class Card {
   constructor(value, suit) {
     if (!CARDS.hasOwnProperty(value))
       throw new Error(`Invalid card value: ${value}`);
-    
+
       // create variable to hold value
       var _viewableByPlayers = [];
 
@@ -180,13 +180,10 @@ class Card {
     attrGetterSetter(this, 'suit', () => suit);
     attrGetterSetter(this, 'digit', () => CARDS[value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
-<<<<<<< HEAD
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
-=======
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => false);
->>>>>>> c54ddae98b8287e9bb22fdbf5b091288b6cfc6e2
 
     this.ownerID = 0;
   }
@@ -195,7 +192,7 @@ class Card {
     this.ownerID = player.id;
   }
   isVisibleTo(player, set){
-    if(!player) 
+    if(!player)
       return false;
 
     var viewableByPlayers = this.viewableByPlayers;
