@@ -1,8 +1,8 @@
 const { Card } = require('./card'),
-      { capitalize } = require('./utils');
+      { capitalize } = require('./utils'),
+      SocketIO = require('socket.io-client');
 
 global.capitalize = capitalize;
-
 class Game {
 
   /* @mason: Define the structure of data for game instances
@@ -21,6 +21,35 @@ class Game {
     this.currentPlayerId = 1;
     this.defaultCardWidth = 12;
     this.defaultCardHeight = 16;
+    this.initializeWebsocketConnection('localhost', 8085);
+  }
+
+  initializeWebsocketConnection(host, port) {
+    // Attach to the WebSocket
+    const socket = SocketIO(`http://${host}:${port}`),
+          self = this;
+
+    socket.on('connection', function(data) {
+      console.log('Connected to websocket server!', data);
+  
+      self.sendChat = (user, message) => {
+        if (typeof message !== 'string')
+          throw new Error('Improper usage. Specify your username as the first argument, message as the second');
+  
+        this.emit('chat_message', {
+          user,
+          message
+        });
+      };
+  
+      this.on('chat_message', (data) => {
+        console.info(`${data.user} says: ${data.message}`);
+      });
+
+      this.on('disconnect', () => {
+        console.info('Client disconnected');
+      });
+    });
   }
 
   removePlayer(player) {

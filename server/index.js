@@ -5,18 +5,22 @@ const PORT = 8085;
 var app = http.createServer(function(request, response){}),
     io = require('socket.io')(app);
 
-io.on('connection', function (socket) {
+// connection event
+io.on('connection', function (client) {
   console.log('User connected!');
+  // give user client ID
+  
 
-  socket.on('chat_message', function(data) {
+  client.on('chat_message', function(data) {
     try {
-      socket.broadcast.emit('chat_message', data);
+      client.broadcast.emit('chat_message', data);
+      // new player just joined game
     } catch (e) {
       console.error(e);
     }
   });
 
-  socket.emit('connection');
+  client.emit('connection', {playerID : 1});
 });
 
 app.listen(PORT);

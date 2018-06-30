@@ -2,9 +2,8 @@
 const dust = global.dust = require('dustjs-linkedin'),
       dustHelpers = require('dustjs-helpers'),
       extraDustHelpers = require('./custom-dust-helpers');
-
-      // Include websocket connector
-const { initializeWebsocketConnection } = require('./websockets'),
+      
+const 
       // Include game classes
       { DOMRenderer } = require('./dom-renderer'),
       { BlackJackGame } = require('./games/blackjack'),
@@ -12,8 +11,6 @@ const { initializeWebsocketConnection } = require('./websockets'),
       { renderCard } = require('./debug-utils');
 
 (function() {
-  // Start websocket connection to server
-  //initializeWebsocketConnection('localhost', 8085);
 
   console.log('KingTut: ', BlackJackGame);
   var game = global.game = new BlackJackGame({
