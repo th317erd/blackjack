@@ -4,17 +4,22 @@ html, body {
   box-sizing: border-box;
   line-height: 1rem;
   background:
-  radial-gradient(circle farthest-side, rgb(80, 159, 70), rgba(18, 88, 0, 0.9)),
-  url(https://www.toptal.com/designers/subtlepatterns/patterns/noise_lines.png);
+    radial-gradient(circle farthest-side, rgb(80, 159, 70), rgba(18, 88, 0, 0.9)),
+    url(https://www.toptal.com/designers/subtlepatterns/patterns/noise_lines.png);
   position: relative;
   height: 100vh;
   width: 100vw;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
 .player {
   position: relative;
-  width: 20rem;
-  height: 14rem;
 }
 
 .card {
@@ -26,7 +31,11 @@ html, body {
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.2);
-  box-sizing: border-box;
+  background-position: center center;
+  background-size: contain;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-repeat: no-repeat;
 }
 
 .card-container {
@@ -93,4 +102,25 @@ html, body {
 
 .suit-flip {
   transform: translate(-50%, -50%) scale(-1.0, -1.0);
+}
+
+.hand {
+  position: absolute;
+}
+
+.table {
+}
+
+.table-container {
+  position: relative;
+  width: 100vh;
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table-hand-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

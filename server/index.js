@@ -9,7 +9,7 @@ var app = http.createServer(function(request, response){}),
 io.on('connection', function (client) {
   console.log('User connected!');
   // give user client ID
-  
+
 
   client.on('chat_message', function(data) {
     try {

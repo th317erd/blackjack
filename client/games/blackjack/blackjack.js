@@ -5,9 +5,6 @@ const { Game } = require('../../game'),
 class BlackJackGame extends Game {
   constructor(...args) {
     super(...args);
-
-    this.cards = this.generateDeck();
-    this.addPlayer(new Player(this));
   }
 
   checkPlayIsValid(action) {

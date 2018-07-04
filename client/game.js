@@ -19,9 +19,12 @@ class Game {
     this.cards = [];
     this.hand = 0;
     this.currentPlayerID = 1; // This is the player id for whichever player's turn it is
-    this.clientPlayerID = null; // This is the player id for this computer / client
+    this.clientPlayerID = 1; // This is the player id for this computer / client
     this.defaultCardWidth = 12;
     this.defaultCardHeight = 16;
+    this.defaultHandWidth = 20;
+    this.cardBackgroundImageURL = 'images/cardback01.png';
+
     this.initializeWebsocketConnection('localhost', 8085);
   }
 
@@ -32,17 +35,17 @@ class Game {
 
     socket.on('connection', function(data) {
       console.log('Connected to websocket server!', data);
-  
+
       self.sendChat = (user, message) => {
         if (typeof message !== 'string')
           throw new Error('Improper usage. Specify your username as the first argument, message as the second');
-  
+
         this.emit('chat_message', {
           user,
           message
         });
       };
-  
+
       this.on('chat_message', (data) => {
         console.info(`${data.user} says: ${data.message}`);
       });
@@ -151,7 +154,7 @@ class Game {
     return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
   }
 
-  addRandomCardToHand(player){
+  addRandomCardToHand(player) {
     // use math to randomly generate a suit - get random index
     var suits = Card.SUITS;
     var randomSuit = suits[Math.floor(Math.random() * suits.length)];
