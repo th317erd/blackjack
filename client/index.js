@@ -2,11 +2,12 @@
 const dust = global.dust = require('dustjs-linkedin'),
       dustHelpers = require('dustjs-helpers'),
       extraDustHelpers = require('./custom-dust-helpers');
-      
-const 
+
+const
       // Include game classes
       { DOMRenderer } = require('./dom-renderer'),
       { BlackJackGame } = require('./games/blackjack'),
+      { Player } = require('./player'),
       { Card } = require('./card'),
       { renderCard } = require('./debug-utils');
 
@@ -17,10 +18,16 @@ const
     renderer: new DOMRenderer('root')
   });
 
-  var player = game.getPlayerByID(1);
+  var testPlayers = 5,
+      cardsPerHand = 5;
 
-  for (var i = 0; i < 5; i++)
-    game.addRandomCardToHand(player);
+  for (var i = 0; i < testPlayers; i++) {
+    var player = new Player(this);
+    game.addPlayer(player);
+
+    for (var j = 0; j < cardsPerHand; j++)
+      game.addRandomCardToHand(player);
+  }
 
   game.render();
 })();

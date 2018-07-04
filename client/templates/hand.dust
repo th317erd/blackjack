@@ -1,6 +1,6 @@
-<div class="hand" style="{style}">
+<div class="hand" style="width:{handWidth}rem;height:{cardHeight}rem;{style}">
   {#hand}
-    {@calc x="idx/len"}
+    {@calc _order="r,resize,x" r="safe(idx/(len-1))" resize="(handWidth-cardWidth)/handWidth" x="resize*r"}
       {>"card" x=x y="0"/}
     {/calc}
   {/hand}

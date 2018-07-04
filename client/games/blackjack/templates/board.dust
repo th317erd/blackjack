@@ -1,7 +1,11 @@
-<div class="board">
-  {#players}
-    <div class="player">
-      {>"hand" hand=hand style="background-color:red;"/}
+{@calc handWidth="defaultHandWidth" cardWidth="defaultCardWidth" cardHeight="defaultCardHeight" halfCardWidth="defaultCardWidth/2" halfCardHeight="defaultCardHeight/2"}
+  <div class="table-container" style="padding:{halfCardHeight}rem {halfCardWidth}rem {halfCardHeight}rem {halfCardWidth}rem;">
+    <div class="table-hand-container">
+      {#players}
+        {@calc _order="r,radians,handX,handY" r="idx/len" radians="(2*PI)*r" handX="(sin(radians)*50)+50" handY="(cos(radians)*50)+50" _debug="player"}
+          {>"hand" hand=hand style="left:{handX}%;top:{handY}%;transform:translate(-50%,-50%);"/}
+        {/calc}
+      {/players}
     </div>
-  {/players}
-</div>
+  </div>
+{/calc}

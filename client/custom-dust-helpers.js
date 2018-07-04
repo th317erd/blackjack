@@ -3,7 +3,10 @@ const { regexpEscape } = require('./utils');
 
 const CustomMath = (function() {
   var CustomMath = {
-        getContextVariables: () => contextVariables
+        getContextVariables: () => contextVariables,
+        safe: (value) => {
+          return (isNaN(value) || !isFinite(value)) ? 0 : value;
+        }
       },
       contextVariables = {
         DTR: Math.PI / 180,
@@ -30,7 +33,8 @@ const CustomMath = (function() {
 })();
 
 const valueE = "([\\d.-]+?e-\\d+|[\\d.-]+|\\b[a-zA-Z]+\\b)",
-      valueRE = new RegExp(valueE, 'g');
+      valueRE = new RegExp(valueE, 'g'),
+      strictValueRE = new RegExp('^' + valueE + '$');
 
 const operators = {
   '*': (lh, rh) => (lh * rh),
@@ -96,9 +100,15 @@ function solve(state) {
 }
 
 function reduce(_expression, context) {
-  var expression = _expression,
-      keys = Object.keys(operators);
+  var expression = _expression;
 
+  // Is this a value all by itself?
+  strictValueRE.lastIndex = 0;
+  if (strictValueRE.test(expression))
+    return parseFloat(getValue({ offset: 0, data: expression, context }));
+
+  // No, do some math...
+  var keys = Object.keys(operators);
   keys.forEach((key) => {
     var str = `${valueE}${regexpEscape(key)}${valueE}`;
     expression = expression.replace(new RegExp(str, 'g'), function(m) {
@@ -185,15 +195,28 @@ global.dust.helpers.calc = function(chunk, context, bodies, params) {
     return chunk;
 
   var state = {},
-      keys = Object.keys(params),
+      keys = context.resolve(params['_order']),
       mathContext = Object.assign(mergeStack(context.stack), CustomMath.getContextVariables());
 
-  for (var i = 0, il = keys.length; i < il; i++) {
-    var key = keys[i],
-        expression = context.resolve(params[key]);
+  if (keys && typeof keys.valueOf() === 'string')
+    keys = keys.split(/\s*,\s*/g);
 
-    state[key] = calc('' + expression, mathContext);
+  if (!keys)
+    keys = Object.keys(params);
+
+  for (var i = 0, il = keys.length; i < il; i++) {
+    var key = keys[i];
+    if (key.charAt(0) === '_')
+      continue;
+
+    var expression = context.resolve(params[key]),
+        value = calc('' + expression, mathContext);
+
+    state[key] = mathContext[key] = value;
   }
+
+  if (params['_debug'])
+    console.log('Calc output [' + params._debug + ']: ', state);
 
   return chunk.render(body, context.push(state));
 }

@@ -199,15 +199,18 @@ class Card {
     this.ownerID = player.id;
   }
 
-  isVisibleTo(player, set){
-    if(!player)
+  isVisibleTo(player, set) {
+    if (!player)
       return false;
+
+    if (player.id === this.ownerID)
+      return true;
 
     var viewableByPlayers = this.viewableByPlayers;
     var playerID = player.id;
 
     // if false NOT VISIBLE
-    if(set === undefined) {
+    if (set === undefined) {
       // GET
       // step through and check if the ID matches the array of visible to players
       return (viewableByPlayers.indexOf(playerID) >= 0);
@@ -231,11 +234,11 @@ class Card {
       }
     }
   }
+
   visibleToAllPlayers(set){
     this.game.players.forEach((player)=> this.isVisibleTo(player, set));
     // TODO: need to add GET
   }
-
 }
 
 Card.CARDS = CARDS;
