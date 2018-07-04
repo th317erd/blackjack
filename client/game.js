@@ -1,30 +1,26 @@
 const { Card } = require('./card'),
       { capitalize } = require('./utils'),
+      { Player } = require('./player'),
       SocketIO = require('socket.io-client');
 
 global.capitalize = capitalize;
 class Game {
 
-  /* @mason: Define the structure of data for game instances
-      How will cards be stored and acted upon?
-      How will players be stored and acted upon?
-      How will turns be handled?
-  */
-
   constructor(_opts) {
     var opts = _opts || {};
 
-    this.renderer = opts.renderer;
+    this.renderer = opts.renderer; // TODO: de enumerate
     this.players = [];
     this.cards = [];
     this.hand = 0;
-    this.currentPlayerID = 1; // This is the player id for whichever player's turn it is
     this.clientPlayerID = 1; // This is the player id for this computer / client
+    this.defaultCardWidth = 12; // TODO: de enumerate
+    this.defaultCardHeight = 16; // TODO: de enumerate
     this.defaultCardWidth = 12;
     this.defaultCardHeight = 16;
     this.defaultHandWidth = 20;
     this.cardBackgroundImageURL = 'images/cardback01.png';
-
+    
     this.initializeWebsocketConnection('localhost', 8085);
   }
 
@@ -54,6 +50,11 @@ class Game {
         console.info('Client disconnected');
       });
     });
+  }
+  createNewPlayer(){
+    var player = new Player(this);
+    this.addPlayer(player);
+    return player;
   }
 
   removePlayer(player) {
@@ -139,8 +140,8 @@ class Game {
         // access value in var suitkey
         var suitvalue = suits[suitkey];
 
-        // create a "card" and give it a value and a suit
-        var card = new Card(this, suitkey,Card.SUITS[x]);
+        // create a "card" object and give it a value and a suit
+        var card = new Card( this, { value: suitkey, suit: Card.SUITS[x]});
 
         // give the object "cards" the key "card" that stores a "value" and "suit" key
         cards.push(card);
@@ -164,13 +165,15 @@ class Game {
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
-    var randomCard = new Card(this, randomValue, randomSuit);
+    var randomCard = new Card( this, { value: randomValue, suit: randomSuit });
 
     // add that card to the current cards
     this.cards.push(randomCard);
 
     // assign that card to the current player
     this.assignCardToOwner(player, randomCard);
+
+    return randomCard;
   }
 
   assignCardToOwner(owner, card) {

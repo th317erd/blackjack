@@ -162,24 +162,31 @@ const SUITS = [ 'diamond', 'heart', 'spade', 'club' ];
 
 // Defining a class
 class Card {
-  // here we need something to instantiate a single card
-
-  /* @paul define class constructor, and decide how internal instance variables should be
-      structured and defined. Also, define structure of methods that will act upon each instance
-  */
 
   // Define a generic card and its functionality here
-  constructor(game, value, suit) {
-    if (!CARDS.hasOwnProperty(value))
-      throw new Error(`Invalid card value: ${value}`);
+  constructor(game, _opts) {
+    if (!game)
+      throw new Error('Game must be defined in order to create a player');
 
+    var opts = _opts || {};
+
+    if (!CARDS.hasOwnProperty(opts.value))
+      throw new Error(`Invalid card value: ${opts.value}`);
+
+    // $opts = arguements passed by _opts OR new array
+    // value, suit, viewableByPlayers
+    
     // create variable to hold value
-    var _viewableByPlayers = [];
-
-    attrGetterSetter(this, 'value', () => value);
-    attrGetterSetter(this, 'suit', () => suit);
-    attrGetterSetter(this, 'digit', () => CARDS[value].digit);
-    attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
+    var _viewableByPlayers = opts.viewableByPlayers || [];
+    var _game = game;
+    attrGetterSetter(this, 'game', () => game, (val) => {
+      _game = val;
+      return val;
+    });
+    attrGetterSetter(this, 'value', () => opts.value);
+    attrGetterSetter(this, 'suit', () => opts.suit);
+    attrGetterSetter(this, 'digit', () => CARDS[opts.value].digit);
+    attrGetterSetter(this, 'pattern', () => CARDS[opts.value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
@@ -226,6 +233,11 @@ class Card {
         }
       }
     }
+  }
+
+  visibleToAllPlayers(set){
+    this.game.players.forEach((player)=> this.isVisibleTo(player, set));
+    // TODO: need to add GET
   }
 }
 

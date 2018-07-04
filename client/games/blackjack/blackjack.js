@@ -7,6 +7,13 @@ class BlackJackGame extends Game {
     super(...args);
   }
 
+  createNewPlayer(){
+    var player = super.createNewPlayer();
+    this.addRandomCardToHand(player);
+    this.addRandomCardToHand(player).visibleToAllPlayers();
+    return player;
+  }
+
   checkPlayIsValid(action) {
     //get the current player
     var currentPlayerID = this.getCurrentPlayerID();

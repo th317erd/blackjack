@@ -7,8 +7,12 @@ class Player extends CardOwner {
 
     if (!game)
       throw new Error('Game must be defined in order to create a player');
-
-    this.game = game;
+    
+    var _game = game;
+    attrGetterSetter(this, 'game', () => game, (val) => {
+      _game = val;
+      return val;
+    });
     attrGetterSetter(this, 'hand', () => this.game.getPlayerHand(this));
   }
 
