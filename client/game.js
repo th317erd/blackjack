@@ -9,14 +9,14 @@ class Game {
   constructor(_opts) {
     var opts = _opts || {};
 
-    this.renderer = opts.renderer;
+    this.renderer = opts.renderer; // TODO: de enumerate
     this.players = [];
     this.cards = [];
     this.hand = 0;
     this.currentPlayerID = 1; // This is the player id for whichever player's turn it is
     this.clientPlayerID = null; // This is the player id for this computer / client
-    this.defaultCardWidth = 12;
-    this.defaultCardHeight = 16;
+    this.defaultCardWidth = 12; // TODO: de enumerate
+    this.defaultCardHeight = 16; // TODO: de enumerate
     this.initializeWebsocketConnection('localhost', 8085);
   }
 
