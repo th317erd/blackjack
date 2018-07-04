@@ -137,7 +137,7 @@ class Game {
         var suitvalue = suits[suitkey];
 
         // create a "card" object and give it a value and a suit
-        var card = new Card({ game: this, value: suitkey, suit: Card.SUITS[x]});
+        var card = new Card( this, { value: suitkey, suit: Card.SUITS[x]});
 
         // give the object "cards" the key "card" that stores a "value" and "suit" key
         cards.push(card);
@@ -161,7 +161,7 @@ class Game {
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
-    var randomCard = new Card({ game: this, value: randomValue, suit: randomSuit });
+    var randomCard = new Card( this, { value: randomValue, suit: randomSuit });
 
     // add that card to the current cards
     this.cards.push(randomCard);

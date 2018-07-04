@@ -162,19 +162,17 @@ const SUITS = [ 'diamond', 'heart', 'spade', 'club' ];
 
 // Defining a class
 class Card {
-  // here we need something to instantiate a single card
-
-  /* @paul define class constructor, and decide how internal instance variables should be
-      structured and defined. Also, define structure of methods that will act upon each instance
-  */
 
   // Define a generic card and its functionality here
-  constructor(_opts) {
+  constructor(game, _opts) {
+    if (!game)
+      throw new Error('Game must be defined in order to create a player');
+
     if (!CARDS.hasOwnProperty(value))
       throw new Error(`Invalid card value: ${value}`);
-    
+
     // $opts = arguements passed by _opts OR new array
-    // game, value, suit, viewableByPlayers
+    // value, suit, viewableByPlayers
     var opts = _opts || {};
     // create variable to hold value
     var _viewableByPlayers = opts.viewableByPlayers || [];

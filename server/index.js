@@ -10,7 +10,6 @@ io.on('connection', function (client) {
   console.log('User connected!');
   // give user client ID
   
-
   client.on('chat_message', function(data) {
     try {
       client.broadcast.emit('chat_message', data);
