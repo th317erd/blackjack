@@ -175,11 +175,11 @@ class Card {
 
     // $opts = arguements passed by _opts OR new array
     // value, suit, viewableByPlayers
-    
+
     // create variable to hold value
     var _viewableByPlayers = opts.viewableByPlayers || [];
     var _game = game;
-    attrGetterSetter(this, 'game', () => game, (val) => {
+    attrGetterSetter(this, 'game', () => _game, (val) => {
       _game = val;
       return val;
     });
