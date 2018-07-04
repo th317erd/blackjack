@@ -169,15 +169,18 @@ class Card {
   */
 
   // Define a generic card and its functionality here
-  constructor(game, value, suit) {
+  constructor(_opts) {
     if (!CARDS.hasOwnProperty(value))
       throw new Error(`Invalid card value: ${value}`);
-
+    
+    // $opts = arguements passed by _opts OR new array
+    // game, value, suit, viewableByPlayers
+    var opts = _opts || {};
     // create variable to hold value
-    var _viewableByPlayers = [];
+    var _viewableByPlayers = opts.viewableByPlayers || [];
 
-    attrGetterSetter(this, 'value', () => value);
-    attrGetterSetter(this, 'suit', () => suit);
+    attrGetterSetter(this, 'value', () => opts.value);
+    attrGetterSetter(this, 'suit', () => opts.suit);
     attrGetterSetter(this, 'digit', () => CARDS[value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
