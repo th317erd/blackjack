@@ -1,15 +1,10 @@
 const { Card } = require('./card'),
       { capitalize } = require('./utils'),
+      { Player } = require('./player'),
       SocketIO = require('socket.io-client');
 
 global.capitalize = capitalize;
 class Game {
-
-  /* @mason: Define the structure of data for game instances
-      How will cards be stored and acted upon?
-      How will players be stored and acted upon?
-      How will turns be handled?
-  */
 
   constructor(_opts) {
     var opts = _opts || {};
@@ -51,6 +46,11 @@ class Game {
         console.info('Client disconnected');
       });
     });
+  }
+  createNewPlayer(){
+    var player = new Player(this);
+    this.addPlayer(player);
+    return player;
   }
 
   removePlayer(player) {
@@ -168,6 +168,8 @@ class Game {
 
     // assign that card to the current player
     this.assignCardToOwner(player, randomCard);
+
+    return randomCard;
   }
 
   assignCardToOwner(owner, card) {

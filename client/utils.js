@@ -6,7 +6,7 @@ function regexpEscape(str) {
 
 function attrGetterSetter(target, name, get, set = noop) {
   Object.defineProperty(target, name, {
-    enumerable: true,
+    enumerable: false,
     configurable: true,
     get,
     set

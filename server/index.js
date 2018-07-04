@@ -1,15 +1,20 @@
-const http = require('http');
+const http = require('http'),
+      SocketIO = require('socket.io'),
+      { BlackJackGame } = require('../client/games/blackjack'),
+      { Player } = require('../client/player.js');
 
 const PORT = 8085;
 
 var app = http.createServer(function(request, response){}),
-    io = require('socket.io')(app);
+    io = SocketIO(app),
+    game = new BlackJackGame();
 
 // connection event
 io.on('connection', function (client) {
   console.log('User connected!');
-  // give user client ID
-  
+
+  var player = game.createNewPlayer();
+
   client.on('chat_message', function(data) {
     try {
       client.broadcast.emit('chat_message', data);
@@ -18,8 +23,15 @@ io.on('connection', function (client) {
       console.error(e);
     }
   });
+  console.log(game);
+  // client.emit('connection', {
+  //   game: 'BlackJackGame',
+  //   _opts: {
+  //     value: '',
+  //     suit: ''
+  //   }
+  // });
 
-  client.emit('connection', {playerID : 1});
 });
 
 app.listen(PORT);
