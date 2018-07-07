@@ -1,8 +1,9 @@
 var ownerIDCounter = 1;
 
 class CardOwner {
-  constructor() {
-    this.id = ownerIDCounter++;
+  constructor(_opts) {
+    var opts = _opts || {};
+    this.id = (opts.id) ? opts.id : ownerIDCounter++;
   }
 
 }
