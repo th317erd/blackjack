@@ -183,8 +183,8 @@ class Card {
       _game = val;
       return val;
     });
-    attrGetterSetter(this, 'value', () => opts.value);
-    attrGetterSetter(this, 'suit', () => opts.suit);
+    this.value = opts.value;
+    this.suit = opts.suit;
     attrGetterSetter(this, 'digit', () => CARDS[opts.value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[opts.value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);

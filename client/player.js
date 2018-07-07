@@ -2,8 +2,9 @@ const { CardOwner } = require('./card-owner'),
       { attrGetterSetter } = require('./utils');
 
 class Player extends CardOwner {
-  constructor(game) {
-    super();
+  constructor(game, _opts) {
+    var opts = _opts || {};
+    super(opts);
 
     if (!game)
       throw new Error('Game must be defined in order to create a player');
@@ -14,6 +15,7 @@ class Player extends CardOwner {
       return val;
     });
     attrGetterSetter(this, 'hand', () => this.game.getPlayerHand(this));
+
   }
 
   setGame(game) {

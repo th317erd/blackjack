@@ -1,56 +1,58 @@
 const { Card } = require('./card'),
       { capitalize } = require('./utils'),
       { Player } = require('./player'),
-      SocketIO = require('socket.io-client');
-
+      { attrGetterSetter } = require('./utils');
+      
 global.capitalize = capitalize;
 class Game {
 
   constructor(_opts) {
-    var opts = _opts || {};
-
-    this.renderer = opts.renderer; // TODO: de enumerate
-    this.players = [];
-    this.cards = [];
-    this.hand = 0;
-    this.clientPlayerID = 1; // This is the player id for this computer / client
-    this.defaultCardWidth = 12; // TODO: de enumerate
-    this.defaultCardHeight = 16; // TODO: de enumerate
-    this.defaultCardWidth = 12;
-    this.defaultCardHeight = 16;
-    this.defaultHandWidth = 20;
-    this.cardBackgroundImageURL = 'images/cardback01.png';
+    var opts = _opts || {},
+        _renderer = opts.renderer,
+        _players = opts.players || [],
+        _cards = opts.cards || [],
+        _clientPlayerID = opts.clientPlayerID || 1,
+        _defaultCardWidth = opts.defaultCardWidth || 12,
+        _defaultCardHeight = opts.defaultCardHeight || 16,
+        _defaultHandWidth = opts.defaultHandWidth || 20,
+        _cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
     
-    this.initializeWebsocketConnection('localhost', 8085);
+    attrGetterSetter(this, 'renderer', () => _renderer );
+    this.players = _players.map( (player) => new Player(this, player) );
+    this.cards = _cards.map( (card) => new Card(this, card) );
+    this.clientPlayerID = _clientPlayerID;
+    this.defaultCardWidth = _defaultCardWidth;
+    this.defaultCardHeight = _defaultCardHeight;
+    this.defaultHandWidth = _defaultHandWidth;
+    this.cardBackgroundImageURL = _cardBackgroundImageURL;
+    
+    this.setupWebsocketConnection(opts.webSocket);
   }
 
-  initializeWebsocketConnection(host, port) {
-    // Attach to the WebSocket
-    const socket = SocketIO(`http://${host}:${port}`),
-          self = this;
+  setupWebsocketConnection(webSocket) {
 
-    socket.on('connection', function(data) {
-      console.log('Connected to websocket server!', data);
+    if (!webSocket)
+      return;
 
-      self.sendChat = (user, message) => {
-        if (typeof message !== 'string')
-          throw new Error('Improper usage. Specify your username as the first argument, message as the second');
+    this.sendChat = (user, message) => {
+      if (typeof message !== 'string')
+        throw new Error('Improper usage. Specify your username as the first argument, message as the second');
 
-        this.emit('chat_message', {
-          user,
-          message
-        });
-      };
-
-      this.on('chat_message', (data) => {
-        console.info(`${data.user} says: ${data.message}`);
+      webSocket.emit('chat_message', {
+        user,
+        message
       });
+    };
 
-      this.on('disconnect', () => {
-        console.info('Client disconnected');
-      });
+    webSocket.on('chat_message', (data) => {
+      console.info(`${data.user} says: ${data.message}`);
+    });
+
+    webSocket.on('disconnect', () => {
+      console.info('Client disconnected');
     });
   }
+
   createNewPlayer(){
     var player = new Player(this);
     this.addPlayer(player);
@@ -63,6 +65,9 @@ class Game {
       player.setGame(null);
       this.players.splice(index, 1);
     }
+    this.getCardsMatchingOwnerId(player.id);
+    //TODO: get cards array and filter out matching IDs
+    
   }
 
   addPlayer(player) {

@@ -8,10 +8,16 @@ const PORT = 8085;
 var app = http.createServer(function(request, response){}),
     io = SocketIO(app),
     game = new BlackJackGame();
+    
 
 // connection event
 io.on('connection', function (client) {
   console.log('User connected!');
+  
+  client.once('disconnect', function() {
+    console.log('User disconnected!');
+    game.removePlayer(player);
+  });
 
   var player = game.createNewPlayer();
 
@@ -23,14 +29,8 @@ io.on('connection', function (client) {
       console.error(e);
     }
   });
-  console.log(game);
-  // client.emit('connection', {
-  //   game: 'BlackJackGame',
-  //   _opts: {
-  //     value: '',
-  //     suit: ''
-  //   }
-  // });
+  console.log('SERVER', game);
+  client.emit( 'connection', game);
 
 });
 
