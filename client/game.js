@@ -104,13 +104,16 @@ class Game extends Base {
 
   removePlayer(player) {
     var index = this.players.indexOf(player);
-    if (index >= 0) {
-      player.setGame(null);
-      this.players.splice(index, 1);
-    }
+    if (index < 0)
+      return;
 
-    this.getCardsMatchingOwnerID(player.id);
-    //TODO: get cards array and filter out matching IDs
+    // remove cards
+    this.cards = this.cards.filter((card) => (card.ownerID !== player.id));
+
+    // remove player
+    player.setGame(null);
+    this.players.splice(index, 1);
+  
   }
 
   addPlayer(player) {
