@@ -12,7 +12,9 @@
 // http://www.milefoot.com/math/discrete/counting/images/cards.png
 // X is horizonal   Y is vertical
 
-const { attrGetterSetter } = require('./utils');
+const { Base } = require('./base'),
+      { attrGetterSetter } = require('./utils');
+
 const DEFAULT_SUIT_FONT = 'font-suits1';
 
 const CARDS = {
@@ -160,11 +162,15 @@ const CARDS = {
 
 const SUITS = [ 'diamond', 'heart', 'spade', 'club' ];
 
+var cardIDCounter = 1;
+
 // Defining a class
-class Card {
+class Card extends Base {
 
   // Define a generic card and its functionality here
   constructor(game, _opts) {
+    super();
+
     if (!game)
       throw new Error('Game must be defined in order to create a player');
 
@@ -185,6 +191,7 @@ class Card {
       return val;
     });
 
+    this.id = opts.id || (cardIDCounter++);
     this.value = opts.value;
     this.suit = opts.suit;
     this.ownerID = opts.ownerID || 0;
@@ -198,16 +205,25 @@ class Card {
     attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.visible && this.isVisibleTo(game.getClientPlayer()));
   }
 
+  toString() {
+    return `Card ${this.value} of ${this.suit}s`;
+  }
+
+  setGame(game) {
+    this.game = game;
+  }
+
+  setOwner(player) {
+    this.ownerID = player.id;
+  }
+
   isVisible(set) {
     if (set === undefined)
       return this.visible;
 
     this.visible = set;
-    return set;
-  }
 
-  setOwner(player) {
-    this.ownerID = player.id;
+    return this;
   }
 
   isVisibleTo(player, set) {

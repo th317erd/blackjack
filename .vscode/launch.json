@@ -27,6 +27,12 @@
       "request": "launch",
       "name": "Example Program",
       "program": "${workspaceFolder}/../example.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Server",
+      "program": "${workspaceFolder}/server/index.js"
     }
   ]
 }

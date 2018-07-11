@@ -1,4 +1,4 @@
-<div class="hand" style="width:{handWidth}rem;height:{cardHeight}rem;{style}">
+<div data-player-id="{id}" class="hand" style="width:{handWidth}rem;height:{cardHeight}rem;{style}">
   {#hand}
     {@calc _order="r,resize,x" r="safe(idx/(len-1))" resize="(handWidth-cardWidth)/handWidth" x="resize*r"}
       {>"card" x=x y="0"/}

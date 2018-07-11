@@ -1,55 +1,99 @@
-const { Card } = require('./card'),
-      { capitalize } = require('./utils'),
+const { capitalize, attrGetterSetter } = require('./utils'),
+      { Base } = require('./base'),
+      { Card } = require('./card'),
       { Player } = require('./player'),
-      { attrGetterSetter } = require('./utils');
+      { Deck } = require('./deck');
 
 global.capitalize = capitalize;
-class Game {
+var gameIDCounter = 1;
 
+class Game extends Base {
   constructor(_opts) {
+    super();
+
     var opts = _opts || {},
-        _renderer = opts.renderer,
+        _renderer = null,
+        _server = (typeof window === 'undefined'),
+        _connection = opts.connection || null,
         _players = opts.players || [],
-        _cards = opts.cards || [],
-        _clientPlayerID = opts.clientPlayerID || 1,
-        _defaultCardWidth = opts.defaultCardWidth || 12,
-        _defaultCardHeight = opts.defaultCardHeight || 16,
-        _defaultHandWidth = opts.defaultHandWidth || 20,
-        _cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
+        _cards = opts.cards || [];
 
-    attrGetterSetter(this, 'renderer', () => _renderer );
-    this.players = _players.map( (player) => new Player(this, player) );
-    this.cards = _cards.map( (card) => new Card(this, card) );
-    this.clientPlayerID = _clientPlayerID;
-    this.defaultCardWidth = _defaultCardWidth;
-    this.defaultCardHeight = _defaultCardHeight;
-    this.defaultHandWidth = _defaultHandWidth;
-    this.cardBackgroundImageURL = _cardBackgroundImageURL;
+    attrGetterSetter(this, 'isServer', () => _server, () => {});
 
-    this.setupWebsocketConnection(opts.webSocket);
+    attrGetterSetter(this, 'renderer', () => _renderer, (val) => {
+      _renderer = val;
+      return val;
+    });
+
+    attrGetterSetter(this, 'connection', () => _connection, (val) => {
+      _connection = this.initializeConnection(val);
+      return val;
+    });
+
+    this.id = opts.id || (gameIDCounter++);
+    this.players = _players.map((player) => this.instantiateClassByName(player._class, [player]));
+    this.cards = _cards.map((card) => this.instantiateClassByName(card._class, [card]));
+
+    this.currentPlayerID = opts.currentPlayerID || 1;
+    this.clientPlayerID = opts.clientPlayerID || 1;
+    this.defaultCardWidth = opts.defaultCardWidth || 12;
+    this.defaultCardHeight = opts.defaultCardHeight || 16;
+    this.defaultHandWidth = opts.defaultHandWidth || 20;
+    this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
   }
 
-  setupWebsocketConnection(webSocket) {
-    if (!webSocket)
+  instantiateClassByName(className, args) {
+    if (className === 'Player')
+      return new Player(this, ...args);
+    else if (className === 'Deck')
+      return new Deck(this, ...args);
+    else if (className === 'Card')
+      return new Card(this, ...args);
+  }
+
+  setRenderer(renderer) {
+    this.renderer = renderer;
+    return this;
+  }
+
+  setConnection(connection) {
+    this.connection = connection;
+    return this;
+  }
+
+  initializeConnection(connection) {
+    if (this.connection)
+      this.connection.disconnect();
+
+    if (!connection)
       return;
 
     this.sendChat = (user, message) => {
       if (typeof message !== 'string')
         throw new Error('Improper usage. Specify your username as the first argument, message as the second');
 
-      webSocket.emit('chat_message', {
+      connection.emit('chat_message', {
         user,
         message
       });
     };
 
-    webSocket.on('chat_message', (data) => {
+    this.emitAction = (action) => {
+      connection.emit('action', action);
+    };
+
+    connection.on('update', (data) => {
+    });
+
+    connection.on('chat_message', (data) => {
       console.info(`${data.user} says: ${data.message}`);
     });
 
-    webSocket.on('disconnect', () => {
+    connection.on('disconnect', () => {
       console.info('Client disconnected');
     });
+
+    return connection;
   }
 
   createNewPlayer() {
@@ -72,6 +116,9 @@ class Game {
   addPlayer(player) {
     player.setGame(this);
     this.players.push(player);
+
+    if (this.players.length === 1)
+      this.setPlayerTurn(player);
   }
 
   getActivePlayers() {
@@ -88,7 +135,10 @@ class Game {
   }
 
   setPlayerTurn(player) {
-    this.currentPlayerID = player;
+    if (!player)
+      return;
+
+    this.currentPlayerID = player.id;
   }
 
   getPlayerByID(id) {
@@ -111,15 +161,17 @@ class Game {
     return this.getPlayerByID(this.getClientPlayerID());
   }
 
-  /* @team define how this will provide an interface to a game and its rules */
+  getCardByID(_id) {
+    var id = (_id != null) ? _id.valueOf() : _id;
+    if (typeof id === 'string')
+      id = parseInt(('' + id).replace(/[^\d.-]/g, ''), 10);
 
-  /* @mason defined all methods for players
-    i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
-  */
+    if (!id || isNaN(id) || !isFinite(id))
+      return;
 
-  /* @paul Add methods for cards!
-      i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
-  */
+    return this.cards.find((card) => (card.id === id));
+  }
+
   generateDeck() {
     // variable "cards" equals an empty array
     var cards = [];
@@ -174,6 +226,7 @@ class Game {
     // assign that card to the current player
     this.assignCardToOwner(player, randomCard);
 
+    console.log(`Gave ${randomCard} to ${player}`);
     return randomCard;
   }
 
@@ -211,22 +264,45 @@ class Game {
   }
 
   async render() {
+    var R = this.renderer;
+    if (!R)
+      return;
+
+    R.querySelectorAll('[data-action]').forEach((element) => {
+      element.addEventListener('click', (event) => {
+        var game = this,
+            player = this.getClientPlayer(),
+            cardElement = element.closest('[data-card-id]'),
+            card,
+            actionName = element.getAttribute('data-action');
+
+        if (cardElement)
+          card = this.getCardByID(cardElement.getAttribute('data-card-id'));
+
+        console.log('I WAS CLICKED!!!', event, game, player, card);
+        if (typeof this.emitAction === 'function') {
+          this.emitAction({
+            name: actionName,
+            cardID: (card) ? card.id : undefined,
+            playerID: (player) ? player.id : undefined,
+            gameID: game.id
+          });
+        }
+      }, false);
+    });
   }
 
   calculateGameState() {
 
   }
 
-  /* @team define how this will provide an interface to a game and its rules */
-  //  game.dispatchAction({name: 'split', playerID: 3});
   dispatchAction(action) {
-    var actionName = 'action' + capitalize(action.name);
-    // var playerId = action.playerID;
-    if (typeof this[actionName] !== 'function')
+    if (!this.isServer)
       return;
 
-    // if (typeof this[playerId] !== 'number')
-    //   return;
+    var actionName = 'action' + capitalize(action.name);
+    if (typeof this[actionName] !== 'function')
+      return;
 
     if (this.checkPlayIsValid(action)) {
       return this[actionName](action);
@@ -234,9 +310,7 @@ class Game {
       return false;
     }
   }
-
 }
-
 
 /*
 what a game needs.

@@ -9,7 +9,6 @@ var app = http.createServer(function(request, response){}),
     io = SocketIO(app),
     game = new BlackJackGame();
 
-
 // connection event
 io.on('connection', function (client) {
   console.log('User connected!');
@@ -30,8 +29,22 @@ io.on('connection', function (client) {
     }
   });
 
-  console.log('SERVER', game);
-  client.emit( 'connection', game);
+  client.on('action', function(action) {
+    try {
+      console.log(`Received action from client [${player.id}]:`, action);
+      game.dispatchAction(action);
+      // new player just joined game
+    } catch (e) {
+      console.error(e);
+    }
+  });
+
+  var clientData = Object.assign({}, game, {
+    clientPlayerID: player.id
+  });
+
+  console.log('SERVER', JSON.stringify(clientData, undefined, 2));
+  client.emit( 'connection', clientData);
 });
 
 app.listen(PORT);
