@@ -60,13 +60,16 @@ class Game {
 
   removePlayer(player) {
     var index = this.players.indexOf(player);
-    if (index >= 0) {
-      player.setGame(null);
-      this.players.splice(index, 1);
-    }
+    if (index < 0)
+      return;
 
-    this.getCardsMatchingOwnerID(player.id);
-    //TODO: get cards array and filter out matching IDs
+    // remove cards
+    this.cards = this.cards.filter((card) => (card.ownerID !== player.id));
+
+    // remove player
+    player.setGame(null);
+    this.players.splice(index, 1);
+  
   }
 
   addPlayer(player) {
@@ -111,15 +114,6 @@ class Game {
     return this.getPlayerByID(this.getClientPlayerID());
   }
 
-  /* @team define how this will provide an interface to a game and its rules */
-
-  /* @mason defined all methods for players
-    i.e changeCurrentPlayer, addPlayer, removePlayer, etc...
-  */
-
-  /* @paul Add methods for cards!
-      i.e. generateDeck, assignCardToPlayer, getPlayerCards, etc...
-  */
   generateDeck() {
     // variable "cards" equals an empty array
     var cards = [];
