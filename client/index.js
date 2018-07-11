@@ -33,12 +33,12 @@ const dust = global.dust = require('dustjs-linkedin'),
           self = this;
 
     socket.on('connection', function(gameData) {
-
       console.log('Connected to websocket server!', gameData);
-      gameData.webSocket = this;
-      gameData.renderer = new DOMRenderer('root');
       var game = global.game = new BlackJackGame(gameData);
-      game.render();
+
+      game.setRenderer(new DOMRenderer(game, { rootElementID: 'root' }))
+          .setConnection(this)
+          .render();
     });
   }
   initializeWebsocketConnection('localhost', 8085);

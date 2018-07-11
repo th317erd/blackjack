@@ -9,8 +9,8 @@ class BlackJackGame extends Game {
 
   createNewPlayer(){
     var player = super.createNewPlayer();
-    this.addRandomCardToHand(player);
-    this.addRandomCardToHand(player).visibleToAllPlayers();
+    this.addRandomCardToHand(player).isVisible(true);
+    this.addRandomCardToHand(player).isVisible(true).visibleToAllPlayers();
     return player;
   }
 
@@ -19,21 +19,23 @@ class BlackJackGame extends Game {
     var currentPlayerID = this.getCurrentPlayerID();
     // get the player who git the action
     var actionPlayer = this.getPlayerByID(action.playerID);
-    var playerAction = action.name;
+    var actionName = action.name;
     // double check to make sure the players exist
     if (!actionPlayer || !currentPlayerID)
       return false
 
     // compair the player who initiated the action to the player who is the current player
-    if (actionPlayer.id !== currentPlayerID) {
+    if (actionPlayer.id !== currentPlayerID)
       // return false if the players are not the same
       return false;
 
-    } else if (playerAction === 'hit'){
+    if (actionName === 'hit') {
+      // If the players current hand value is less then 21,
+      // then they are allowed to take a hit
+      return (this.getHandValue(actionPlayer) < 21);
+    } else if (actionName === 'split' ) {
 
-    } else if (playerAction === 'split' ){
-
-    } else if (playerAction === 'handvalue') {
+    } else if (actionName === 'handvalue') {
       return true;
       // // do something
       // var runAction = actionHit();
@@ -43,16 +45,14 @@ class BlackJackGame extends Game {
     }
   }
 
-  actionHit() {
-    // assing random card to current player
-    var currentPlayerID = this.getCurrentPlayerID();
-    var getPlayerById = this.getPlayerByID(currentPlayerID);
+  actionHit(action) {
+    var actionPlayer = this.getPlayerByID(action.playerID);
     // console.log(getPlayerById);
-    var addRandomCard = this.addRandomCardToHand(getPlayerById);
+    var addRandomCard = this.addRandomCardToHand(actionPlayer);
     return addRandomCard;
   }
 
-  getCardValue(card){
+  getCardValue(card) {
     var values = {
       '0' : 11, // ace
       '1' : 2,
@@ -167,9 +167,11 @@ class BlackJackGame extends Game {
     if (!R)
       return;
 
-    R.render(async () => {
-      return R.renderTemplate(boardTemplate, game);
+    await R.render(async () => {
+      return await R.renderTemplate(boardTemplate, game);
     });
+
+    return await super.render();
   }
 }
 

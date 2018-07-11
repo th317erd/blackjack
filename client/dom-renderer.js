@@ -1,17 +1,38 @@
 const dust = require('dustjs-linkedin'),
-      cardTemplate = require('./templates/card'),
-      { Card } = require('./card');
+      { attrGetterSetter } = require('./utils');
 
 class DOMRenderer {
-  constructor(rootElementID) {
-    var rootElement = this.rootElement = document.getElementById(rootElementID);
+  constructor(game, _opts) {
+    if (!game)
+      throw new Error('Game must be defined in order to create a player');
+
+    var opts = _opts || {},
+        _game = game;
+
+    attrGetterSetter(this, 'game', () => _game, (val) => {
+      _game = val;
+      return val;
+    });
+
+    var rootElementID = opts.rootElementID,
+        rootElement = this.rootElement = document.getElementById(rootElementID);
+
     if (!rootElement)
       throw new Error(`Unable to find root element: ${rootElementID}`);
 
     var gameRootElement = this.gameRootElement = document.createElement('div');
     gameRootElement.setAttribute('class', 'game');
+    gameRootElement.setAttribute('data-game-id', game.id);
 
     rootElement.appendChild(gameRootElement);
+  }
+
+  querySelector(selector) {
+    return this.rootElement.querySelector(selector);
+  }
+
+  querySelectorAll(selectors) {
+    return this.rootElement.querySelectorAll(selectors);
   }
 
   isDirty(obj) {
@@ -93,21 +114,6 @@ class DOMRenderer {
     }
 
     this.unlock();
-  }
-
-  async update(game) {
-    if (!game)
-      return;
-
-    var players = game.players,
-        playerHands = [];
-
-    for (var i = 0, il = players.length; i < il; i++) {
-      var players = players[i];
-      playerHands.push(this.renderPlayerHand(player));
-    }
-
-    await Promise.all(playerHands);
   }
 }
 

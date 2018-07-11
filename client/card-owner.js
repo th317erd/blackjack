@@ -1,14 +1,18 @@
-const { attrGetterSetter } = require('./utils');
+const { Base } = require('./base'),
+      { attrGetterSetter } = require('./utils');
 
 var ownerIDCounter = 1;
 
-class CardOwner {
+class CardOwner extends Base{
   constructor(game, _opts) {
-    var opts = _opts || {};
+    super();
+
     if (!game)
       throw new Error('Game must be defined in order to create a player');
 
-    var _game = game;
+    var opts = _opts || {},
+        _game = game;
+
     attrGetterSetter(this, 'game', () => _game, (val) => {
       _game = val;
       return val;
