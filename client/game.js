@@ -108,12 +108,17 @@ class Game extends Base {
       return;
 
     // remove cards
-    this.cards = this.cards.filter((card) => (card.ownerID !== player.id));
+    this.cards = this.cards.filter((card) => {
+      if (card.ownerID !== player.id)
+        return true;
+
+      card.setGame(null);
+      return false;
+    });
 
     // remove player
     player.setGame(null);
     this.players.splice(index, 1);
-  
   }
 
   addPlayer(player) {
