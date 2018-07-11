@@ -177,22 +177,33 @@ class Card {
     // value, suit, viewableByPlayers
 
     // create variable to hold value
-    var _viewableByPlayers = opts.viewableByPlayers || [];
-    var _game = game;
+    var _viewableByPlayers = opts.viewableByPlayers || [],
+        _game = game;
+
     attrGetterSetter(this, 'game', () => _game, (val) => {
       _game = val;
       return val;
     });
+
     this.value = opts.value;
     this.suit = opts.suit;
+    this.ownerID = opts.ownerID || 0;
+    this.visible = opts.visible || false;
+
     attrGetterSetter(this, 'digit', () => CARDS[opts.value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[opts.value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
-    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.isVisibleTo(game.getClientPlayer()));
+    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.visible && this.isVisibleTo(game.getClientPlayer()));
+  }
 
-    this.ownerID = 0;
+  isVisible(set) {
+    if (set === undefined)
+      return this.visible;
+
+    this.visible = set;
+    return set;
   }
 
   setOwner(player) {
