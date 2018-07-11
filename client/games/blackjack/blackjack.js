@@ -111,7 +111,7 @@ class BlackJackGame extends Game {
   actionStand() {
     var player = this.getCurrentPlayer();
     // Request that you receive no more cards. Your current hand will be judged against the dealer's.
-    var currentPlayerHand = getPlayerHand(player)
+    var currentPlayerHand = getCardOwnersHand(player)
     console.log(currentPlayerHand);
   }
 

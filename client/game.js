@@ -198,7 +198,7 @@ class Game {
     return hand;
   }
 
-  getPlayerHand(player) {
+  getCardOwnersHand(player) {
     return this.getCardsMatchingOwnerID(player.id);
   }
 
