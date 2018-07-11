@@ -38,7 +38,7 @@ const dust = global.dust = require('dustjs-linkedin'),
       gameData.webSocket = this;
       gameData.renderer = new DOMRenderer('root');
       var game = global.game = new BlackJackGame(gameData);
-      
+      game.render();
     });
   }
   initializeWebsocketConnection('localhost', 8085);

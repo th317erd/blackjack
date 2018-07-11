@@ -8,12 +8,12 @@ const PORT = 8085;
 var app = http.createServer(function(request, response){}),
     io = SocketIO(app),
     game = new BlackJackGame();
-    
+
 
 // connection event
 io.on('connection', function (client) {
   console.log('User connected!');
-  
+
   client.once('disconnect', function() {
     console.log('User disconnected!');
     game.removePlayer(player);
@@ -29,9 +29,9 @@ io.on('connection', function (client) {
       console.error(e);
     }
   });
+
   console.log('SERVER', game);
   client.emit( 'connection', game);
-
 });
 
 app.listen(PORT);

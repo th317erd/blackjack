@@ -2,7 +2,7 @@ const { Card } = require('./card'),
       { capitalize } = require('./utils'),
       { Player } = require('./player'),
       { attrGetterSetter } = require('./utils');
-      
+
 global.capitalize = capitalize;
 class Game {
 
@@ -16,7 +16,7 @@ class Game {
         _defaultCardHeight = opts.defaultCardHeight || 16,
         _defaultHandWidth = opts.defaultHandWidth || 20,
         _cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
-    
+
     attrGetterSetter(this, 'renderer', () => _renderer );
     this.players = _players.map( (player) => new Player(this, player) );
     this.cards = _cards.map( (card) => new Card(this, card) );
@@ -25,12 +25,11 @@ class Game {
     this.defaultCardHeight = _defaultCardHeight;
     this.defaultHandWidth = _defaultHandWidth;
     this.cardBackgroundImageURL = _cardBackgroundImageURL;
-    
+
     this.setupWebsocketConnection(opts.webSocket);
   }
 
   setupWebsocketConnection(webSocket) {
-
     if (!webSocket)
       return;
 
@@ -53,7 +52,7 @@ class Game {
     });
   }
 
-  createNewPlayer(){
+  createNewPlayer() {
     var player = new Player(this);
     this.addPlayer(player);
     return player;
@@ -65,9 +64,9 @@ class Game {
       player.setGame(null);
       this.players.splice(index, 1);
     }
-    this.getCardsMatchingOwnerId(player.id);
+
+    this.getCardsMatchingOwnerID(player.id);
     //TODO: get cards array and filter out matching IDs
-    
   }
 
   addPlayer(player) {
@@ -80,11 +79,8 @@ class Game {
   }
 
   clearPlayers() {
-    var players = this.players;
-    for (var i = 0, il = players.length; i < il; i++)
-      players[i].setGame(null);
-
-    this.players = [];
+    while(this.players.length)
+      this.removePlayer(this.players[0]);
   }
 
   numberOfPlayers() {
@@ -185,7 +181,7 @@ class Game {
     card.setOwner(owner);
   }
 
-  getCardsMatchingOwnerId(id) {
+  getCardsMatchingOwnerID(id) {
     // iterate cards and match on card.owner === player.id
     // insert matching cards into an array called "hand"
     // return the hand array, including all matching cards
@@ -203,11 +199,11 @@ class Game {
   }
 
   getPlayerHand(player) {
-    return this.getCardsMatchingOwnerId(player.id);
+    return this.getCardsMatchingOwnerID(player.id);
   }
 
   getUnassignedCards() {
-    return this.getCardsMatchingOwnerId(0);
+    return this.getCardsMatchingOwnerID(0);
   }
 
   update() {
