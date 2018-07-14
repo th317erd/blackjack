@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node node_modules/.bin/jasmine",
     "watch": "node_modules/.bin/webpack --watch --config webpack.config.dev.js",
     "start-client": "node_modules/.bin/webpack-dev-server --config webpack.config.dev.js",
     "start-server": "node server/index.js",
@@ -25,11 +25,15 @@
     "dust-loader-complete": "^4.0.1",
     "webpack": "^4.8.1",
     "webpack-cli": "^2.1.3",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "jasmine": "^3.1.0"
   },
   "dependencies": {
     "dustjs-helpers": "^1.7.4",
     "dustjs-linkedin": "^2.7.5",
+    "re-reselect": "^2.1.0",
+    "redux-panoptic": "0.0.5",
+    "reselect": "^3.0.1",
     "socket.io": "^2.1.0",
     "socket.io-client": "^2.1.0"
   }

@@ -18,6 +18,10 @@ function capitalize(str) {
   return `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
 }
 
+function isObject(data) {
+  return (data && data.constructor === Object.constructor);
+}
+
 function pending(func, _opts) {
   var opts = _opts && _opts.valueOf();
   if (typeof opts === 'string')
@@ -41,7 +45,10 @@ function pending(func, _opts) {
 }
 
 module.exports = {
+  noop,
   regexpEscape,
   attrGetterSetter,
-  capitalize
+  capitalize,
+  isObject,
+  pending
 };
