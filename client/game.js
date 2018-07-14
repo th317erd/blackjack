@@ -1,4 +1,4 @@
-const { capitalize, attrGetterSetter } = require('./utils'),
+const { capitalize, attrGetterSetter, pending } = require('./utils'),
       { Base } = require('./base'),
       { Card } = require('./card'),
       { Player } = require('./player'),
@@ -15,8 +15,8 @@ class Game extends Base {
         _renderer = null,
         _server = (typeof window === 'undefined'),
         _connection = opts.connection || null,
-        _players = opts.players || [],
-        _cards = opts.cards || [];
+        _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
+        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
 
@@ -31,8 +31,18 @@ class Game extends Base {
     });
 
     this.id = opts.id || (gameIDCounter++);
-    this.players = _players.map((player) => this.instantiateClassByName(player._class, [player]));
-    this.cards = _cards.map((card) => this.instantiateClassByName(card._class, [card]));
+
+    attrGetterSetter(this, 'players', () => _players, (val) => {
+      this.queueUpdate();
+      _players = val;
+      return val;
+    });
+
+    attrGetterSetter(this, 'cards', () => _cards, (val) => {
+      this.queueUpdate();
+      _cards = val;
+      return val;
+    });
 
     this.currentPlayerID = opts.currentPlayerID || 1;
     this.clientPlayerID = opts.clientPlayerID || 1;
@@ -40,6 +50,10 @@ class Game extends Base {
     this.defaultCardHeight = opts.defaultCardHeight || 16;
     this.defaultHandWidth = opts.defaultHandWidth || 20;
     this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
+  }
+
+  queueUpdate() {
+
   }
 
   instantiateClassByName(className, args) {
