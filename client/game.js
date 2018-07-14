@@ -52,8 +52,31 @@ class Game extends Base {
     this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
   }
 
-  queueUpdate() {
+  diffGameChanges() {
+    var players = this.players,
+        oldPlayers = this.oldPlayers,
+        cards = this.cards,
+        oldCards = this.oldCards;
 
+    // Diff players
+    // Diff cards
+  }
+
+  async serverUpdate() {
+    var diff = this.diffGameChanges();
+  }
+
+  async clientUpdate() {
+    await this.render();
+  }
+
+  queueUpdate() {
+    pending(() => {
+      if (this.isServer)
+        this.serverUpdate();
+      else
+        this.clientUpdate();
+    });
   }
 
   instantiateClassByName(className, args) {
