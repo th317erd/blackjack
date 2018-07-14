@@ -16,7 +16,9 @@ class Game extends Base {
         _server = (typeof window === 'undefined'),
         _connection = opts.connection || null,
         _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
-        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
+        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
+        _oldPlayers = _players,
+        _oldCards = _cards;
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
 
@@ -34,15 +36,27 @@ class Game extends Base {
 
     attrGetterSetter(this, 'players', () => _players, (val) => {
       this.queueUpdate();
+      _oldPlayers = _players,
       _players = val;
       return val;
-    });
+    }, true);
 
     attrGetterSetter(this, 'cards', () => _cards, (val) => {
       this.queueUpdate();
+      _oldCards = _cards;
       _cards = val;
       return val;
-    });
+    }, true );
+
+    attrGetterSetter(this, 'oldPlayers', () => _oldPlayers, (val) => {
+      _oldPlayers = val;
+      return val;
+    } );
+
+    attrGetterSetter(this, 'oldCards', () => _oldCards, (val) => {
+      _oldCards = val;
+      return val;
+    } );
 
     this.currentPlayerID = opts.currentPlayerID || 1;
     this.clientPlayerID = opts.clientPlayerID || 1;
