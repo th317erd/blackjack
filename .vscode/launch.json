@@ -7,14 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Paul Testing",
-      "program": "${workspaceFolder}/client/paul-test.js"
+      "name": "Personal Playground",
+      "program": "${workspaceFolder}/client/custom-test.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Wyatts Playground",
-      "program": "${workspaceFolder}/client/wyatt-test.js"
+      "name": "DataStore Unit Test",
+      "program": "${workspaceFolder}/node_modules/.bin/jasmine",
+      "args": ["spec/data-store/data-store-spec.js"],
+      "cwd": "${workspaceRoot}"
     },
     {
       "type": "node",
