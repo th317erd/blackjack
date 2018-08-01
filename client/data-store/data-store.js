@@ -24,16 +24,58 @@ class DataStore {
         };
 
     var store = (opts.debug) ? buildStore(dataStoreTemplate.template, applyMiddleware(dispatchActionMiddleware)) : buildStore(dataStoreTemplate.template),
-        dispatch = store.dispatch.bind(store);
+        dispatch = store.dispatch.bind(store),
+        subscribers = [],
+        oldState = store.getState();
 
+    attrGetterSetter(this, '_subscribers', () => subscribers, noop);
     attrGetterSetter(this, 'dispatch', () => dispatch, noop);
     attrGetterSetter(this, 'actions', () => store.actions, noop);
     attrGetterSetter(this, 'selectors', () => dataStoreTemplate.selectors, noop);
     attrGetterSetter(this, 'state', () => store.getState(), noop);
+
+    var _disconnectStoreListener = store.subscribe(() => {
+      var state = store.getState();
+
+      for (var i = 0, il = subscribers.length; i < il; i++) {
+        var subscriber = subscribers[i];
+        subscriber.callback.call(this, state, oldState, this);
+      }
+
+      oldState = state;
+    });
+
+    attrGetterSetter(this, 'stopListening', () => {
+      subscribers = [];
+      _disconnectStoreListener();
+    }, noop);
+  }
+
+  destroy() {
+    if (typeof this.stopListening === 'function')
+      this.stopListening();
   }
 
   op(func) {
     return func.call(this, this.state, this.selectors, this.dispatch, this.actions);
+  }
+
+  subscribe(func) {
+    if (typeof func !== 'function')
+      throw new Error('Subscribe argument must be a function');
+
+    var subscribers = this._subscribers,
+        subscriber = {
+          callback: func
+        };
+
+    subscribers.push(subscriber);
+
+    return function() {
+      var index = subscribers.indexOf(subscriber);
+      if (index >= 0)
+        subscribers.splice(index, 1);
+    };
   }
 }
 

@@ -17,9 +17,10 @@ class Game extends Base {
         _server = (typeof window === 'undefined'),
         _connection = opts.connection || null,
         _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
-        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
+        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
         _store = new DataStore();
 
+    _store.subscribe(this.handleStoreUpdate.bind(this));
     attrGetterSetter(this, 'store', () => _store, () => {});
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
@@ -54,6 +55,10 @@ class Game extends Base {
     this.defaultCardHeight = opts.defaultCardHeight || 16;
     this.defaultHandWidth = opts.defaultHandWidth || 20;
     this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
+  }
+
+  handleStoreUpdate(newState, oldState) {
+    console.log('STORE UPDATED!!!', newState, oldState);
   }
 
   diffGameChanges() {

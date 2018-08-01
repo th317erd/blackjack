@@ -17,7 +17,7 @@ function mapToKeys(_keys) {
         continue;
 
       for (var j = 0, jl = keys.length; j < jl; j++) {
-        var key = keys[j];
+        var key = val[keys[j]];
         if (key == null)
           continue;
 

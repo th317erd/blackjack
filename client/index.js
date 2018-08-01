@@ -41,7 +41,9 @@ const dust = global.dust = require('dustjs-linkedin'),
           .render();
     });
   }
-  initializeWebsocketConnection('localhost', 8085);
+  //initializeWebsocketConnection('localhost', 8085);
+
+  global.BlackJackGame = BlackJackGame;
 
   //game.render();
 })();

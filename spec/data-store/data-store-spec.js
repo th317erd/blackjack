@@ -2,7 +2,6 @@ const { DataStore } = require('../../client/data-store');
 
 describe("DataStore", function() {
   beforeEach(function() {
-    this.derp = 'test';
     this.store = new DataStore();
   });
 
