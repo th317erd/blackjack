@@ -18,7 +18,7 @@ class Game extends Base {
         _connection = opts.connection || null,
         _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
         _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
-        _store = new DataStore();
+        _store = new DataStore(this);
 
     _store.subscribe(this.handleStoreUpdate.bind(this));
     attrGetterSetter(this, 'store', () => _store, () => {});

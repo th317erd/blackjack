@@ -45,5 +45,8 @@ const dust = global.dust = require('dustjs-linkedin'),
 
   global.BlackJackGame = BlackJackGame;
 
-  //game.render();
+  var game = global.game = new BlackJackGame(),
+      player = global.player = game.createNewPlayer();
+
+  game.store.op((state, selectors, dispatch, actions) => dispatch(actions.updatePlayers([player])))
 })();

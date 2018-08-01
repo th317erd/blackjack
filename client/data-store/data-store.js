@@ -15,13 +15,17 @@ const dataStoreTemplate = {
 };
 
 class DataStore {
-  constructor(_opts) {
+  constructor(_game, _opts) {
     // Create some middleware to help us log dispatches
-    var opts = _opts || {},
+    var game = _game,
+        opts = _opts || {},
         dispatchActionMiddleware = (store) => (next) => (action) => {
           console.log('Dispatching action [' + action.type + ']: ' + JSON.stringify(action.payload));
           return next(action);
         };
+
+    if (!game)
+      throw new Error('"game" argument required for DataStore constructor');
 
     var store = (opts.debug) ? buildStore(dataStoreTemplate.template, applyMiddleware(dispatchActionMiddleware)) : buildStore(dataStoreTemplate.template),
         dispatch = store.dispatch.bind(store),
@@ -32,7 +36,11 @@ class DataStore {
     attrGetterSetter(this, 'dispatch', () => dispatch, noop);
     attrGetterSetter(this, 'actions', () => store.actions, noop);
     attrGetterSetter(this, 'selectors', () => dataStoreTemplate.selectors, noop);
-    attrGetterSetter(this, 'state', () => store.getState(), noop);
+    attrGetterSetter(this, 'state', () => {
+      var state = store.getState();
+      attrGetterSetter(state, '_game', () => game, noop);
+      return state;
+    }, noop);
 
     var _disconnectStoreListener = store.subscribe(() => {
       var state = store.getState();
