@@ -39,15 +39,27 @@ class Game extends Base {
 
     attrGetterSetter(this, 'players', () => _players, (val) => {
       this.queueUpdate();
+      _oldPlayers = _players,
       _players = val;
       return val;
-    });
+    }, true);
 
     attrGetterSetter(this, 'cards', () => _cards, (val) => {
       this.queueUpdate();
+      _oldCards = _cards;
       _cards = val;
       return val;
-    });
+    }, true );
+
+    attrGetterSetter(this, 'oldPlayers', () => _oldPlayers, (val) => {
+      _oldPlayers = val;
+      return val;
+    } );
+
+    attrGetterSetter(this, 'oldCards', () => _oldCards, (val) => {
+      _oldCards = val;
+      return val;
+    } );
 
     this.currentPlayerID = opts.currentPlayerID || 1;
     this.clientPlayerID = opts.clientPlayerID || 1;
