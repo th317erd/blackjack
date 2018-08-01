@@ -24,7 +24,7 @@ describe("DataStore", function() {
 
   it("should be able to diff data", function() {
     var store = this.store;
-    store.op((state, selectors, dispatch, actions) => {
+    store.op(({dispatch, actions}) => {
       dispatch(actions.updatePlayers([
         {
           id: 5,
