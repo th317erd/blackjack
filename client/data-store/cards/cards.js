@@ -1,4 +1,10 @@
-const { mapToID, getID, convertToArrayOfInstances, createSelector, createCachedSelector } = require('../common'),
+const {
+        mapToID,
+        getID,
+        convertToArrayOfInstances,
+        createSelector,
+        createCachedSelector
+      } = require('../common'),
       playerSelectors = require('../players').selectors;
 
 const getPlayer       = playerSelectors.getPlayer,

@@ -20,7 +20,7 @@ class Game extends Base {
         _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
         _store = new DataStore(this);
 
-    _store.subscribe(this.handleStoreUpdate.bind(this));
+    _store.subscribe(this.queueUpdate.bind(this));
     attrGetterSetter(this, 'store', () => _store, () => {});
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
@@ -57,10 +57,6 @@ class Game extends Base {
     this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
   }
 
-  handleStoreUpdate(newState, oldState) {
-    console.log('STORE UPDATED!!!', newState, oldState);
-  }
-
   diffGameChanges() {
     var players = this.players,
         oldPlayers = this.oldPlayers,
@@ -79,13 +75,15 @@ class Game extends Base {
     await this.render();
   }
 
-  queueUpdate() {
+  queueUpdate(newState, oldState) {
     pending(() => {
+      console.log('STORE UPDATED!!!', newState, oldState);
+
       if (this.isServer)
-        this.serverUpdate();
+        this.serverUpdate(newState, oldState);
       else
-        this.clientUpdate();
-    });
+        this.clientUpdate(newState, oldState);
+    }, 5);
   }
 
   instantiateClassByName(className, args) {
@@ -142,50 +140,42 @@ class Game extends Base {
     return connection;
   }
 
-  createNewPlayer() {
-    var player = new Player(this);
-    this.addPlayer(player);
+  getPlayers() {
+    return this.store.op(({ state, selectors }) => {
+      return selectors.getAllPlayers(state);
+    });
+  }
+
+  addPlayer(data) {
+    var player = new Player(this, data);
+
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.updatePlayers([player]));
+    });
+
+    // if (this.players.length === 1)
+    //   this.setPlayerTurn(player);
+
     return player;
   }
 
   removePlayer(player) {
-    var index = this.players.indexOf(player);
-    if (index < 0)
-      return;
+    var playerCards = this.store.op(({ state, selectors }) => selectors.getCardsByOwner(state, player));
 
-    // remove cards
-    this.cards = this.cards.filter((card) => {
-      if (card.ownerID !== player.id)
-        return true;
-
-      card.setGame(null);
-      return false;
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.updateCards(playerCards, true));
+      dispatch(actions.updatePlayers(player, true));
     });
-
-    // remove player
-    player.setGame(null);
-    this.players.splice(index, 1);
-  }
-
-  addPlayer(player) {
-    player.setGame(this);
-    this.players.push(player);
-
-    if (this.players.length === 1)
-      this.setPlayerTurn(player);
-  }
-
-  getActivePlayers() {
-    return this.players.filter((player) => player.inGame());
   }
 
   clearPlayers() {
-    while(this.players.length)
-      this.removePlayer(this.players[0]);
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.setPlayers([]));
+    });
   }
 
   numberOfPlayers() {
-    return this.players.length;
+    return this.getPlayers().length;
   }
 
   setPlayerTurn(player) {

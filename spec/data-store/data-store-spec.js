@@ -7,7 +7,7 @@ describe("DataStore", function() {
 
   it("should be able to use store", function() {
     var store = this.store;
-    store.op((state, selectors, dispatch, actions) => {
+    store.op(({ dispatch, actions }) => {
       dispatch(actions.updatePlayers([
         {
           id: 5,
@@ -16,7 +16,7 @@ describe("DataStore", function() {
       ]));
     });
 
-    var players = store.op((state, selectors) => selectors.getAllPlayers(state));
+    var players = store.op(({ state, selectors }) => selectors.getAllPlayers(state));
     expect(players.length).toBe(1);
     expect(players[0].id).toBe(5);
     expect(players[0].name).toBe('Test Bro');

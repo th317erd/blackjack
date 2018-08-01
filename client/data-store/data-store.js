@@ -6,12 +6,13 @@ const {
       } = require('redux-panoptic'),
       players = require('./players'),
       cards = require('./cards'),
+      game = require('./game'),
       { noop, attrGetterSetter } = require('../utils');
 
 // Define our template for our store
 const dataStoreTemplate = {
-  template: Object.assign({}, players.template, cards.template),
-  selectors: Object.assign({}, players.selectors, cards.selectors)
+  template: Object.assign({}, players.template, cards.template, game.template),
+  selectors: Object.assign({}, players.selectors, cards.selectors, game.selectors)
 };
 
 class DataStore {
@@ -65,7 +66,12 @@ class DataStore {
   }
 
   op(func) {
-    return func.call(this, this.state, this.selectors, this.dispatch, this.actions);
+    return func.call(this, {
+      state: this.state,
+      selectors: this.selectors,
+      dispatch: this.dispatch,
+      actions: this.actions
+    });
   }
 
   subscribe(func) {

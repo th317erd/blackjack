@@ -7,8 +7,8 @@ class BlackJackGame extends Game {
     super(...args);
   }
 
-  createNewPlayer() {
-    var player = super.createNewPlayer();
+  addPlayer() {
+    var player = super.addPlayer();
     this.addRandomCardToHand(player).isVisible(true);
     this.addRandomCardToHand(player).isVisible(true).visibleToAllPlayers();
     return player;
