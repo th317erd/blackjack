@@ -2,7 +2,8 @@ const { capitalize, attrGetterSetter, pending } = require('./utils'),
       { Base } = require('./base'),
       { Card } = require('./card'),
       { Player } = require('./player'),
-      { Deck } = require('./deck');
+      { Deck } = require('./deck'),
+      { DataStore } = require('./data-store');
 
 global.capitalize = capitalize;
 var gameIDCounter = 1;
@@ -16,9 +17,10 @@ class Game extends Base {
         _server = (typeof window === 'undefined'),
         _connection = opts.connection || null,
         _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
-        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
-        _oldPlayers = _players,
-        _oldCards = _cards;
+        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
+        _store = new DataStore();
+
+    attrGetterSetter(this, 'store', () => _store, () => {});
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
 
