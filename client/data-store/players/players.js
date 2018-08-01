@@ -8,7 +8,12 @@ const getAllPlayers = createSelector((state) => state.players, convertToArray);
 
 module.exports = {
   template: {
-    players: mapToID
+    players: mapToID,
+    name: {
+      test : {
+        bro : 'null'
+      }
+    }
   },
   selectors: {
     getAllPlayers,

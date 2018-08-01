@@ -45,22 +45,16 @@ describe("DataStore", function() {
 
     function diffObjectChanges(a, b){
       if( a !== b ){
-        
         console.log('not equal, here are the differences:');
-  
-        if (a.length !== b.length ){
-         
-          arrayIndexs = a.length - b.length;
-  
-          console.log( arrayIndexs + ' index were removed from a');
-  
-          for (var i=0; i < a.length; i++){
-            if (a[i] !== b[i]){
-              // console.log('index' + a[i] + 'was changed to' + b[i]);
-              console.log( a[i] + ' was changed to ' + b[i]);
-            }
-          } 
-        }
+
+        Object.values(a).forEach((value,index)=> console.log('value:' + value, 'index:' + index));
+        
+        console.log('a:', Object.values(a));
+        console.log('b:', Object.values(b));
+
+        // itterate over object.keys
+        // recall diffobject change 
+        
       } else {
         return;
       };
