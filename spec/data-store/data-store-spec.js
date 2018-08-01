@@ -35,7 +35,7 @@ describe("DataStore", function() {
 
     //snapshot
     var state = store.state;
-    store.op((state, selectors, dispatch, actions) => {
+    store.op(({dispatch, actions}) => {
       dispatch(actions.updateNameTestBro('different'));
     });
     var newState = store.state;
