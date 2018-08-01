@@ -23,17 +23,20 @@ function isObject(data) {
 }
 
 function pending(func, _opts) {
-  var opts = _opts && _opts.valueOf();
+  var opts = _opts && _opts.valueOf(),
+      id,
+      time;
+
   if (typeof opts === 'string')
-    opts = { id: opts };
+    id = opts;
   else if (typeof opts === 'number')
-    opts = { time: opts };
+    time = opts;
 
-  if (!opts.id)
-    opts.id = ('' + func);
+  if (!id)
+    id = ('' + func);
 
-  if (opts.time == null)
-    opts.time = 15;
+  if (time == null)
+    time = 15;
 
   if (pendingTimers[id])
     clearTimeout(pendingTimers[id]);
@@ -41,7 +44,7 @@ function pending(func, _opts) {
   pendingTimers[id] = setTimeout(() => {
     pendingTimers[id] = null;
     func();
-  }, opts.time);
+  }, time);
 }
 
 module.exports = {

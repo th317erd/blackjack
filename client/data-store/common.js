@@ -1,7 +1,8 @@
 const { isObject } = require('../utils'),
       RP = require('redux-panoptic'),
       createSelector = require('reselect').createSelector,
-      createCachedSelector = require('re-reselect').default;
+      createCachedSelector = require('re-reselect').default,
+      noop = (val) => val;
 
 function mapToKeys(_keys) {
   var keys = (_keys instanceof Array) ? _keys : [_keys];
@@ -16,6 +17,8 @@ function mapToKeys(_keys) {
       if (!val)
         continue;
 
+      val = val.valueOf();
+
       for (var j = 0, jl = keys.length; j < jl; j++) {
         var key = val[keys[j]];
         if (key == null)
@@ -27,8 +30,8 @@ function mapToKeys(_keys) {
         }
 
         var currentVal = newState[key];
-        if (currentVal && currentVal.data && val && val.constructor === Object.constructor)
-          val = Object.assign({}, currentVal, val);
+        if (currentVal && currentVal.data && val && val.data)
+          val = Object.assign({}, currentVal.data, val.data);
 
         newState[key] = {
           lastUpdateTime: now,
@@ -41,27 +44,29 @@ function mapToKeys(_keys) {
   }, {});
 }
 
-function convertToArray() {
-  var items = [];
+function convertToArray(formatter = noop) {
+  return function(state) {
+    var items = [];
 
-  for (var i = 0, il = arguments.length; i < il; i++) {
-    var thisArg = arguments[i];
-    if (thisArg == null || thisArg === '')
-      continue;
-
-    var keys = Object.keys(thisArg);
-    for (var j = 0, jl = keys.length; j < jl; j++) {
-      var key = keys[j],
-          item = thisArg[key];
-
-      if (!item)
+    for (var i = 1, il = arguments.length; i < il; i++) {
+      var thisArg = arguments[i];
+      if (thisArg == null || thisArg === '')
         continue;
 
-      items.push(item.data);
-    }
-  }
+      var keys = Object.keys(thisArg);
+      for (var j = 0, jl = keys.length; j < jl; j++) {
+        var key = keys[j],
+            item = thisArg[key];
 
-  return items;
+        if (!item)
+          continue;
+
+        items.push(formatter(state, item.data));
+      }
+    }
+
+    return items;
+  };
 }
 
 function getID(obj) {
@@ -74,6 +79,14 @@ module.exports = {
   getID,
   createReducer: RP.createReducer,
   convertToArray,
-  createSelector,
-  createCachedSelector
+  convertToArrayOfInstances: convertToArray((state, data) => {
+    var game = state._game;
+    return (data && data._class) ? game.instantiateClassByName(data._class, [data]) : data;
+  }),
+  createSelector: function(...args) {
+    return createSelector((state) => state, ...args);
+  },
+  createCachedSelector: function(...args) {
+    return createCachedSelector((state) => state, ...args);
+  }
 };

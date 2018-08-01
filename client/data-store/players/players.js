@@ -1,9 +1,15 @@
-const { mapToID, getID, convertToArray, createSelector, createCachedSelector } = require('../common');
+const {
+        mapToID,
+        getID,
+        convertToArrayOfInstances,
+        createSelector,
+        createCachedSelector
+      } = require('../common');
 
-const getAllPlayers = createSelector((state) => state.players, convertToArray);
+const getAllPlayers = createSelector((state) => state.players, convertToArrayOfInstances);
       getPlayer     = createCachedSelector(
                         (state, player) => state.players[getID(player)],
-                        (player) => player
+                        (state, player) => player
                       )((state, player) => getID(player));
 
 module.exports = {

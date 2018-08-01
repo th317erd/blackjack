@@ -6,22 +6,27 @@ const {
       } = require('redux-panoptic'),
       players = require('./players'),
       cards = require('./cards'),
+      game = require('./game'),
       { noop, attrGetterSetter } = require('../utils');
 
 // Define our template for our store
 const dataStoreTemplate = {
-  template: Object.assign({}, players.template, cards.template),
-  selectors: Object.assign({}, players.selectors, cards.selectors)
+  template: Object.assign({}, players.template, cards.template, game.template),
+  selectors: Object.assign({}, players.selectors, cards.selectors, game.selectors)
 };
 
 class DataStore {
-  constructor(_opts) {
+  constructor(_game, _opts) {
     // Create some middleware to help us log dispatches
-    var opts = _opts || {},
+    var game = _game,
+        opts = _opts || {},
         dispatchActionMiddleware = (store) => (next) => (action) => {
           console.log('Dispatching action [' + action.type + ']: ' + JSON.stringify(action.payload));
           return next(action);
         };
+
+    if (!game)
+      throw new Error('"game" argument required for DataStore constructor');
 
     var store = (opts.debug) ? buildStore(dataStoreTemplate.template, applyMiddleware(dispatchActionMiddleware)) : buildStore(dataStoreTemplate.template),
         dispatch = store.dispatch.bind(store),
@@ -32,7 +37,11 @@ class DataStore {
     attrGetterSetter(this, 'dispatch', () => dispatch, noop);
     attrGetterSetter(this, 'actions', () => store.actions, noop);
     attrGetterSetter(this, 'selectors', () => dataStoreTemplate.selectors, noop);
-    attrGetterSetter(this, 'state', () => store.getState(), noop);
+    attrGetterSetter(this, 'state', () => {
+      var state = store.getState();
+      attrGetterSetter(state, '_game', () => game, noop);
+      return state;
+    }, noop);
 
     var _disconnectStoreListener = store.subscribe(() => {
       var state = store.getState();
@@ -57,7 +66,12 @@ class DataStore {
   }
 
   op(func) {
-    return func.call(this, this.state, this.selectors, this.dispatch, this.actions);
+    return func.call(this, {
+      state: this.state,
+      selectors: this.selectors,
+      dispatch: this.dispatch,
+      actions: this.actions
+    });
   }
 
   subscribe(func) {

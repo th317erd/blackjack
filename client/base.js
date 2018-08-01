@@ -7,6 +7,10 @@ class Base {
       set: () => {}
     });
   }
+
+  valueOf() {
+    return JSON.parse(JSON.stringify(this));
+  }
 }
 
 module.exports = {

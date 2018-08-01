@@ -3,7 +3,7 @@ const { Base } = require('./base'),
 
 var ownerIDCounter = 1;
 
-class CardOwner extends Base{
+class CardOwner extends Base {
   constructor(game, _opts) {
     super();
 

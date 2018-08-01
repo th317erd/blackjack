@@ -18,7 +18,7 @@ io.on('connection', function (client) {
     game.removePlayer(player);
   });
 
-  var player = game.createNewPlayer();
+  var player = game.addPlayer();
 
   client.on('chat_message', function(data) {
     try {
