@@ -16,7 +16,7 @@ describe("DataStore", function() {
       ]));
     });
 
-    var players = store.op(({ state, selectors }) => selectors.getAllPlayers(state));
+    var players = store.op(({ state, selectors }) => selectors.getPlayers(state));
     expect(players.length).toBe(1);
     expect(players[0].id).toBe(5);
     expect(players[0].name).toBe('Test Bro');
@@ -48,13 +48,13 @@ describe("DataStore", function() {
         console.log('not equal, here are the differences:');
 
         Object.values(a).forEach((value,index)=> console.log('value:' + value, 'index:' + index));
-        
+
         console.log('a:', Object.values(a));
         console.log('b:', Object.values(b));
 
         // itterate over object.keys
-        // recall diffobject change 
-        
+        // recall diffobject change
+
       } else {
         return;
       };

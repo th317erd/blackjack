@@ -14,6 +14,14 @@ function attrGetterSetter(target, name, get, set = noop, enumerable = false) {
   });
 }
 
+function toNumber(_num, defaultValue) {
+  var num = parseFloat(('' + _num).replace(/[^\d.-]/g, ''));
+  if (isNaN(num) || !isFinite(num))
+    return defaultValue;
+
+  return num;
+}
+
 function capitalize(str) {
   return `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
 }
@@ -51,6 +59,7 @@ module.exports = {
   noop,
   regexpEscape,
   attrGetterSetter,
+  toNumber,
   capitalize,
   isObject,
   pending

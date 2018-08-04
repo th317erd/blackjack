@@ -1,4 +1,4 @@
-const { isObject } = require('../utils'),
+const { isObject, toNumber } = require('../utils'),
       RP = require('redux-panoptic'),
       createSelector = require('reselect').createSelector,
       createCachedSelector = require('re-reselect').default,
@@ -69,8 +69,16 @@ function convertToArray(formatter = noop) {
   };
 }
 
+function convertToInstance(state, _data) {
+  var game = state._game,
+      data = (_data && _data.data) ? _data.data : _data;
+
+    return (data && data._class) ? game.instantiateClassByName(data._class, [data]) : data;
+}
+
 function getID(obj) {
-  return (isObject(obj)) ? obj.id : obj;
+  var id = (obj && obj.hasOwnProperty('id')) ? obj.id : obj;
+  return toNumber(id);
 }
 
 module.exports = {
@@ -79,10 +87,8 @@ module.exports = {
   getID,
   createReducer: RP.createReducer,
   convertToArray,
-  convertToArrayOfInstances: convertToArray((state, data) => {
-    var game = state._game;
-    return (data && data._class) ? game.instantiateClassByName(data._class, [data]) : data;
-  }),
+  convertToInstance,
+  convertToArrayOfInstances: convertToArray(convertToInstance),
   createSelector: function(...args) {
     return createSelector((state) => state, ...args);
   },
