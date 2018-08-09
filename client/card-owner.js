@@ -18,7 +18,7 @@ class CardOwner extends Base {
       return val;
     });
 
-    this.id = (opts.id) ? opts.id : ownerIDCounter++;
+    this.id = (opts.id) ? opts.id : `${this._class}:${ownerIDCounter++}`;
 
     attrGetterSetter(this, 'hand', () => this.game.getCardOwnersHand(this));
   }

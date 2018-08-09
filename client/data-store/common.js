@@ -4,7 +4,7 @@ const { isObject, toNumber } = require('../utils'),
       createCachedSelector = require('re-reselect').default,
       noop = (val) => val;
 
-function mapToKeys(_keys) {
+function mapToKeys(_keys, formatter = noop) {
   var keys = (_keys instanceof Array) ? _keys : [_keys];
 
   return RP.createReducer(function(_data, remove) {
@@ -32,6 +32,8 @@ function mapToKeys(_keys) {
         var currentVal = newState[key];
         if (currentVal && currentVal.data && val && val.data)
           val = Object.assign({}, currentVal.data, val.data);
+
+        key = formatter(key, val);
 
         newState[key] = {
           lastUpdateTime: now,
