@@ -1,8 +1,10 @@
-const { DataStore } = require('../../client/data-store');
+const { DataStore } = require('../../client/data-store'),
+      { Game } = require('../../client/game');
 
 describe("DataStore", function() {
   beforeEach(function() {
-    this.store = new DataStore();
+    this.game = new Game();
+    this.store = new DataStore(this.game);
   });
 
   it("should be able to use store", function() {
@@ -25,14 +27,15 @@ describe("DataStore", function() {
   it("should be able to diff data", function() {
     var store = this.store;
     store.op(({dispatch, actions}) => {
+      
       dispatch(actions.updatePlayers([
         {
           id: 5,
-          name: 'Test Bro'
+          name: 'Test Bro'  
         }
       ]));
     });
-
+    
     //snapshot
     var state = store.state;
     store.op(({dispatch, actions}) => {
@@ -40,27 +43,55 @@ describe("DataStore", function() {
     });
     var newState = store.state;
 
-    //throws exception if different
-    // expect(players.length).toBe(1);
+    function diffObjectChanges(_a, _b, parentKey, diffReport = [], alreadyVisited = []){
+      var a = _a, 
+          b = _b;
 
-    function diffObjectChanges(a, b){
-      if( a !== b ){
-        console.log('not equal, here are the differences:');
+      // if a or b is empty
+      if (a == null || b == null){
+        diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b });
+        return diffReport;
+      } 
 
-        Object.values(a).forEach((value,index)=> console.log('value:' + value, 'index:' + index));
+      // return the primive value
+      a = a.valueOf();
+      b = b.valueOf();
+  
+      // if either is primitive see if they're the same
+      if((['string', 'number', 'boolean'].indexOf(typeof a) >= 0 || 
+          ['string', 'number', 'boolean'].indexOf(typeof b) >= 0) && 
+          a !== b) {
+        diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b }); 
+        return diffReport;
+      }
 
-        console.log('a:', Object.values(a));
-        console.log('b:', Object.values(b));
-
-        // itterate over object.keys
-        // recall diffobject change
-
-      } else {
+      // check if array has been checked already
+      if( alreadyVisited.indexOf(a) >= 0 && alreadyVisited.indexOf(b) >= 0 )
         return;
-      };
+      
+      alreadyVisited.push(a);
+      alreadyVisited.push(b);
+ 
+      // make sure keys are the same (is valid object or array)
+      var aKeys = Object.keys(a), 
+          bKeys = Object.keys(b),
+          keys = Object.keys(aKeys.concat(bKeys).reduce((obj, key) => (obj[key] = obj), {}));
+          
+      for (var i = 0; i < keys.length; i++ ){
+        //keys is the unique keys
+        var key = keys[i], 
+            aVal = a[key], 
+            bVal = b[key];
+
+        // recursion 
+        diffObjectChanges(aVal, bVal, (parentKey != null) ? (parentKey + '.' + key) : key, diffReport, alreadyVisited);
+
+      }
+      return diffReport;
     };
 
-    diffObjectChanges(state, newState);
+    var diffReport = diffObjectChanges('derp', 'hello');
+    console.log(diffReport[0]);
 
   });
 });
