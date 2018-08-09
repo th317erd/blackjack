@@ -12,12 +12,23 @@ class Game extends Base {
   constructor(_opts) {
     super();
 
+    const defineStoreAttr = (name, prefix = '') => {
+      attrGetterSetter(this, name,
+        () => _store.op(({ state, selectors }) => selectors[`get${capitalize(name)}`](state)),
+        (val) => {
+          _store.op(({ dispatch, actions }) => {
+            dispatch(actions[`set${prefix}${capitalize(name)}`](val));
+          });
+
+          return val;
+        }
+      );
+    };
+
     var opts = _opts || {},
         _renderer = null,
         _server = (typeof window === 'undefined'),
         _connection = opts.connection || null,
-        _players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player])),
-        _cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card])),
         _store = new DataStore(this);
 
     _store.subscribe(this.queueUpdate.bind(this));
@@ -37,36 +48,17 @@ class Game extends Base {
 
     this.id = opts.id || (gameIDCounter++);
 
-    attrGetterSetter(this, 'players', () => _players, (val) => {
-      this.queueUpdate();
-      _oldPlayers = _players,
-      _players = val;
-      return val;
-    }, true);
+    defineStoreAttr('players');
+    defineStoreAttr('cards');
+    defineStoreAttr('currentPlayerID', 'Game');
+    defineStoreAttr('clientPlayerID', 'Game');
+    defineStoreAttr('defaultCardWidth', 'Game');
+    defineStoreAttr('defaultCardHeight', 'Game');
+    defineStoreAttr('defaultHandWidth', 'Game');
+    defineStoreAttr('cardBackgroundImageURL', 'Game');
 
-    attrGetterSetter(this, 'cards', () => _cards, (val) => {
-      this.queueUpdate();
-      _oldCards = _cards;
-      _cards = val;
-      return val;
-    }, true );
-
-    attrGetterSetter(this, 'oldPlayers', () => _oldPlayers, (val) => {
-      _oldPlayers = val;
-      return val;
-    } );
-
-    attrGetterSetter(this, 'oldCards', () => _oldCards, (val) => {
-      _oldCards = val;
-      return val;
-    } );
-
-    this.currentPlayerID = opts.currentPlayerID || 1;
-    this.clientPlayerID = opts.clientPlayerID || 1;
-    this.defaultCardWidth = opts.defaultCardWidth || 12;
-    this.defaultCardHeight = opts.defaultCardHeight || 16;
-    this.defaultHandWidth = opts.defaultHandWidth || 20;
-    this.cardBackgroundImageURL = opts.cardBackgroundImageURL || 'images/cardback01.png';
+    this.players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player]));
+    this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
   }
 
   diffGameChanges() {
@@ -152,12 +144,7 @@ class Game extends Base {
     return connection;
   }
 
-  getPlayers() {
-    return this.store.op(({ state, selectors }) => {
-      return selectors.getAllPlayers(state);
-    });
-  }
-
+  // Players
   addPlayer(data) {
     var player = new Player(this, data);
 
@@ -165,8 +152,8 @@ class Game extends Base {
       dispatch(actions.updatePlayers([player]));
     });
 
-    // if (this.players.length === 1)
-    //   this.setPlayerTurn(player);
+    if (this.players.length === 1)
+      this.setPlayerTurn(player);
 
     return player;
   }
@@ -187,7 +174,7 @@ class Game extends Base {
   }
 
   numberOfPlayers() {
-    return this.getPlayers().length;
+    return this.players.length;
   }
 
   setPlayerTurn(player) {
@@ -198,7 +185,7 @@ class Game extends Base {
   }
 
   getPlayerByID(id) {
-    return this.players.find((player) => (player.id === id));
+    return this.store.op(({ state, selectors}) => selectors.getPlayer(state, id));
   }
 
   getCurrentPlayerID() {
@@ -217,54 +204,69 @@ class Game extends Base {
     return this.getPlayerByID(this.getClientPlayerID());
   }
 
-  getCardByID(_id) {
-    var id = (_id != null) ? _id.valueOf() : _id;
-    if (typeof id === 'string')
-      id = parseInt(('' + id).replace(/[^\d.-]/g, ''), 10);
+  // Cards
+  addCard(data) {
+    var card = new Card(this, data);
 
-    if (!id || isNaN(id) || !isFinite(id))
-      return;
+    // Add card to store
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.updateCards([card]));
+    });
 
-    return this.cards.find((card) => (card.id === id));
+    return card;
   }
 
-  generateDeck() {
-    // variable "cards" equals an empty array
-    var cards = [];
-
-    // variable "suits" equals the suits defined in the const SUITS
-    var suits = Card.CARDS;
-
-    // return all the keys of the suits object
-    var suitkeys = Object.keys(suits);
-
-    // if index is less than suites length, iterate (4 suites)
-    for(var x = 0; x < 4; x++){
-
-      // if index is less than values length (13 values)
-      for(var i = 0; i < suitkeys.length; i++){
-        // each key in suits =
-        var suitkey = suitkeys[i];
-
-        // access value in var suitkey
-        var suitvalue = suits[suitkey];
-
-        // create a "card" object and give it a value and a suit
-        var card = new Card( this, { value: suitkey, suit: Card.SUITS[x]});
-
-        // give the object "cards" the key "card" that stores a "value" and "suit" key
-        cards.push(card);
-      }
-    }
-    return cards.slice(0, 2);
+  removeCard(card) {
+    // Remove card from store
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.updateCards([card], true));
+    });
   }
 
-  getRandomCardFromDeck() {
-    var unassignedCards = this.getUnassignedCards();
-    return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
+  clearCards() {
+    this.store.op(({ dispatch, actions }) => {
+      dispatch(actions.setCards([]));
+    });
   }
 
-  addRandomCardToHand(player) {
+  // generateDeck() {
+  //   // variable "cards" equals an empty array
+  //   var cards = [];
+
+  //   // variable "suits" equals the suits defined in the const SUITS
+  //   var suits = Card.CARDS;
+
+  //   // return all the keys of the suits object
+  //   var suitkeys = Object.keys(suits);
+
+  //   // if index is less than suites length, iterate (4 suites)
+  //   for(var x = 0; x < 4; x++) {
+
+  //     // if index is less than values length (13 values)
+  //     for(var i = 0; i < suitkeys.length; i++) {
+  //       // each key in suits =
+  //       var suitkey = suitkeys[i];
+
+  //       // access value in var suitkey
+  //       var suitvalue = suits[suitkey];
+
+  //       // create a "card" object and give it a value and a suit
+  //       var card = new Card(this, { value: suitkey, suit: Card.SUITS[x] });
+
+  //       // give the object "cards" the key "card" that stores a "value" and "suit" key
+  //       cards.push(card);
+  //     }
+  //   }
+
+  //   return cards.slice(0, 2);
+  // }
+
+  // getRandomCardFromDeck() {
+  //   var unassignedCards = this.getUnassignedCards();
+  //   return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
+  // }
+
+  createRandomCard() {
     // use math to randomly generate a suit - get random index
     var suits = Card.SUITS;
     var randomSuit = suits[Math.floor(Math.random() * suits.length)];
@@ -274,37 +276,33 @@ class Game extends Base {
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
-    var randomCard = new Card( this, { value: randomValue, suit: randomSuit });
+    return new Card(this, { value: randomValue, suit: randomSuit });
+  }
 
-    // add that card to the current cards
-    this.cards.push(randomCard);
+  addRandomCardToHand(player) {
+    var card = this.createRandomCard();
 
     // assign that card to the current player
-    this.assignCardToOwner(player, randomCard);
+    this.assignCardToOwner(player, card);
 
-    console.log(`Gave ${randomCard} to ${player}`);
-    return randomCard;
+    // add that card to the current cards
+    this.addCard(card);
+
+    console.log(`Gave ${card} to ${player}`);
+
+    return card;
   }
 
   assignCardToOwner(owner, card) {
+    // Change the card owner
     card.setOwner(owner);
+
+    // Make sure to update the store
+    this.addCard(card);
   }
 
   getCardsMatchingOwnerID(id) {
-    // iterate cards and match on card.owner === player.id
-    // insert matching cards into an array called "hand"
-    // return the hand array, including all matching cards
-    var cards = this.cards,
-        hand = [];
-
-    // for each index in array "cards"
-    for (var i = 0; i < cards.length; i++){
-      var card = cards[i];
-      // Does this card belong to the specified player?
-      if (id === card.ownerID)
-        hand.push(card);
-    }
-    return hand;
+    return this.store.op(({ state, selectors }) => selectors.getCardsByOwner(state, id));
   }
 
   getCardOwnersHand(player) {

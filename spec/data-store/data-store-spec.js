@@ -18,7 +18,7 @@ describe("DataStore", function() {
       ]));
     });
 
-    var players = store.op(({ state, selectors }) => selectors.getAllPlayers(state));
+    var players = store.op(({ state, selectors }) => selectors.getPlayers(state));
     expect(players.length).toBe(1);
     expect(players[0].id).toBe(5);
     expect(players[0].name).toBe('Test Bro');

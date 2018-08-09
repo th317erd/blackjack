@@ -3,17 +3,18 @@ const {
         getID,
         convertToArrayOfInstances,
         createSelector,
-        createCachedSelector
+        createCachedSelector,
+        convertToInstance
       } = require('../common'),
       playerSelectors = require('../players').selectors;
 
 const getPlayer       = playerSelectors.getPlayer,
-      getAllCards     = createSelector((state) => state.cards, convertToArrayOfInstances),
+      getCards        = createSelector((state) => state.cards, convertToArrayOfInstances),
       getCard         = createCachedSelector(
                           (state, card) => state.cards[getID(card)],
-                          (state, card) => card
+                          convertToInstance
                         )((state, card) => getID(card)),
-      getCardsByOwner = createCachedSelector(getPlayer, getAllCards, (state, player, cards) => {
+      getCardsByOwner = createCachedSelector(getPlayer, getCards, (state, player, cards) => {
                           if (!player)
                             return [];
 
@@ -26,7 +27,7 @@ module.exports = {
     cards: mapToID
   },
   selectors: {
-    getAllCards,
+    getCards,
     getCard,
     getCardsByOwner
   }

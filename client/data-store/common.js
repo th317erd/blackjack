@@ -1,10 +1,10 @@
-const { isObject } = require('../utils'),
+const { isObject, toNumber } = require('../utils'),
       RP = require('redux-panoptic'),
       createSelector = require('reselect').createSelector,
       createCachedSelector = require('re-reselect').default,
       noop = (val) => val;
 
-function mapToKeys(_keys) {
+function mapToKeys(_keys, formatter = noop) {
   var keys = (_keys instanceof Array) ? _keys : [_keys];
 
   return RP.createReducer(function(_data, remove) {
@@ -32,6 +32,8 @@ function mapToKeys(_keys) {
         var currentVal = newState[key];
         if (currentVal && currentVal.data && val && val.data)
           val = Object.assign({}, currentVal.data, val.data);
+
+        key = formatter(key, val);
 
         newState[key] = {
           lastUpdateTime: now,
@@ -69,8 +71,16 @@ function convertToArray(formatter = noop) {
   };
 }
 
+function convertToInstance(state, _data) {
+  var game = state._game,
+      data = (_data && _data.data) ? _data.data : _data;
+
+    return (data && data._class) ? game.instantiateClassByName(data._class, [data]) : data;
+}
+
 function getID(obj) {
-  return (isObject(obj)) ? obj.id : obj;
+  var id = (obj && obj.hasOwnProperty('id')) ? obj.id : obj;
+  return toNumber(id);
 }
 
 module.exports = {
@@ -79,10 +89,8 @@ module.exports = {
   getID,
   createReducer: RP.createReducer,
   convertToArray,
-  convertToArrayOfInstances: convertToArray((state, data) => {
-    var game = state._game;
-    return (data && data._class) ? game.instantiateClassByName(data._class, [data]) : data;
-  }),
+  convertToInstance,
+  convertToArrayOfInstances: convertToArray(convertToInstance),
   createSelector: function(...args) {
     return createSelector((state) => state, ...args);
   },

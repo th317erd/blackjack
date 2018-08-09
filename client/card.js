@@ -191,7 +191,7 @@ class Card extends Base {
       return val;
     });
 
-    this.id = opts.id || (cardIDCounter++);
+    this.id = opts.id || (`${this._class}:${cardIDCounter++}`);
     this.value = opts.value;
     this.suit = opts.suit;
     this.ownerID = opts.ownerID || 0;

@@ -1,23 +1,11 @@
-const {
-        mapToID,
-        getID,
-        convertToArrayOfInstances,
-        createSelector,
-        createCachedSelector
-      } = require('../common'),
+const { createSelector } = require('../common'),
       playerSelectors = require('../players').selectors;
 
 
-const getCurrentPlayer        = createSelector(
-                                  (state) => state.game.currentPlayerID,
-                                (state, playerID) => {
-                                  return playerSelectors.getPlayer(playerID);
-                                });
-      getClientPlayerID       = createSelector(
-                                  (state) => state.game.clientPlayerID,
-                                (state, playerID) => {
-                                  return playerSelectors.getPlayer(playerID);
-                                }),
+const getCurrentPlayerID      = createSelector((state) => state.game.currentPlayerID, (s, playerID) => playerID),
+      getClientPlayerID       = createSelector((state) => state.game.clientPlayerID, (s, playerID) => playerID),
+      getCurrentPlayer        = createSelector(getCurrentPlayerID, (s, playerID) => playerSelectors.getPlayer(playerID));
+      getClientPlayer         = createSelector(getClientPlayerID, (s, playerID) => playerSelectors.getPlayer(playerID)),
       defaultCardWidth        = createSelector((state) => state.game.defaultCardWidth, (state, val) => val),
       defaultCardHeight       = createSelector((state) => state.game.defaultCardHeight, (state, val) => val),
       defaultHandWidth        = createSelector((state) => state.game.defaultHandWidth, (state, val) => val),
@@ -35,8 +23,10 @@ module.exports = {
     }
   },
   selectors: {
-    getCurrentPlayer,
+    getCurrentPlayerID,
     getClientPlayerID,
+    getCurrentPlayer,
+    getClientPlayer,
     defaultCardWidth,
     defaultCardHeight,
     defaultHandWidth,
