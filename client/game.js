@@ -1,4 +1,4 @@
-const { capitalize, attrGetterSetter, pending } = require('./utils'),
+const { capitalize, attrGetterSetter, pending, diffObjectChanges } = require('./utils'),
       { Base } = require('./base'),
       { Card } = require('./card'),
       { Player } = require('./player'),
@@ -61,29 +61,29 @@ class Game extends Base {
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
   }
 
-  diffGameChanges() {
-    var players = this.players,
-        oldPlayers = this.oldPlayers,
-        cards = this.cards,
-        oldCards = this.oldCards;
+  // diffGameChanges() {
+  //   var players = this.players,
+  //       oldPlayers = this.oldPlayers,
+  //       cards = this.cards,
+  //       oldCards = this.oldCards;
 
-    // Diff players
-    // Diff cards
+  //   // Diff players
+  //   // Diff cards
+  // }
+
+  async serverUpdate(newState, oldState) {
+    var diff = diffObjectChanges();
   }
 
-  async serverUpdate() {
-    var diff = this.diffGameChanges();
-  }
-
-  async clientUpdate() {
+  async clientUpdate(newState, oldState) {
     await this.render();
   }
 
   queueUpdate(newState, oldState) {
     pending(() => {
       console.log('STORE UPDATED!!!', newState, oldState);
-
-      if (this.isServer)
+      
+      if (/*this.isServer*/ true)
         this.serverUpdate(newState, oldState);
       else
         this.clientUpdate(newState, oldState);

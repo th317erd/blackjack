@@ -55,6 +55,53 @@ function pending(func, _opts) {
   }, time);
 }
 
+function diffObjectChanges(_a, _b, parentKey, diffReport = [], alreadyVisited = []){
+  var a = _a, 
+      b = _b;
+
+  // if a or b is empty
+  if (a == null || b == null){
+    diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b });
+    return diffReport;
+  } 
+
+  // return the primive value
+  a = a.valueOf();
+  b = b.valueOf();
+
+  // if either is primitive see if they're the same
+  if((['string', 'number', 'boolean'].indexOf(typeof a) >= 0 || 
+      ['string', 'number', 'boolean'].indexOf(typeof b) >= 0) && 
+      a !== b) {
+    diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b }); 
+    return diffReport;
+  }
+
+  // check if array has been checked already
+  if( alreadyVisited.indexOf(a) >= 0 && alreadyVisited.indexOf(b) >= 0 )
+    return;
+  
+  alreadyVisited.push(a);
+  alreadyVisited.push(b);
+
+  // make sure keys are the same (is valid object or array)
+  var aKeys = Object.keys(a), 
+      bKeys = Object.keys(b),
+      keys = Object.keys(aKeys.concat(bKeys).reduce((obj, key) => (obj[key] = obj), {}));
+      
+  for (var i = 0; i < keys.length; i++ ){
+    //keys is the unique keys
+    var key = keys[i], 
+        aVal = a[key], 
+        bVal = b[key];
+
+    // recursion 
+    diffObjectChanges(aVal, bVal, (parentKey != null) ? (parentKey + '.' + key) : key, diffReport, alreadyVisited);
+
+  }
+  return diffReport;
+};
+
 module.exports = {
   noop,
   regexpEscape,
@@ -62,5 +109,6 @@ module.exports = {
   toNumber,
   capitalize,
   isObject,
-  pending
+  pending,
+  diffObjectChanges
 };
