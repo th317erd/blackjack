@@ -61,7 +61,8 @@ function diffObjectChanges(_a, _b, parentKey, diffReport = [], alreadyVisited = 
 
   // if a or b is empty
   if (a == null || b == null){
-    diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b });
+    if(a !== b)
+      diffReport.push({type: 'value', key: parentKey, aValue: a, bValue: b });
     return diffReport;
   } 
 

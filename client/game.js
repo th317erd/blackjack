@@ -42,7 +42,7 @@ class Game extends Base {
     });
 
     attrGetterSetter(this, 'connection', () => _connection, (val) => {
-      _connection = this.initializeConnection(val);
+      _connection = (_server) ? val : this.initializeConnection(val);
       return val;
     });
 
@@ -72,7 +72,24 @@ class Game extends Base {
   // }
 
   async serverUpdate(newState, oldState) {
-    var diff = diffObjectChanges();
+    var diffs = diffObjectChanges(oldState,newState);
+    diffs.forEach((diff)=>{
+      var key = diff.key,
+          a = diff.aValue,
+          b = diff.bValue;
+        
+      if (key.match(/^cards\./)) {
+        this.sendStoreUpdate({action: 'updateCards', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
+      } else if (key.match(/^players\./)) {
+        this.sendStoreUpdate({action: 'updatePlayers', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
+      } else if (key.match(/^game\./)) {
+        // figure action out from key name
+        // key is the diff
+        // check utlis caps function
+        // TODO: function game.currentPlayerId -> updateGameCurrentPlayerId
+        this.sendStoreUpdate();
+      }
+    });
   }
 
   async clientUpdate(newState, oldState) {
@@ -82,7 +99,7 @@ class Game extends Base {
   onStoreUpdated(newState, oldState) {
     console.log('STORE UPDATED!!!', newState, oldState);
 
-    if (/*this.isServer*/ true)
+    if (this.isServer)
       this.serverUpdate(newState, oldState);
     else
       this.clientUpdate(newState, oldState);
@@ -107,6 +124,10 @@ class Game extends Base {
     return this;
   }
 
+  sendStoreUpdate(data){
+    this.connection.emit('storeUpdate', data);
+  };
+
   initializeConnection(connection) {
     if (this.connection)
       this.connection.disconnect();
@@ -127,8 +148,11 @@ class Game extends Base {
     this.emitAction = (action) => {
       connection.emit('action', action);
     };
-
-    connection.on('update', (data) => {
+    
+    connection.on('storeUpdate', (data) => {
+      this.store.op(({dispatch, actions}) => {
+        dispatch(actions[data.action](data.value, data.reset));
+      });
     });
 
     connection.on('chat_message', (data) => {

@@ -7,7 +7,9 @@ const PORT = 8085;
 
 var app = http.createServer(function(request, response){}),
     io = SocketIO(app),
-    game = new BlackJackGame();
+    game = new BlackJackGame({ connection: io });
+
+global.game = game;
 
 // connection event
 io.on('connection', function (client) {
