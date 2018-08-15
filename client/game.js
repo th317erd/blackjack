@@ -31,7 +31,7 @@ class Game extends Base {
         _connection = opts.connection || null,
         _store = new DataStore(this);
 
-    _store.subscribe(this.queueUpdate.bind(this));
+    _store.subscribe(this.onStoreUpdated.bind(this));
     attrGetterSetter(this, 'store', () => _store, () => {});
 
     attrGetterSetter(this, 'isServer', () => _server, () => {});
@@ -79,15 +79,13 @@ class Game extends Base {
     await this.render();
   }
 
-  queueUpdate(newState, oldState) {
-    pending(() => {
-      console.log('STORE UPDATED!!!', newState, oldState);
+  onStoreUpdated(newState, oldState) {
+    console.log('STORE UPDATED!!!', newState, oldState);
 
-      if (this.isServer)
-        this.serverUpdate(newState, oldState);
-      else
-        this.clientUpdate(newState, oldState);
-    }, 5);
+    if (this.isServer)
+      this.serverUpdate(newState, oldState);
+    else
+      this.clientUpdate(newState, oldState);
   }
 
   instantiateClassByName(className, args) {

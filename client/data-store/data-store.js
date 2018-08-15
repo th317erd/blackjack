@@ -31,7 +31,8 @@ class DataStore {
     var store = (opts.debug) ? buildStore(dataStoreTemplate.template, applyMiddleware(dispatchActionMiddleware)) : buildStore(dataStoreTemplate.template),
         dispatch = store.dispatch.bind(store),
         subscribers = [],
-        oldState = store.getState();
+        oldState = store.getState(),
+        updateTimer;
 
     attrGetterSetter(this, '_subscribers', () => subscribers, noop);
     attrGetterSetter(this, 'dispatch', () => dispatch, noop);
@@ -44,14 +45,20 @@ class DataStore {
     }, noop);
 
     var _disconnectStoreListener = store.subscribe(() => {
-      var state = store.getState();
+      if (updateTimer)
+        clearTimeout(updateTimer);
 
-      for (var i = 0, il = subscribers.length; i < il; i++) {
-        var subscriber = subscribers[i];
-        subscriber.callback.call(this, state, oldState, this);
-      }
+      updateTimer = setTimeout(() => {
+        updateTimer = null;
 
-      oldState = state;
+        var state = store.getState();
+        for (var i = 0; i < subscribers.length; i++) {
+          var subscriber = subscribers[i];
+          subscriber.callback.call(this, state, oldState, this);
+        }
+
+        oldState = state;
+      }, 1);
     });
 
     attrGetterSetter(this, 'stopListening', () => {
