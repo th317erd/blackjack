@@ -1,4 +1,4 @@
-const { capitalize, attrGetterSetter, pending } = require('./utils'),
+const { capitalize, attrGetterSetter, pending, diffObjectChanges } = require('./utils'),
       { Base } = require('./base'),
       { Card } = require('./card'),
       { Player } = require('./player'),
@@ -42,7 +42,7 @@ class Game extends Base {
     });
 
     attrGetterSetter(this, 'connection', () => _connection, (val) => {
-      _connection = this.initializeConnection(val);
+      _connection = (_server) ? val : this.initializeConnection(val);
       return val;
     });
 
@@ -61,21 +61,38 @@ class Game extends Base {
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
   }
 
-  diffGameChanges() {
-    var players = this.players,
-        oldPlayers = this.oldPlayers,
-        cards = this.cards,
-        oldCards = this.oldCards;
+  // diffGameChanges() {
+  //   var players = this.players,
+  //       oldPlayers = this.oldPlayers,
+  //       cards = this.cards,
+  //       oldCards = this.oldCards;
 
-    // Diff players
-    // Diff cards
+  //   // Diff players
+  //   // Diff cards
+  // }
+
+  async serverUpdate(newState, oldState) {
+    var diffs = diffObjectChanges(oldState,newState);
+    diffs.forEach((diff)=>{
+      var key = diff.key,
+          a = diff.aValue,
+          b = diff.bValue;
+        
+      if (key.match(/^cards\./)) {
+        this.sendStoreUpdate({action: 'updateCards', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
+      } else if (key.match(/^players\./)) {
+        this.sendStoreUpdate({action: 'updatePlayers', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
+      } else if (key.match(/^game\./)) {
+        // figure action out from key name
+        // key is the diff
+        // check utlis caps function
+        // TODO: function game.currentPlayerId -> updateGameCurrentPlayerId
+        this.sendStoreUpdate();
+      }
+    });
   }
 
-  async serverUpdate() {
-    var diff = this.diffGameChanges();
-  }
-
-  async clientUpdate() {
+  async clientUpdate(newState, oldState) {
     await this.render();
   }
 
@@ -107,6 +124,10 @@ class Game extends Base {
     return this;
   }
 
+  sendStoreUpdate(data){
+    this.connection.emit('storeUpdate', data);
+  };
+
   initializeConnection(connection) {
     if (this.connection)
       this.connection.disconnect();
@@ -127,8 +148,11 @@ class Game extends Base {
     this.emitAction = (action) => {
       connection.emit('action', action);
     };
-
-    connection.on('update', (data) => {
+    
+    connection.on('storeUpdate', (data) => {
+      this.store.op(({dispatch, actions}) => {
+        dispatch(actions[data.action](data.value, data.reset));
+      });
     });
 
     connection.on('chat_message', (data) => {
