@@ -1,7 +1,7 @@
 const http = require('http'),
       SocketIO = require('socket.io'),
-      { BlackJackGame } = require('../client/games/blackjack'),
-      { Player } = require('../client/player.js');
+      { BlackJackGame } = require('../games/blackjack'),
+      { Player } = require('../common/player.js');
 
 const PORT = 8085;
 

@@ -4,10 +4,9 @@ const dust = global.dust = require('dustjs-linkedin'),
       extraDustHelpers = require('./custom-dust-helpers'),
       SocketIO = require('socket.io-client'),
       { DOMRenderer } = require('./dom-renderer'),
-      { BlackJackGame } = require('./games/blackjack'),
-      { Player } = require('./player'),
-      { Card } = require('./card'),
-      { renderCard } = require('./debug-utils');
+      { BlackJackGame } = require('../games/blackjack'),
+      { Player } = require('../common/player'),
+      { Card } = require('../common/card');
 
 (function() {
 
@@ -34,19 +33,19 @@ const dust = global.dust = require('dustjs-linkedin'),
 
     socket.on('connection', function(gameData) {
       console.log('Connected to websocket server!', gameData);
-      var game = global.game = new BlackJackGame(gameData); 
+      var game = global.game = new BlackJackGame(gameData);
 
       game.setRenderer(/*new DOMRenderer(game, { rootElementID: 'root' })*/)
           .setConnection(this)
           .render();
     });
   }
-  initializeWebsocketConnection('localhost', 8085); 
+  initializeWebsocketConnection('localhost', 8085);
 
   global.BlackJackGame = BlackJackGame;
 
   // var game = global.game = new BlackJackGame(),
-  //     player = global.player = game.addPlayer(); 
+  //     player = global.player = game.addPlayer();
 
   // game.store.op(({ dispatch, actions }) => dispatch(actions.updatePlayers([player])))
 })();

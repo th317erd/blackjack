@@ -1,5 +1,5 @@
-const { Game } = require('../../game'),
-      { Player } = require('../../player'),
+const { Game } = require('../../common/game'),
+      { Player } = require('../../common/player'),
       boardTemplate = (global.PLATFORM === 'browser') ? require('./templates/board') : null;
 
 class BlackJackGame extends Game {

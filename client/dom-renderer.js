@@ -1,5 +1,5 @@
 const dust = require('dustjs-linkedin'),
-      { attrGetterSetter } = require('./utils');
+      { attrGetterSetter } = require('../common/utils');
 
 class DOMRenderer {
   constructor(game, _opts) {
