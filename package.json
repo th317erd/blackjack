@@ -8,7 +8,7 @@
     "test": "node node_modules/.bin/jasmine",
     "watch": "node_modules/.bin/webpack --watch --config webpack.config.dev.js",
     "start-client": "node_modules/.bin/webpack-dev-server --config webpack.config.dev.js",
-    "start-server": "node server/index.js",
+    "start-server": "node --inspect server/index.js",
     "build": "node_modules/.bin/webpack --config webpack.config.prod.js"
   },
   "repository": {
