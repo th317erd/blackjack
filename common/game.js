@@ -61,16 +61,6 @@ class Game extends Base {
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
   }
 
-  // diffGameChanges() {
-  //   var players = this.players,
-  //       oldPlayers = this.oldPlayers,
-  //       cards = this.cards,
-  //       oldCards = this.oldCards;
-
-  //   // Diff players
-  //   // Diff cards
-  // }
-
   async serverUpdate(newState, oldState) {
     var diffs = diffObjectChanges(oldState,newState);
     diffs.forEach((diff)=>{
@@ -82,13 +72,16 @@ class Game extends Base {
         this.sendStoreUpdate({action: 'updateCards', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
       } else if (key.match(/^players\./)) {
         this.sendStoreUpdate({action: 'updatePlayers', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
+      } else if (key.match(/^permissions\./)) {
+        this.sendStoreUpdate({action: 'updatePermissions', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
       } else if (key.match(/^game\./)) {
-        // figure action out from key name
-        // key is the diff
-        // check utlis caps function
-        // TODO: function game.currentPlayerId -> updateGameCurrentPlayerId
-        this.sendStoreUpdate();
-      }
+
+        var actionName = key.replace(/^game.(\w+)/, function(m, capture1) {
+          return 'updateGame' + capture1.charAt(0).toUpperCase() + capture1.substring(1);
+        })
+        this.sendStoreUpdate({action: actionName, value: b});
+
+      } 
     });
   }
 
@@ -151,6 +144,8 @@ class Game extends Base {
     
     connection.on('storeUpdate', (data) => {
       this.store.op(({dispatch, actions}) => {
+        if(!actions.hasOwnProperty(data.action))
+          return
         dispatch(actions[data.action](data.value, data.reset));
       });
     });
