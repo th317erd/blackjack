@@ -7,12 +7,13 @@ const {
       players = require('./players'),
       cards = require('./cards'),
       game = require('./game'),
+      permissions = require('./permissions'),
       { noop, attrGetterSetter } = require('../utils');
 
 // Define our template for our store
 const dataStoreTemplate = {
-  template: Object.assign({}, players.template, cards.template, game.template),
-  selectors: Object.assign({}, players.selectors, cards.selectors, game.selectors)
+  template: Object.assign({}, players.template, cards.template, game.template, permissions.template),
+  selectors: Object.assign({}, players.selectors, cards.selectors, game.selectors, permissions.selectors)
 };
 
 class DataStore {
