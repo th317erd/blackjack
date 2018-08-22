@@ -40,12 +40,12 @@ const dust = global.dust = require('dustjs-linkedin'),
           .render();
     });
   }
-  initializeWebsocketConnection('localhost', 8085);
+  //initializeWebsocketConnection('localhost', 8085);
 
   global.BlackJackGame = BlackJackGame;
 
-  // var game = global.game = new BlackJackGame(),
-  //     player = global.player = game.addPlayer();
+  var game = global.game = new BlackJackGame(),
+      player = global.player = game.addPlayer();
 
-  // game.store.op(({ dispatch, actions }) => dispatch(actions.updatePlayers([player])))
+  game.store.op(({ dispatch, actions }) => dispatch(actions.updatePlayers([player])))
 })();

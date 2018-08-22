@@ -20,9 +20,13 @@ function mapToKeys(_keys, formatter = noop) {
       val = val.valueOf();
 
       for (var j = 0, jl = keys.length; j < jl; j++) {
-        var key = val[keys[j]];
+        var index = keys[j],
+            key = val[index];
+
         if (key == null)
           continue;
+
+        key = formatter(key, val, index);
 
         if (remove === true) {
           delete newState[key];
@@ -32,8 +36,6 @@ function mapToKeys(_keys, formatter = noop) {
         var currentVal = newState[key];
         if (currentVal && currentVal.data && val && val.data)
           val = Object.assign({}, currentVal.data, val.data);
-
-        key = formatter(key, val);
 
         newState[key] = {
           lastUpdateTime: now,

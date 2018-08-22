@@ -2,6 +2,7 @@ const { capitalize, attrGetterSetter, pending, diffObjectChanges } = require('./
       { Base } = require('./base'),
       { Card } = require('./card'),
       { Player } = require('./player'),
+      { Permission } = require('./permission'),
       { Deck } = require('./deck'),
       { DataStore } = require('./data-store');
 
@@ -17,7 +18,9 @@ class Game extends Base {
         () => _store.op(({ state, selectors }) => selectors[`get${capitalize(name)}`](state)),
         (val) => {
           _store.op(({ dispatch, actions }) => {
-            dispatch(actions[`set${prefix}${capitalize(name)}`](val));
+            var action = `set${prefix}${capitalize(name)}`;
+            console.log('SETTING WITH ACTION: ', action);
+            dispatch(actions[action](val));
           });
 
           return val;
@@ -50,6 +53,7 @@ class Game extends Base {
 
     defineStoreAttr('players');
     defineStoreAttr('cards');
+    defineStoreAttr('permissions');
     defineStoreAttr('currentPlayerID', 'Game');
     defineStoreAttr('clientPlayerID', 'Game');
     defineStoreAttr('defaultCardWidth', 'Game');
@@ -59,6 +63,7 @@ class Game extends Base {
 
     this.players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player]));
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
+    this.permissions = (opts.permissions || []).map((permission) => this.instantiateClassByName(card._class, [permission]));
   }
 
   // diffGameChanges() {
@@ -77,7 +82,7 @@ class Game extends Base {
       var key = diff.key,
           a = diff.aValue,
           b = diff.bValue;
-        
+
       if (key.match(/^cards\./)) {
         this.sendStoreUpdate({action: 'updateCards', value: (!b && a && a.data) ? { id: a.data.id } : (b || {}).data, reset: !b });
       } else if (key.match(/^players\./)) {
@@ -106,12 +111,15 @@ class Game extends Base {
   }
 
   instantiateClassByName(className, args) {
-    if (className === 'Player')
+    if (className === 'Card')
+      return new Card(this, ...args);
+    else if (className === 'Permission')
+      return new Permission(this, ...args);
+    else if (className === 'Player')
       return new Player(this, ...args);
     else if (className === 'Deck')
       return new Deck(this, ...args);
-    else if (className === 'Card')
-      return new Card(this, ...args);
+
   }
 
   setRenderer(renderer) {
@@ -148,7 +156,7 @@ class Game extends Base {
     this.emitAction = (action) => {
       connection.emit('action', action);
     };
-    
+
     connection.on('storeUpdate', (data) => {
       this.store.op(({dispatch, actions}) => {
         dispatch(actions[data.action](data.value, data.reset));
