@@ -83,13 +83,20 @@ function operate(lh, op, rh) {
 }
 
 function solve(state) {
-  var lh, op, rh;
+  var lh, 
+      op, 
+      rh, 
+      step = 0;
+
+  //defaultCardWidth/2
 
   for (var i = state.offset, il = state.data.length; i < il; i = state.offset) {
-    if (lh === undefined) {
+    if (step === 0) {
       lh = getValue(state);
-    } else if (op === undefined) {
+      step++;
+    } else if (step === 1) {
       op = getOp(state);
+      step++;
     } else {
       rh = getValue(state);
       return operate(lh, op, rh);

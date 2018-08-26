@@ -82,7 +82,7 @@ function convertToInstance(state, _data) {
 
 function getID(obj) {
   var id = (obj && obj.hasOwnProperty('id')) ? obj.id : obj;
-  return toNumber(id);
+  return id;
 }
 
 module.exports = {

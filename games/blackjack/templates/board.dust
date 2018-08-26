@@ -1,5 +1,8 @@
 <div class="game-space">
-  <button data-action="hit">Hit Me!</button>
+  <button data-action="hit" class="action-button">Hit Me!</button>
+  <button data-action="stand" class="action-button">Stand!</button>
+  <button data-action="split" class="action-button">Split!</button>
+  <button data-action="double" class="action-button">Double!</button>
   {@calc handWidth="defaultHandWidth" cardWidth="defaultCardWidth" cardHeight="defaultCardHeight" halfCardWidth="defaultCardWidth/2" halfCardHeight="defaultCardHeight/2"}
     <div class="table-container" style="padding:{halfCardHeight}rem {halfCardWidth}rem {halfCardHeight}rem {halfCardWidth}rem;">
       <div class="table-hand-container">

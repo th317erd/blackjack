@@ -33,19 +33,22 @@ const dust = global.dust = require('dustjs-linkedin'),
 
     socket.on('connection', function(gameData) {
       console.log('Connected to websocket server!', gameData);
+      if (typeof global.game !== 'undefined'){
+        global.game.destroy();
+      }
       var game = global.game = new BlackJackGame(gameData);
 
-      game.setRenderer(/*new DOMRenderer(game, { rootElementID: 'root' })*/)
+      game.setRenderer( new DOMRenderer(game, { rootElementID: 'root' }))
           .setConnection(this)
           .render();
     });
   }
-  //initializeWebsocketConnection('localhost', 8085);
+  initializeWebsocketConnection('localhost', 8085);
 
-  global.BlackJackGame = BlackJackGame;
+  // global.BlackJackGame = BlackJackGame;
 
-  var game = global.game = new BlackJackGame(),
-      player = global.player = game.addPlayer();
+  // var game = global.game = new BlackJackGame(),
+  //     player = global.player = game.addPlayer();
 
-  game.store.op(({ dispatch, actions }) => dispatch(actions.updatePlayers([player])))
+  // game.store.op(({ dispatch, actions }) => dispatch(actions.updatePlayers([player])))
 })();
