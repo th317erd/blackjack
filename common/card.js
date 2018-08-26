@@ -183,9 +183,7 @@ class Card extends Base {
     // value, suit, viewableByPlayers
 
     // create variable to hold value
-    var _viewableByPlayers = opts.viewableByPlayers || [],
-        _game = game;
-
+    var _game = game;
     attrGetterSetter(this, 'game', () => _game, (val) => {
       _game = val;
       return val;
@@ -203,6 +201,29 @@ class Card extends Base {
     attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.visible && this.isVisibleTo(game.getClientPlayer()));
+  }
+
+  viewableByPlayers(players) {
+    if (!players || !players.length)
+      return;
+
+    return this.game.store.op(({ dispatch, actions }) => {
+      for (var i = 0, il = players.length; i < il; i++) {
+        var player = players[i];
+        dispatch(actions.updatePermissions([new Permission(this.game, {
+          ownerID: this.id,
+          receiverID: player.id,
+          permit: Permission.PERMIT.VIEW
+        })]));
+      }
+    });
+  }
+
+  isVisibleToCurrentPlayer() {
+    return this.game.store.op(({ state, selectors }) => {
+      var permissions = selectors.getPermission(state, this, player);
+      debugger;
+    });
   }
 
   toString() {
