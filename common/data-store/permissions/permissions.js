@@ -1,5 +1,5 @@
 const {
-        mapToKeys,
+        mapToID,
         getID,
         convertToArrayOfInstances,
         createSelector,
@@ -34,12 +34,7 @@ const getPermissions            = createSelector((state) => state.permissions, c
 
 module.exports = {
   template: {
-    permissions: mapToKeys(['id', 'combined'], (key, val, index) => {
-      if (index === 'id')
-        return key;
-
-      return `${val.ownerID}::${val.receiverID}`;
-    })
+    permissions: mapToID
   },
   selectors: {
     getPermissions,

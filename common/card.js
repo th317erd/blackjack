@@ -198,32 +198,11 @@ class Card extends Base {
     attrGetterSetter(this, 'digit', () => CARDS[opts.value].digit);
     attrGetterSetter(this, 'pattern', () => CARDS[opts.value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
-    attrGetterSetter(this, 'viewableByPlayers', () => _viewableByPlayers );
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
-    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.visible && this.isVisibleTo(game.getClientPlayer()));
-  }
-
-  viewableByPlayers(players) {
-    if (!players || !players.length)
-      return;
-
-    return this.game.store.op(({ dispatch, actions }) => {
-      for (var i = 0, il = players.length; i < il; i++) {
-        var player = players[i];
-        dispatch(actions.updatePermissions([new Permission(this.game, {
-          ownerID: this.id,
-          receiverID: player.id,
-          permit: Permission.PERMIT.VIEW
-        })]));
-      }
-    });
   }
 
   isVisibleToCurrentPlayer() {
-    return this.game.store.op(({ state, selectors }) => {
-      var permissions = selectors.getPermission(state, this, player);
-      debugger;
-    });
+    return this.isVisibleTo(this.game.getCurrentPlayer());
   }
 
   toString() {
@@ -247,45 +226,57 @@ class Card extends Base {
     return this;
   }
 
-  isVisibleTo(player, set) {
-    if (!player)
+  isVisibleTo(_players, set) {
+    var players = _players;
+    if (!players)
       return false;
 
-    if (player.id === this.ownerID)
-      return true;
+    if (!(players instanceof Array))
+      players = [players];
 
-    var viewableByPlayers = this.viewableByPlayers;
-    var playerID = player.id;
+    if (!players.length)
+      return false;
 
     // if false NOT VISIBLE
     if (set === undefined) {
-      // GET
-      // step through and check if the ID matches the array of visible to players
-      return (viewableByPlayers.indexOf(playerID) >= 0);
-      // same as above
-      // for ( var i = 0; i < viewableByPlayers.length; i++ ){
-      //   if (playerID === viewableByPlayers[i])
-      //     return true;
-      // }
+      if (!this.visible)
+        return false;
 
-    } else {
-      // SET
-      if(set === true){
-        viewableByPlayers.push(playerID);
-      } else {
-        //remove player from array
-        var playerIndex = viewableByPlayers.indexOf(playerID);
-        if(playerIndex >= 0){
-          //remove this player from array
-          viewableByPlayers.splice(playerIndex, 1);
+      // Get visibility status of all players
+      return this.game.store.op(({ state, selectors }) => {
+        var permissions = selectors.getPermissionsByOwner(state, this);
+        debugger;
+        for (var i = 0, il = players.length; i < il; i++) {
+          var player = players[i],
+              playerID = player.id;
+
+          // The owner always has permission to view
+          if (playerID === this.ownerID)
+            continue;
+
+          var index = permissions.findIndex((permission) => (permission.receiverID === playerID && (permission.permit & Permissions.PERMIT.VIEW)));
+          if (index < 0)
+            return false;
         }
-      }
+
+        return true;
+      });
     }
+
+    return this.game.store.op(({ dispatch, actions }) => {
+      for (var i = 0, il = players.length; i < il; i++) {
+        var player = players[i];
+        dispatch(actions.updatePermissions([new Permission(this.game, {
+          ownerID: this.id,
+          receiverID: player.id,
+          permit: Permission.PERMIT.VIEW
+        })]));
+      }
+    });
   }
 
-  visibleToAllPlayers(set){
-    this.game.players.forEach((player)=> this.isVisibleTo(player, set));
-    // TODO: need to add GET
+  visibleToAllPlayers(set) {
+    this.isVisibleTo(this.game.players, set);
   }
 }
 
