@@ -24,7 +24,8 @@ class Game extends Base {
           });
 
           return val;
-        }
+        }, 
+        true
       );
     };
 
@@ -64,6 +65,14 @@ class Game extends Base {
     this.players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player]));
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
     this.permissions = (opts.permissions || []).map((permission) => this.instantiateClassByName(card._class, [permission]));
+  }
+
+  destroy(){
+    if(this.renderer){
+      this.renderer.destroy();
+      this.renderer = null;
+    }
+    this.store.destroy();
   }
 
   async serverUpdate(newState, oldState) {
@@ -148,6 +157,7 @@ class Game extends Base {
 
     this.emitAction = (action) => {
       connection.emit('action', action);
+
     };
 
     connection.on('storeUpdate', (data) => {
@@ -305,6 +315,9 @@ class Game extends Base {
   }
 
   addRandomCardToHand(player) {
+    if(!player)
+      return;
+
     var card = this.createRandomCard();
 
     // assign that card to the current player
@@ -375,11 +388,12 @@ class Game extends Base {
 
   }
 
-  dispatchAction(action) {
+  recieveAction(action) {
     if (!this.isServer)
       return;
 
     var actionName = 'action' + capitalize(action.name);
+    //actionHit
     if (typeof this[actionName] !== 'function')
       return;
 

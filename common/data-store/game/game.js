@@ -6,10 +6,10 @@ const getCurrentPlayerID      = createSelector((state) => state.game.currentPlay
       getClientPlayerID       = createSelector((state) => state.game.clientPlayerID, (s, playerID) => playerID),
       getCurrentPlayer        = createSelector(getCurrentPlayerID, (s, playerID) => playerSelectors.getPlayer(playerID));
       getClientPlayer         = createSelector(getClientPlayerID, (s, playerID) => playerSelectors.getPlayer(playerID)),
-      defaultCardWidth        = createSelector((state) => state.game.defaultCardWidth, (state, val) => val),
-      defaultCardHeight       = createSelector((state) => state.game.defaultCardHeight, (state, val) => val),
-      defaultHandWidth        = createSelector((state) => state.game.defaultHandWidth, (state, val) => val),
-      cardBackgroundImageURL  = createSelector((state) => state.game.cardBackgroundImageURL, (state, val) => val),
+      getDefaultCardWidth        = createSelector((state) => state.game.defaultCardWidth, (state, val) => val),
+      getDefaultCardHeight       = createSelector((state) => state.game.defaultCardHeight, (state, val) => val),
+      getDefaultHandWidth        = createSelector((state) => state.game.defaultHandWidth, (state, val) => val),
+      getCardBackgroundImageURL  = createSelector((state) => state.game.cardBackgroundImageURL, (state, val) => val),
 
 module.exports = {
   template: {
@@ -27,9 +27,9 @@ module.exports = {
     getClientPlayerID,
     getCurrentPlayer,
     getClientPlayer,
-    defaultCardWidth,
-    defaultCardHeight,
-    defaultHandWidth,
-    cardBackgroundImageURL
+    getDefaultCardWidth,
+    getDefaultCardHeight,
+    getDefaultHandWidth,
+    getCardBackgroundImageURL
   }
 };

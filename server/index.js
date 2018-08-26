@@ -31,14 +31,18 @@ io.on('connection', function (client) {
     }
   });
 
-  client.on('action', function(action) {
+  client.on('action', function(_action) {
+    var action = Object.assign({},_action || {}, {playerID:player.id});
+    console.log(action);
     try {
       console.log(`Received action from client [${player.id}]:`, action);
-      game.dispatchAction(action);
+      game.recieveAction(action);
       // new player just joined game
     } catch (e) {
       console.error(e);
-    }
+    } finally{
+      
+    };
   });
 
   var clientData = Object.assign({}, game, {

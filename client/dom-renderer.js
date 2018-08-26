@@ -27,6 +27,10 @@ class DOMRenderer {
     rootElement.appendChild(gameRootElement);
   }
 
+  destroy(){
+    this.gameRootElement.parentElement.removeChild(this.gameRootElement);
+  }
+
   querySelector(selector) {
     return this.rootElement.querySelector(selector);
   }
