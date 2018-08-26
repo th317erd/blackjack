@@ -33,6 +33,8 @@ class BlackJackGame extends Game {
       // If the players current hand value is less then 21,
       // then they are allowed to take a hit
       return (this.getHandValue(actionPlayer) < 21);
+      console.log('BUST');
+
     } else if (actionName === 'split' ) {
 
     } else if (actionName === 'handvalue') {
@@ -43,13 +45,6 @@ class BlackJackGame extends Game {
       // // console.log(this is true);
       // console.log(runAction);
     }
-  }
-
-  actionHit(action) {
-    var actionPlayer = this.getPlayerByID(action.playerID);
-    // console.log(getPlayerById);
-    var addRandomCard = this.addRandomCardToHand(actionPlayer);
-    return addRandomCard;
   }
 
   getCardValue(card) {
@@ -102,17 +97,43 @@ class BlackJackGame extends Game {
     return handTotal;
   }
 
-  // Stand
+  actionHit(action) {
+    var actionPlayer = this.getPlayerByID(action.playerID);
+    // console.log(getPlayerById);
+    var addRandomCard = this.addRandomCardToHand(actionPlayer);
+    return addRandomCard;
+  }
 
   // Split
 
   // Double Down
+
   //Stand
   actionStand() {
-    var player = this.getCurrentPlayer();
-    // Request that you receive no more cards. Your current hand will be judged against the dealer's.
-    var currentPlayerHand = getCardOwnersHand(player)
-    console.log(currentPlayerHand);
+    var actionPlayerID = action.playerID,
+        allPlayers = this.players;
+
+    if ( !allPlayers || !allPlayers.length )
+      return;
+
+    allPlayers.sort((a,b)=>{
+      var x = a.id,
+          y = b.id;
+
+      if( x == y ){
+        return 0;
+      }
+      return (x > y) ? 1 : -1;
+    });
+
+    var currentPlayerIndex = allPlayers.findIndex((player)=>(player.id === actionPlayerID));
+    if (currentPlayerIndex < 0)
+      return;
+
+    var nextPlayerIndex = (currentPlayerIndex + 1)%allPlayers.length;
+    
+    this.setPlayerTurn(allPlayers[nextPlayerIndex]);
+
   }
 
   //Split

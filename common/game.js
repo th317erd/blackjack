@@ -55,16 +55,23 @@ class Game extends Base {
     defineStoreAttr('players');
     defineStoreAttr('cards');
     defineStoreAttr('permissions');
-    defineStoreAttr('currentPlayerID', 'Game');
-    defineStoreAttr('clientPlayerID', 'Game');
-    defineStoreAttr('defaultCardWidth', 'Game');
-    defineStoreAttr('defaultCardHeight', 'Game');
-    defineStoreAttr('defaultHandWidth', 'Game');
-    defineStoreAttr('cardBackgroundImageURL', 'Game');
 
     this.players = (opts.players || []).map((player) => this.instantiateClassByName(player._class, [player]));
     this.cards = (opts.cards || []).map((card) => this.instantiateClassByName(card._class, [card]));
     this.permissions = (opts.permissions || []).map((permission) => this.instantiateClassByName(card._class, [permission]));
+
+
+    ['currentPlayerID',
+    'clientPlayerID',
+    'defaultCardWidth',
+    'defaultCardHeight',
+    'defaultHandWidth',
+    'cardBackgroundImageURL'].forEach((propName)=>{
+      defineStoreAttr(propName, 'Game');
+      if(opts.hasOwnProperty(propName))
+        this[propName] = opts[propName];
+
+    });
   }
 
   destroy(){
