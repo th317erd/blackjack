@@ -245,7 +245,6 @@ class Card extends Base {
       // Get visibility status of all players
       return this.game.store.op(({ state, selectors }) => {
         var permissions = selectors.getPermissionsByOwner(state, this);
-        debugger;
         for (var i = 0, il = players.length; i < il; i++) {
           var player = players[i],
               playerID = player.id;

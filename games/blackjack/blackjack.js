@@ -20,30 +20,27 @@ class BlackJackGame extends Game {
     // get the player who git the action
     var actionPlayer = this.getPlayerByID(action.playerID);
     var actionName = action.name;
-    // double check to make sure the players exist
-    if (!actionPlayer || !currentPlayerID)
-      return false
 
     // compair the player who initiated the action to the player who is the current player
+    if (!actionPlayer || !currentPlayerID){
+      console.log('player doesnt exist', actionPlayer); 
+      return false
+    }
+      
+
     if (actionPlayer.id !== currentPlayerID)
       // return false if the players are not the same
+      console.log('Its not your turn', actionPlayer); 
       return false;
 
     if (actionName === 'hit') {
       // If the players current hand value is less then 21,
       // then they are allowed to take a hit
-      return (this.getHandValue(actionPlayer) < 21);
-      console.log('BUST');
+      //return (this.getHandValue(actionPlayer) < 21);
+      //console.log('BUST');
 
     } else if (actionName === 'split' ) {
 
-    } else if (actionName === 'handvalue') {
-      return true;
-      // // do something
-      // var runAction = actionHit();
-      // // runAction
-      // // console.log(this is true);
-      // console.log(runAction);
     }
   }
 
@@ -96,12 +93,27 @@ class BlackJackGame extends Game {
 
     return handTotal;
   }
-
   actionHit(action) {
-    var actionPlayer = this.getPlayerByID(action.playerID);
-    // console.log(getPlayerById);
-    var addRandomCard = this.addRandomCardToHand(actionPlayer);
-    return addRandomCard;
+    var actionPlayer = this.getPlayerByID(action.playerID),
+        addRandomCard = this.addRandomCardToHand(actionPlayer);
+    
+    if(actionPlayer != this.currentPlayerID)
+      console.log('Its not your turn', actionPlayer); 
+
+    if(this.getHandValue(actionPlayer) < 21){
+      console.log('hit');
+      console.log('total', this.getHandValue(actionPlayer));
+      return addRandomCard;
+    } else if (this.getHandValue(actionPlayer) === 21){
+      console.log('BLACKJACK');
+      //end turn
+    } else {
+      console.log('BUSTED');
+      //end turn
+    }
+
+    console.log('total', this.getHandValue(actionPlayer));
+
   }
 
   // Split
