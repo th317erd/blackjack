@@ -1,4 +1,7 @@
 // We need to require dust first since it sets and uses a global
+if (typeof global.nextTick === 'undefined')
+  global.nextTick = (callback) => setTimeout(callback, 0);
+
 const dust = global.dust = require('dustjs-linkedin'),
       dustHelpers = require('dustjs-helpers'),
       extraDustHelpers = require('./custom-dust-helpers'),
@@ -8,10 +11,14 @@ const dust = global.dust = require('dustjs-linkedin'),
       { Player } = require('../common/player'),
       { Card } = require('../common/card');
 
+const HEARTBEAT_TIMEOUT = 60000;
+
 (function() {
   function initializeWebsocketConnection(host, port) {
     // Attach to the WebSocket
-    const socket = SocketIO(`http://${host}:${port}`),
+    const socket = SocketIO(`http://${host}:${port}`, {
+            timeout: HEARTBEAT_TIMEOUT
+          }),
           self = this;
 
     socket.on('connection', function(gameData) {

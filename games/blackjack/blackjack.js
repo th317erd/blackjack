@@ -9,8 +9,8 @@ class BlackJackGame extends Game {
 
   addPlayer() {
     var player = super.addPlayer();
-    this.addRandomCardToHand(player).isVisible(true);
-    this.addRandomCardToHand(player).isVisible(true).visibleToAllPlayers();
+    this.addRandomCardToHand(player, { visible: true });
+    this.addRandomCardToHand(player, { visible: 'all' });
     return player;
   }
 
@@ -95,7 +95,7 @@ class BlackJackGame extends Game {
   }
   actionHit(action) {
     var actionPlayer = this.getPlayerByID(action.playerID),
-        addRandomCard = this.addRandomCardToHand(actionPlayer);
+        addRandomCard = this.addRandomCardToHand(actionPlayer, { visible: 'all' } );
     
     if(actionPlayer != this.currentPlayerID)
       console.log('Its not your turn', actionPlayer); 
@@ -143,7 +143,7 @@ class BlackJackGame extends Game {
       return;
 
     var nextPlayerIndex = (currentPlayerIndex + 1)%allPlayers.length;
-    
+
     this.setPlayerTurn(allPlayers[nextPlayerIndex]);
 
   }
