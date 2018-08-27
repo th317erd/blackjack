@@ -35,6 +35,10 @@ class DataStore {
         oldState = store.getState(),
         updateTimer;
 
+    attrGetterSetter(this, 'multiDispatch', () => store.multiDispatch, noop);
+    attrGetterSetter(this, 'multiDispatchReset', () => store.multiDispatchReset, noop);
+    attrGetterSetter(this, 'multiDispatchSet', () => store.multiDispatchSet, noop);
+    attrGetterSetter(this, 'multiDispatchUpdate', () => store.multiDispatchUpdate, noop);
     attrGetterSetter(this, '_subscribers', () => subscribers, noop);
     attrGetterSetter(this, 'dispatch', () => dispatch, noop);
     attrGetterSetter(this, 'actions', () => store.actions, noop);

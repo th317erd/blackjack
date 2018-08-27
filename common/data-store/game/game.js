@@ -14,8 +14,8 @@ const getCurrentPlayerID      = createSelector((state) => state.game.currentPlay
 module.exports = {
   template: {
     game: {
-      currentPlayerID: 1,
-      clientPlayerID: 1,
+      currentPlayerID: 0,
+      clientPlayerID: 0,
       defaultCardWidth: 12,
       defaultCardHeight: 16,
       defaultHandWidth: 20,
