@@ -1,12 +1,16 @@
+global.nextTick = (...args) => process.nextTick(...args);
+
 const http = require('http'),
       SocketIO = require('socket.io'),
       { BlackJackGame } = require('../games/blackjack'),
       { Player } = require('../common/player.js');
 
-const PORT = 8085;
+const PORT = 8085,
+      // Set high for development, should be smaller (5000) in production
+      HEARTBEAT_TIMEOUT = 60000;
 
 var app = http.createServer(function(request, response){}),
-    io = SocketIO(app),
+    io = SocketIO(app, { 'pingTimeout': HEARTBEAT_TIMEOUT, 'pingInterval': HEARTBEAT_TIMEOUT * 5 }),
     game = new BlackJackGame({ connection: io });
 
 global.game = game;
@@ -41,7 +45,7 @@ io.on('connection', function (client) {
     } catch (e) {
       console.error(e);
     } finally{
-      
+
     };
   });
 

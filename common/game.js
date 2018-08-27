@@ -24,7 +24,7 @@ class Game extends Base {
           });
 
           return val;
-        }, 
+        },
         true
       );
     };
@@ -95,7 +95,7 @@ class Game extends Base {
         })
         this.sendStoreUpdate({action: actionName, value: b});
 
-      } 
+      }
     });
   }
 
@@ -301,7 +301,7 @@ class Game extends Base {
   //   return unassignedCards[Math.floor(Math.random() * unassignedCards.length)];
   // }
 
-  createRandomCard() {
+  createRandomCard(data) {
     // use math to randomly generate a suit - get random index
     var suits = Card.SUITS;
     var randomSuit = suits[Math.floor(Math.random() * suits.length)];
@@ -311,14 +311,14 @@ class Game extends Base {
     var randomValue = values[Math.floor(Math.random() * values.length)];
 
     // combine results and turn into card
-    return new Card(this, { value: randomValue, suit: randomSuit });
+    return new Card(this, Object.assign({}, data || {}, { value: randomValue, suit: randomSuit }));
   }
 
-  addRandomCardToHand(player) {
+  addRandomCardToHand(player, data) {
     if(!player)
       return;
 
-    var card = this.createRandomCard();
+    var card = this.createRandomCard(data);
 
     // assign that card to the current player
     this.assignCardToOwner(player, card);

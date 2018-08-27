@@ -9,8 +9,8 @@ class BlackJackGame extends Game {
 
   addPlayer() {
     var player = super.addPlayer();
-    this.addRandomCardToHand(player).isVisible(true);
-    this.addRandomCardToHand(player).isVisible(true).visibleToAllPlayers();
+    this.addRandomCardToHand(player, { visible: true });
+    this.addRandomCardToHand(player, { visible: 'all' });
     return player;
   }
 
@@ -48,7 +48,7 @@ class BlackJackGame extends Game {
   actionHit(action) {
     var actionPlayer = this.getPlayerByID(action.playerID);
     // console.log(getPlayerById);
-    var addRandomCard = this.addRandomCardToHand(actionPlayer);
+    var addRandomCard = this.addRandomCardToHand(actionPlayer, { visible: 'all' });
     return addRandomCard;
   }
 

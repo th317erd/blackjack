@@ -199,10 +199,7 @@ class Card extends Base {
     attrGetterSetter(this, 'pattern', () => CARDS[opts.value].pattern);
     attrGetterSetter(this, 'suit-font', () => DEFAULT_SUIT_FONT);
     attrGetterSetter(this, 'suitFont', () => DEFAULT_SUIT_FONT);
-  }
-
-  isVisibleToCurrentPlayer() {
-    return this.isVisibleTo(this.game.getCurrentPlayer());
+    attrGetterSetter(this, 'isVisibleToCurrentPlayer', () => this.isVisibleTo(this.game.getCurrentPlayer()));
   }
 
   toString() {
@@ -219,7 +216,7 @@ class Card extends Base {
 
   isVisible(set) {
     if (set === undefined)
-      return this.visible;
+      return !!this.visible;
 
     this.visible = set;
 
@@ -229,23 +226,25 @@ class Card extends Base {
   isVisibleTo(_players, set) {
     var players = _players;
     if (!players)
-      return false;
+      return (this.visible === 'all');
 
     if (!(players instanceof Array))
       players = [players];
 
     if (!players.length)
-      return false;
+      return (this.visible === 'all');
 
     // if false NOT VISIBLE
     if (set === undefined) {
       if (!this.visible)
         return false;
 
+      if (this.visible === 'all')
+        return true;
+
       // Get visibility status of all players
       return this.game.store.op(({ state, selectors }) => {
         var permissions = selectors.getPermissionsByOwner(state, this);
-        debugger;
         for (var i = 0, il = players.length; i < il; i++) {
           var player = players[i],
               playerID = player.id;

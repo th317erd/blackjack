@@ -73,13 +73,15 @@ class DataStore {
       this.stopListening();
   }
 
-  op(func) {
-    return func.call(this, {
+  op(func, nextTick) {
+    const doCall = func.bind(this, {
       state: this.state,
       selectors: this.selectors,
       dispatch: this.dispatch,
       actions: this.actions
     });
+
+    return (nextTick) ? global.nextTick(doCall) : doCall();
   }
 
   subscribe(func) {
